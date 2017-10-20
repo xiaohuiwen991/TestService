@@ -1,0 +1,27 @@
+#macro(renderOrderList $orders)
+    #foreach($o in $orders)
+    <tr>
+        <td>$o.rownum</td>
+        <td>$!o.dictValue</td>
+        <td>$!o.dictKey</td>
+        <td>$!o.openFlag</td>
+        <td>$!o.py</td>
+        <td>$!o.sort</td>
+        <td>$!o.root</td>
+        <td>$!o.remark</td>
+    </tr>
+    #end
+#end
+<table>
+    <tr my-head>
+        <td my-width="10">序号</td>
+        <td my-width="10">字典名称</td>
+        <td my-width="10">字典代码</td>
+        <td my-width="10">是否启用</td>
+        <td my-width="10">字典拼音</td>
+        <td my-width="10">显示顺序</td>
+        <td my-width="10">字典类型</td>
+        <td my-width="10">备注</td>
+    </tr>
+    #renderOrderList($resultList)
+</table>

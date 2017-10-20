@@ -1,0 +1,2 @@
+exec nohup java -cp conf:lib/code-service-1.0-SNAPSHOT.jar java -cp conf;lib\code-service-1.0-SNAPSHOT.jar com.hisign.code.service.main.ServiceProvider > console.log &
+# -Xdebug -Xrunjdwp:transport=dt_socket,address=8010,server=y,suspend=n

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.system.DictManageMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.system.SysDictModel" >
+        <id column="ID" property="id" jdbcType="CHAR" />
+        <result column="DICT_KEY" property="dictKey" jdbcType="VARCHAR" />
+        <result column="DICT_VALUE1" property="dictValue" jdbcType="VARCHAR" />
+        <result column="DICT_LEVEL" property="dictLevel" jdbcType="VARCHAR" />
+        <result column="PARENT_KEY" property="parentKey" jdbcType="VARCHAR" />
+        <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+        <result column="DICT_PY" property="py" jdbcType="VARCHAR" />
+        <result column="ROOT_KEY" property="root" jdbcType="VARCHAR" />
+        <result column="DICT_SORT" property="sort" jdbcType="DECIMAL" />
+        <result column="DICT_SORT" property="sort" jdbcType="DECIMAL" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        ID, DICT_KEY, PARENT_KEY, REMARK, DICT_PY, DICT_SORT, ROOT_KEY, DICT_VALUE1, DICT_LEVEL
+    </sql>
+
+    <sql id="select_By_Filter_For_Where" >
+        <where>
+            <if test="dictValue != null and dictValue != ''">
+                and DICT_VALUE1 like '%' || #{dictValue} || '%'
+            </if>
+            <if test="dictKey != null and dictKey != ''">
+                and DICT_KEY like '%' || #{dictKey} || '%'
+            </if>
+            <if test="openFlag != null and openFlag != ''">
+                and OPEN_FLAG =  #{openFlag}
+            </if>
+            <if test="py != null and py != ''">
+                and DICT_PY like '%' || #{py} || '%'
+            </if>
+            <if test="root != null and root != ''">
+                and ROOT_KEY like '%' || #{root} || '%'
+            </if>
+            <if test="parentKey != null and parentKey != ''">
+                and PARENT_KEY = #{parentKey}
+            </if>
+            <if test="dictLevel != null and dictLevel != ''">
+                and DICT_LEVEL = #{dictLevel}
+            </if>
+            <if test="defaultRoot != null and defaultRoot != ''">
+                and ROOT_KEY = #{defaultRoot}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_By_Filter_For_Where2" >
+        <where>
+            <if test="id != null and id != ''">
+                and ID = #{id}
+            </if>
+            <if test="root != null and root != ''">
+                and ROOT_KEY = #{root}
+                and PARENT_KEY is null
+            </if>
+            <if test="localId != null and localId != ''">
+                and ID != #{localId}
+            </if>
+            and rownum = 1
+        </where>
+    </sql>
+
+    <select id="findDictByFilter" resultMap="BaseResultMap" parameterType="com.hisign.code.model.system.SysDictModel" >
+        select p.* from(
+            select
+                rownum,rownum as rn,a.* from (
+                select
+                  <include refid="Base_Column_List" />
+                  ,
+                  get_dictValue_by_dictKey('QYZTDM', d.OPEN_FLAG) as openFlag,
+                  (case when exists ( select 1 from sys_dict s where s.PARENT_KEY = d.DICT_KEY and s.root_key = d.root_key and s.dict_Level > d.dict_Level) then '1' else '0' end) as isParent
+                from SYS_DICT d
+                <include refid="select_By_Filter_For_Where" />
+                <if test="orderByString != null and orderByString != ''">
+                    order by ${orderByString}
+                </if>
+                <if test="orderByString == null or orderByString == ''">
+                    order by CREATE_DATE desc nulls last
+                </if>
+            ) a
+            <if test="end != 0 and end !=null">
+                where rownum <![CDATA[<=]]> #{end}
+            </if>
+        ) p
+        <if test="begin != 0 and begin !=null">
+            where rn >= #{begin}
+        </if>
+    </select>
+
+    <select id="findDictByFilterForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.system.SysDictModel" >
+        select
+          count(1)
+        from SYS_DICT
+        <include refid="select_By_Filter_For_Where" />
+    </select>
+
+    <delete id="deleteDict"
+            parameterType="com.hisign.code.model.system.SysDictModel">
+        delete from SYS_DICT where id in (
+            select id from Sys_dict
+              start with id = #{id}
+            connect by prior DICT_KEY = PARENT_KEY and ROOT_KEY = #{root}
+        )
+    </delete>
+
+    <update id="updateOpenFlag"
+            parameterType="com.hisign.code.model.system.SysDictModel">
+        update SYS_DICT set open_flag = #{openFlag} where id in (
+            select id from Sys_dict
+            start with id = #{id}
+            connect by prior DICT_KEY = PARENT_KEY and ROOT_KEY = #{root}
+        )
+    </update>
+
+    <insert id="insertDict" parameterType="com.hisign.code.model.system.SysDictModel" >
+        insert into SYS_DICT (
+          ID,
+          DICT_LEVEL,
+          DICT_KEY,
+          PARENT_KEY,
+          ROOT_KEY,
+          DICT_VALUE1,
+          LEAF_FLAG,
+          DOWNLOAD_FLAG,
+          READONLY_FLAG,
+          DICT_SORT,
+          DICT_PY,
+          OPEN_FLAG,
+          REMARK,
+          CREATE_PID,
+          CREATE_DATE,
+          MODIFY_PID,
+          MODIFY_DATE
+        ) values (
+          #{id,jdbcType=CHAR},
+          #{dictLevel,jdbcType=VARCHAR},
+          #{dictKey,jdbcType=VARCHAR},
+          #{parentKey,jdbcType=VARCHAR},
+          #{root,jdbcType=VARCHAR},
+          #{dictValue,jdbcType=VARCHAR},
+          #{leafFlag,jdbcType=VARCHAR},
+          '1',
+          '0',
+          #{sort,jdbcType=DECIMAL},
+          #{py,jdbcType=VARCHAR},
+          #{openFlag,jdbcType=VARCHAR},
+          #{remark,jdbcType=VARCHAR},
+          #{user.userName,jdbcType=VARCHAR},
+          sysdate,
+          #{user.userName,jdbcType=VARCHAR},
+          sysdate
+        )
+    </insert>
+
+    <update id="updateDict" parameterType="com.hisign.code.model.system.SysDictModel" >
+        update SYS_DICT set
+          DICT_KEY = #{dictKey,jdbcType=VARCHAR},
+          DICT_VALUE1 = #{dictValue,jdbcType=VARCHAR},
+          ROOT_KEY = #{root,jdbcType=VARCHAR},
+          DICT_SORT = #{sort,jdbcType=DECIMAL},
+          DICT_PY = #{py,jdbcType=VARCHAR},
+          OPEN_FLAG = #{openFlag,jdbcType=VARCHAR},
+          REMARK = #{remark,jdbcType=VARCHAR},
+          MODIFY_PID = #{user.userName ,jdbcType=VARCHAR},
+          MODIFY_DATE = sysdate
+        where ID = #{id,jdbcType=CHAR}
+    </update>
+
+    <select id="findDict" resultMap="BaseResultMap" parameterType="com.hisign.code.model.system.SysDictModel" >
+        select
+          <include refid="Base_Column_List" />
+          ,
+          OPEN_FLAG as openFlag,
+          (case when exists ( select 1 from sys_dict s where s.PARENT_KEY = d.DICT_KEY and s.root_key = d.root_key) then '1' else '0' end) as isParent
+        from SYS_DICT d
+        <include refid="select_By_Filter_For_Where2" />
+    </select>
+
+</mapper>

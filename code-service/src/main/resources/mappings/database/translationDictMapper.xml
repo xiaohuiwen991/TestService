@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.database.TranslationDictMapper" >
+  <resultMap id="BaseResultMap" type="com.hisign.code.model.database.TranslationDict" >
+    <id column="ORIGINAL_TEXT" property="originalText" jdbcType="VARCHAR" />
+    <result column="TRANSLATION" property="translation" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="CREATE_PID" property="createPid" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="MODIFY_PID" property="modifyPid" jdbcType="VARCHAR" />
+    <result column="MODIFY_DATE" property="modifyDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    ORIGINAL_TEXT, TRANSLATION, DESCRIPTION,
+    from_username_to_truename(CREATE_PID, '1') as createPidName,CREATE_DATE
+  </sql>
+
+  <sql id="select_By_Filter_For_Where">
+    <where>
+      AND 1 = 1
+      <if test="originalText != null and originalText !=''">
+        AND ORIGINAL_TEXT like '%' || #{originalText,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="translation != null and translation !=''">
+        AND TRANSLATION like '%' || #{translation,jdbcType=VARCHAR} || '%'
+      </if>
+      <if test="createPid != null and createPid != ''">
+        AND CREATE_PID = #{createPid,jdbcType=VARCHAR}
+      </if>
+      <if test="createDateBegin !=null and createDateBegin != ''">
+        and CREATE_DATE >= to_date(#{createDateBegin},'yyyy-mm-dd')
+      </if>
+      <if test="createDateEnd != null and createDateEnd != ''">
+        and CREATE_DATE <![CDATA[<]]> to_date(#{createDateEnd},'yyyy-mm-dd')+1
+      </if>
+    </where>
+  </sql>
+
+  <sql id="select_By_Filter_For_Where2">
+    <where>
+      <choose>
+        <when test="originalText != null and originalText != ''">
+          and ORIGINAL_TEXT = #{originalText,jdbcType=VARCHAR}
+        </when>
+        <otherwise>
+          and 1 = 2
+        </otherwise>
+      </choose>
+      and rownum = 1
+    </where>
+  </sql>
+
+  <select id="findTranslationDict" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TranslationDict">
+    select p.* from(
+    select
+    rownum,rownum as rn,a.* from (
+    select
+    <include refid="Base_Column_List" />
+    from DB_TRANSLATION_DICT t
+    <include refid="select_By_Filter_For_Where" />
+    <if test="orderByString != null and orderByString != ''">
+      order by ${orderByString}
+    </if>
+    <if test="orderByString == null or orderByString == ''">
+      order by CREATE_DATE desc nulls last
+    </if>
+    ) a
+    <if test="end != 0 and end !=null">
+      where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
+    </if>
+    ) p
+    <if test="begin != 0 and begin !=null">
+      where rn >= #{begin, jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="findTranslationDictForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TranslationDict">
+    select count(1) from DB_TRANSLATION_DICT
+    <include refid="select_By_Filter_For_Where" />
+  </select>
+
+  <select id="findTranslationDictInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TranslationDict">
+    select
+    <include refid="Base_Column_List" />
+    from DB_TRANSLATION_DICT
+    <include refid="select_By_Filter_For_Where2" />
+  </select>
+
+  <insert id="insertTranslationDict" parameterType="com.hisign.code.model.database.TranslationDict">
+  insert into db_translation_dict
+  (original_text,
+  translation,
+  description,
+  create_pid,
+  create_date
+  ) values
+  (#{originalText,jdbcType=VARCHAR},
+  #{translation,jdbcType=VARCHAR},
+  #{description,jdbcType=VARCHAR},
+  #{user.userName,jdbcType=VARCHAR},
+  sysdate
+  )
+  </insert>
+
+  <delete id="deleteTranslationDict" parameterType="com.hisign.code.model.database.TranslationDict">
+    DELETE FROM db_translation_dict
+    <include refid="select_By_Filter_For_Where2"/>
+  </delete>
+
+  <update id="updateTranslationDict" parameterType="com.hisign.code.model.database.TranslationDict">
+    UPDATE db_translation_dict SET
+    TRANSLATION = #{translation,jdbcType=VARCHAR},
+    DESCRIPTION = #{description,jdbcType=VARCHAR}
+    <include refid="select_By_Filter_For_Where2" />
+  </update>
+</mapper>

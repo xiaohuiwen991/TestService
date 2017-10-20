@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.database.TableColumnMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.TableColumn" >
+        <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
+        <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
+        <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+        <result column="DATA_LENGTH" property="dataLength" jdbcType="INTEGER" />
+        <result column="NULLABLE" property="nullable" jdbcType="VARCHAR" />
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <sql id="select_By_Filter_For_Where" >
+        <where>
+            AND 1 = 1
+            <if test="tableName != null and tableName != ''">
+                AND (T.TABLE_NAME LIKE '%' || #{tableName,jdbcType=VARCHAR} || '%'
+                    or T2.COMMENTS  LIKE '%' || #{tableName,jdbcType=VARCHAR} || '%')
+            </if>
+            <if test="columnName != null and columnName != ''">
+                AND T.COLUMN_NAME LIKE '%' || #{columnName,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="comments != null and comments != ''">
+                AND T1.COMMENTS LIKE '%' || #{comments,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="tableNames != null and tableNames != ''">
+                and T.TABLE_NAME in
+                <foreach collection="tableNames" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=VARCHAR}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_By_Filter_For_Where2" >
+        <where>
+            AND 1 = 1
+            <if test="tableName != null and tableName != ''">
+                AND T.TABLE_NAME LIKE '%' || #{tableName,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="comments != null and comments != ''">
+                AND T.COMMENTS LIKE '%' || #{comments,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="tableNames != null and tableNames != ''">
+                and T.TABLE_NAME in
+                <foreach collection="tableNames" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=VARCHAR}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+
+
+    <select id="findTableColumnList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableColumn" >
+        select p.* from(
+            select
+                rownum,rownum as rn,a.* from (
+                SELECT
+                    T.TABLE_NAME,
+                    T.COLUMN_NAME,
+                    T.DATA_TYPE,
+                    T.DATA_LENGTH,
+                    T.NULLABLE,
+                    T2.COMMENTS AS tableComments,
+                    T1.COMMENTS
+                FROM USER_TAB_COLUMNS T, USER_COL_COMMENTS T1, USER_TAB_COMMENTS T2
+                <include refid="select_By_Filter_For_Where" />
+                AND T.TABLE_NAME = T1.TABLE_NAME(+)
+                AND T.COLUMN_NAME = T1.COLUMN_NAME(+)
+                AND T.TABLE_NAME = T2.TABLE_NAME(+)
+                <if test="orderByString != null and orderByString != ''">
+                    order by ${orderByString}
+                </if>
+                <if test="orderByString == null or orderByString == ''">
+                    order by T.TABLE_NAME, T.COLUMN_ID
+                </if>
+            ) a
+            <if test="end != 0 and end !=null">
+                where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
+            </if>
+        ) p
+        <if test="begin != 0 and begin !=null">
+            where rn >= #{begin, jdbcType=INTEGER}
+        </if>
+    </select>
+
+
+    <select id="findColumnList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableColumn" >
+        SELECT
+            T.COLUMN_NAME as key,
+            T.COLUMN_NAME || nvl2(T1.COMMENTS, '(' || T1.COMMENTS || ')', '') as value
+        FROM USER_TAB_COLUMNS T, USER_COL_COMMENTS T1
+        where T.TABLE_NAME = T1.TABLE_NAME(+)
+        AND T.COLUMN_NAME = T1.COLUMN_NAME(+)
+        <if test="tableName != null and tableName != ''">
+            AND T.TABLE_NAME =  #{tableName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="findTableColumnListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TableColumn" >
+        SELECT count(1)
+        FROM USER_TAB_COLUMNS T, USER_COL_COMMENTS T1, USER_TAB_COMMENTS T2
+        <include refid="select_By_Filter_For_Where" />
+        AND T.TABLE_NAME = T1.TABLE_NAME(+)
+        AND T.COLUMN_NAME = T1.COLUMN_NAME(+)
+        AND T.TABLE_NAME = T2.TABLE_NAME(+)
+    </select>
+
+
+    <select id="findTableList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableColumn" >
+        select p.* from(
+        select
+        rownum,rownum as rn,a.* from (
+          select
+            TABLE_NAME,
+            COMMENTS
+        from user_tab_comments T
+        <include refid="select_By_Filter_For_Where2" />
+        <if test="orderByString != null and orderByString != ''">
+            order by ${orderByString}
+        </if>
+        <if test="orderByString == null or orderByString == ''">
+            order by T.TABLE_NAME
+        </if>
+        ) a
+        <if test="end != 0 and end !=null">
+            where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
+        </if>
+        ) p
+        <if test="begin != 0 and begin !=null">
+            where rn >= #{begin, jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="findTableListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TableColumn" >
+        SELECT
+          count(1)
+        FROM user_tab_comments T
+        <include refid="select_By_Filter_For_Where2" />
+    </select>
+
+
+</mapper>

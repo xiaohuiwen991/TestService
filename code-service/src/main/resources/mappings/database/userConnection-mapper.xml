@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.database.UserConnectionMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.UserConnection" >
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+        <result column="CONNECTION_NAME" property="connectionName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        USER_NAME, CONNECTION_NAME
+    </sql>
+
+ 
+    <sql id="select_By_Filter_For_Where2" >
+        <where>
+            <choose>
+                <when test="userName != null and userName != ''">
+                    and USER_NAME = #{userName,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and 1 = 2
+                </otherwise>
+            </choose>
+            and rownum = 1
+        </where>
+    </sql>
+    
+
+    <delete id="deleteUserConnection" parameterType="com.hisign.code.model.database.UserConnection">
+        DELETE FROM DB_USER_CONNECTION
+        <include refid="select_By_Filter_For_Where2" />
+    </delete>
+
+    <insert id="insertUserConnection" parameterType="com.hisign.code.model.database.UserConnection" >
+        insert into DB_USER_CONNECTION (
+            USER_NAME,
+            CONNECTION_NAME
+        ) values (
+            #{userName,jdbcType=VARCHAR},
+            #{connectionName,jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <select id="findUserConnectionInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.UserConnection" >
+        select
+        <include refid="Base_Column_List" />
+        from DB_USER_CONNECTION t
+        <include refid="select_By_Filter_For_Where2" />
+    </select>
+
+</mapper>

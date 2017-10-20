@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.database.ConnectionInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.ConnectionInfo" >
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="URL" property="url" jdbcType="VARCHAR" />
+        <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+             NAME, URL, USERNAME, PASSWORD
+    </sql>
+
+    <sql id="select_By_Filter_For_Where" >
+        <where>
+            <if test="name != null and name != ''">
+                  AND NAME like '%' || #{name,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="url != null and url != ''">
+                   AND URL like '%' || #{url,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="username != null and username != ''">
+                   AND USERNAME like '%' || #{username,jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_By_Filter_For_Where2" >
+        <where>
+            <choose>
+                <when test="name != null and name != ''">
+                    and NAME = #{name,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and 1 = 2
+                </otherwise>
+            </choose>
+            and rownum = 1
+        </where>
+    </sql>
+
+    <select id="findConnectionInfoList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.ConnectionInfo" >
+        select p.* from(
+            select
+                rownum,rownum as rn,a.* from (
+                select
+                    <include refid="Base_Column_List" />
+                     ,
+                    (case when exists (select 1 from DB_USER_CONNECTION t1 where t1.CONNECTION_NAME = t.name) then '' else '1' end) as operateFlag
+                from DB_CONNECTION_INFO t
+                <include refid="select_By_Filter_For_Where" />
+                <if test="orderByString != null and orderByString != ''">
+                    order by ${orderByString}
+                </if>
+                <if test="orderByString == null or orderByString == ''">
+                    order by CREATE_DATE desc nulls last
+                </if>
+            ) a
+            <if test="end != 0 and end !=null">
+                where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
+            </if>
+        ) p
+        <if test="begin != 0 and begin !=null">
+            where rn >= #{begin, jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="findConnectionInfoListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.ConnectionInfo" >
+        select
+            count(1)
+        from DB_CONNECTION_INFO t
+        <include refid="select_By_Filter_For_Where" />
+    </select>
+
+    <delete id="deleteConnectionInfo" parameterType="com.hisign.code.model.database.ConnectionInfo">
+        DELETE FROM DB_CONNECTION_INFO
+        <include refid="select_By_Filter_For_Where2" />
+    </delete>
+
+    <insert id="insertConnectionInfo" parameterType="com.hisign.code.model.database.ConnectionInfo" >
+        insert into DB_CONNECTION_INFO (
+            NAME,
+            URL,
+            USERNAME,
+            PASSWORD,
+            CREATE_PID,
+            CREATE_DATE,
+            MODIFY_PID,
+            MODIFY_DATE
+        ) values (
+            #{name,jdbcType=VARCHAR},
+            #{url,jdbcType=VARCHAR},
+            #{username,jdbcType=VARCHAR},
+            #{password,jdbcType=VARCHAR},
+            #{user.userName,jdbcType=VARCHAR},
+            sysdate,
+            #{user.userName,jdbcType=VARCHAR},
+            sysdate
+        )
+    </insert>
+
+    <update id="updateConnectionInfo" parameterType="com.hisign.code.model.database.ConnectionInfo" >
+        update DB_CONNECTION_INFO set
+            URL = #{url,jdbcType=VARCHAR},
+            USERNAME = #{username,jdbcType=VARCHAR},
+            PASSWORD = #{password,jdbcType=VARCHAR},
+            MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
+            MODIFY_DATE = sysdate
+        <include refid="select_By_Filter_For_Where2" />
+    </update>
+
+    <select id="findConnectionInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.ConnectionInfo" >
+        select
+            <include refid="Base_Column_List" />
+        from DB_CONNECTION_INFO t
+        <include refid="select_By_Filter_For_Where2" />
+    </select>
+
+</mapper>

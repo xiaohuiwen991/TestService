@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.database.TemplateSqlMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.TemplateSql" >
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="TYPE" property="type" jdbcType="VARCHAR" />
+        <result column="SQL" property="sql" jdbcType="VARCHAR" />
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+        <result column="CREATE_PID" property="createPid" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+           NAME, TYPE, SQL, CREATE_PID, DESCRIPTION, CREATE_DATE
+           ,
+           get_dictValue_by_dictKey('YJLXDM',TYPE) as typeZw,
+           from_username_to_truename(CREATE_PID, '1') as createPidName
+    </sql>
+
+    <sql id="select_By_Filter_For_Where" >
+        <where>
+            AND 1 = 1
+            <if test="name != null and name != ''">
+                AND NAME like '%' || #{name,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="type != null and type != ''">
+                AND TYPE = #{type,jdbcType=VARCHAR} 
+            </if>
+            <if test="sql != null and sql != ''">
+                AND SQL like '%' || #{sql,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="createPid != null and createPid != ''">
+                AND CREATE_PID = #{createPid,jdbcType=VARCHAR}
+            </if>
+            <if test="createDateBegin!=null and createDateBegin!=''">
+                and CREATE_DATE >= to_date(#{createDateBegin},'yyyy-mm-dd')
+            </if>
+            <if test="createDateEnd!=null and createDateEnd!=''">
+                and CREATE_DATE <![CDATA[<]]> to_date(#{createDateEnd},'yyyy-mm-dd')+1
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_By_Filter_For_Where2" >
+        <where>
+            <choose>
+                <when test="name != null and name != ''">
+                    and NAME = #{name,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and 1 = 2
+                </otherwise>
+            </choose>
+            and rownum = 1
+        </where>
+    </sql>
+
+    <select id="findTemplateSqlList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TemplateSql" >
+        select p.* from(
+            select
+                rownum,rownum as rn,a.* from (
+                select
+                    <include refid="Base_Column_List" />
+                from DB_TEMPLATE_SQL t
+                <include refid="select_By_Filter_For_Where" />
+                <if test="orderByString != null and orderByString != ''">
+                    order by ${orderByString}
+                </if>
+                <if test="orderByString == null or orderByString == ''">
+                    order by CREATE_DATE desc nulls last
+                </if>
+            ) a
+            <if test="end != 0 and end !=null">
+                where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
+            </if>
+        ) p
+        <if test="begin != 0 and begin !=null">
+            where rn >= #{begin, jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="findTemplateSqlListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TemplateSql" >
+        select
+            count(1)
+        from DB_TEMPLATE_SQL t
+        <include refid="select_By_Filter_For_Where" />
+    </select>
+
+    <delete id="deleteTemplateSql" parameterType="com.hisign.code.model.database.TemplateSql">
+        DELETE FROM DB_TEMPLATE_SQL
+        <include refid="select_By_Filter_For_Where2" />
+    </delete>
+
+    <insert id="insertTemplateSql" parameterType="com.hisign.code.model.database.TemplateSql" >
+        insert into DB_TEMPLATE_SQL (
+            NAME,
+            TYPE,
+            SQL,
+            DESCRIPTION,
+            CREATE_PID,
+            CREATE_DATE,
+            MODIFY_PID,
+            MODIFY_DATE
+        ) values (
+            #{name,jdbcType=VARCHAR},
+            #{type,jdbcType=VARCHAR},
+            #{sql,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR},
+            #{user.userName,jdbcType=VARCHAR},
+            sysdate,
+            #{user.userName,jdbcType=VARCHAR},
+            sysdate
+        )
+    </insert>
+
+    <update id="updateTemplateSql" parameterType="com.hisign.code.model.database.TemplateSql" >
+        update DB_TEMPLATE_SQL set
+            TYPE = #{type,jdbcType=VARCHAR},
+            SQL = #{sql,jdbcType=VARCHAR},
+            DESCRIPTION = #{description,jdbcType=VARCHAR},
+            MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
+            MODIFY_DATE = sysdate
+        <include refid="select_By_Filter_For_Where2" />
+    </update>
+
+    <select id="findTemplateSqlInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TemplateSql" >
+        select
+            <include refid="Base_Column_List" />
+        from DB_TEMPLATE_SQL t
+        <include refid="select_By_Filter_For_Where2" />
+    </select>
+
+    <select id="findAllUser" resultMap="BaseResultMap"  >
+        select
+          username as key,
+          true_name as value
+        from SYS_USER
+    </select>
+
+</mapper>

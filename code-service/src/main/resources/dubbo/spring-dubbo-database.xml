@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxws
+		http://cxf.apache.org/schemas/jaxws.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/context
+      	http://www.springframework.org/schema/context/spring-context.xsd
+        ">
+
+    <dubbo:service interface="com.hisign.code.api.database.ConnectionInfoService" protocol="rmi" ref="connectionInfoService" />
+
+    <dubbo:service interface="com.hisign.code.api.database.TableColumnService" protocol="rmi" ref="tableColumnService" />
+
+    <dubbo:service interface="com.hisign.code.api.database.TemplateSqlService" protocol="rmi" ref="templateSqlService" />
+
+    <dubbo:service interface="com.hisign.code.api.database.DevelopSqlService" protocol="rmi" ref="developSqlService" />
+
+    <dubbo:service interface="com.hisign.code.api.database.TableConnectionService" protocol="rmi" ref="tableConnectionService" />
+
+    <dubbo:service interface="com.hisign.code.api.database.TranslationDictService" protocol="rmi" ref="translationDictService"/>
+
+</beans>
