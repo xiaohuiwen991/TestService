@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字典管理</title>
+    <link rel="stylesheet" href="../css/base.css?version=0.91">
+    <link rel="stylesheet" href="../css/sys.css?version=0.91">
+</head>
+<body>
+<div id="sys-dict" class="body-agent">
+    <div id="sys-dict-query-block" class="query-block cq-condition">
+        <div class="query-condition-p">
+            <span class="common-field w65">字典名称：</span>
+            <input id="query-dict-value" type="text" class="common-input mr15"/>
+            <span class="common-field w65">字典代码：</span>
+            <input id="query-dict-key" type="text" class="common-input mr15"/>
+            <span class="common-field w65">字典拼音：</span>
+            <input id="query-py" type="text" class="common-input mr15"/>
+            <b class="cm-query-btn ml10" id="dict-query-btn"></b>
+            <b class="cm-reset-btn" id="dict-reset-btn"></b>
+            <b class="cm-send-btn hideplus" id="dict-return-btn"></b>
+        </div>
+        <div class="query-condition-p mt20 query-block-row">
+            <span class="common-field w65">是否启用：</span>
+            <span id="query-openflag" class="option mr15">
+                <u class="default query-block-active">全部</u>
+                <u val="1">是</u>
+                <u val="0">否</u>
+            </span>
+            <span class="common-field w65">字典类型：</span>
+            <input id="query-root" type="text" class="common-input mr15"/>
+        </div>
+    </div>
+    <div class="cq-condition al-save-condition"></div>
+    <div id="dict-query-result" class="query-result">
+        <div class="new-color-bar">
+            <span class="title">字典管理列表（共找到<span class="total-count"></span>条数据）</span>
+            <div class="bar-btn-div">
+                <b id="dict-excel" class="cm-excel-btn"></b>
+                <b id="into-dict-add" class="cm-add-btn"></b>
+            </div>
+        </div>
+        <table id="dict-table" class="typical-tb">
+            <thead class="need-fix">
+            <th class="need-fix cell-xs">序号</th>
+            <th class="cell-m">字典名称</th>
+            <th class="cell-m">字典代码</th>
+            <th class="cell-m">是否启用</th>
+            <th class="cell-m">字典拼音</th>
+            <th class="cell-m">显示顺序</th>
+            <th class="cell-m">字典类型</th>
+            <th class="cell-xm">备注</th>
+            <th class="need-fix-end cell-s">操作</th>
+            </thead>
+            <tbody tpsource="#dict-list-tp"></tbody>
+        </table>
+        <div class="paging"></div>
+    </div>
+    <div id="sys-dict-add-div" class="hide pd10">
+        <form id="sys-dict-add-form">
+            <input id="add-leaf-flag" type="hidden"/>
+            <input id="add-dict-level" type="hidden"/>
+            <p>
+                <span class="common-field">上级节点：</span>
+                <input id="add-parent-key" name="parentKey" class="common-input" readonly placeholder="根节点"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典类型：</span>
+                <input id="add-root-key" name="root" class="common-input dict-add-valid" data-options="required:true,validType:'extLength[0,40]'"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典名称：</span>
+                <input id="add-dict-value" name="dictValue" class="common-input dict-add-valid" data-options="required:true,validType:'extLength[0,150]'"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典代码：</span>
+                <input id="add-dict-key" name="dictKey" class="common-input dict-add-valid" data-options="required:true,validType:'extLength[0,40]'"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典拼音：</span>
+                <input id="add-py" name="py" class="common-input dict-add-valid" data-options="required:true,validType:'extLength[0,40]'"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>是否启用：</span>
+                <span id="add-openflag" class="option">
+                    <u val="1" class="query-block-active init mr5">是</u>
+                    <u val="0">否</u>
+                </span>
+            </p>
+            <p class="mt10">
+                <span class="common-field">显示顺序：</span>
+                <input id="add-sort" name="sort" class="common-input dict-add-valid" data-options="validType:['extLength[0,4]', 'number']"/>
+                上一个节点顺序为：<em class="prevSort"></em>
+            </p>
+            <p class="mt10">
+                <span class="common-field fl">备注：</span>
+                <textarea id="add-remark" name="remark" class="common-textarea dict-add-valid" data-options="validType:'extLength[0,2000]'"></textarea>
+            </p>
+        </form>
+        <p class="tcenter mt20">
+            <b id="save-add-btn" class="cm-save-btn mr15"></b>
+            <b id="add-cancel-btn" class="cm-cancel-btn"></b>
+        </p>
+    </div>
+    <div id="sys-dict-edit-div" class="hide pd10">
+        <form id="sys-dict-edit-form">
+            <input type="hidden" name="dictId" value="{id}"/>
+            <p>
+                <span class="common-field">上级节点：</span>
+                <input id="edit-parent-key" name="parentKey" class="common-input" readonly value="{parentKey}" placeholder="根节点"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典类型：</span>
+                <input id="edit-root-key" name="root" class="common-input dict-edit-valid" data-options="required:true,validType:'extLength[0,40]'" value="{root}"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典名称：</span>
+                <input id="edit-dict-value" name="dictValue" class="common-input dict-edit-valid" data-options="required:true,validType:'extLength[0,150]'" value="{dictValue}"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典代码：</span>
+                <input id="edit-dict-key" name="dictKey" class="common-input dict-edit-valid" data-options="required:true,validType:'extLength[0,40]'" value="{dictKey}"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>字典拼音：</span>
+                <input id="edit-py" name="py" class="common-input dict-edit-valid" data-options="required:true,validType:'extLength[0,40]'" value="{py}"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field"><span class="orangered">★ </span>是否启用：</span>
+                <span id="edit-openflag" class="option">
+                    <u val="1" class="{openFlagYes} init mr5">是</u>
+                    <u val="0" class="{openFlagNo}">否</u>
+                </span>
+            </p>
+            <p class="mt10">
+                <span class="common-field">显示顺序：</span>
+                <input id="edit-sort" name="sort" class="common-input dict-edit-valid" data-options="validType:['extLength[0,4]', 'number']" value="{sort}"/>
+            </p>
+            <p class="mt10">
+                <span class="common-field fl">备注：</span>
+                <textarea id="edit-remark" name="remark" class="common-textarea dict-edit-valid" data-options="validType:'extLength[0,2000]'">{remark}</textarea>
+            </p>
+        </form>
+        <p class="tcenter mt20">
+            <b id="save-edit-btn" class="cm-save-btn mr15"></b>
+            <b id="edit-cancel-btn" class="cm-cancel-btn"></b>
+        </p>
+    </div>
+</div>
+</body>
+<script type="text/template" id="dict-list-tp">
+<tr>
+    <td>{rownum}</td>
+    <td>
+        {{isParent.toInt && #<a class="into-sub-dict" dictKey="{dictKey}" rootKey="{root}" href="javascript:void(0);">{dictValue}</a>#}}
+        {{!isParent.toInt && #{dictValue}#}}
+    </td>
+    <td>{dictKey}</td>
+    <td>{openFlag}</td>
+    <td>{py}</td>
+    <td>{sort}</td>
+    <td>{root}</td>
+    <td>{remark}</td>
+    <td>
+        <a class="into-dict-add" dictKey="{dictKey}" rootKey="{root}" href="javascript:void(0);">新增下级节点</a><br>
+        <a class="into-dict-edit" parentkey="{parentKey}" paramid="{id}" href="javascript:void(0);">修改</a><br>
+        <a class="delete-dict" paramid="{id}" href="javascript:void(0);">删除</a>
+    </td>
+</tr>
+</script>
+<script src="../js/base.js?version=0.91"></script>
+<script src="../js/sys.js?version=0.91"></script>
+<script>
+    importing(function(){
+        var dictQueryListAct = top.path+'/api/0/system/dict_mng/list',
+                dictSaveAddAct = top.path+'/api/0/system/dict_mng/add',
+                dictDelAct = top.path+'/api/0/system/dict_mng/delete',
+                dictIntoEditAct = top.path+'/api/0/system/dict_mng/dict_info',
+                dictSaveEditAct = top.path+'/api/0/system/dict_mng/edit',
+                dictExcelAct = top.path+'/api/0/system/dict_mng/export';
+
+        var delLimit = top.ops['sys-dict-del'],
+                addLimit = top.ops['sys-dict-add'],
+                editLimit = top.ops['sys-dict-edit'];
+
+        window.$filter=function(fliterName,fn,theType){
+            if(theType){
+                theType.prototype.extending(fliterName,fn);
+            }else{
+                String.prototype.extending(fliterName,fn);
+                Number.prototype.extending(fliterName,fn);
+            }
+        };
+        window.$filter('toInt', function(){
+            return parseInt(this.valueOf());
+        });
+
+
+        top.registry.sys.allDict = [];  //存放每次查询的dictKey rootKey currentPage
+        top.registry.sys.allCondition = []; //查询条件
+
+        top.registry.sys.allCondition.push(getQueryObj('', ''));
+        top.registry.sys.allDict.push({'dictKey':'', 'rootKey':'', 'currentPage':'0'});
+
+//        $filter('toInt', function(){
+//            return parseInt(this.valueOf());
+//        });
+        //获取新增字典上一级的顺序
+        var getPrevSort = function(defaultRootV, parentKeyV){
+            return $post(dictQueryListAct,{
+                defaultRoot: defaultRootV,
+                parentKey:parentKeyV,
+                sortOrder:'desc',
+                sortName:'DICT_SORT'
+            }, function(){}, true, false);
+        };
+        //获取查询条件的对象
+        function getQueryObj(defaultRootV, parentKeyV){
+            trimAll('#sys-dict-query-block');
+            return {
+                defaultRoot: defaultRootV,
+                parentKey: parentKeyV,
+                dictValue: $('#query-dict-value').val(), //字典名称
+                dictKey: $('#query-dict-key').val(), //字典代码
+                py:$('#query-py').val(), //字典拼音
+                openFlag: $('#query-openflag').children('.query-block-active').attr('val'), //是否启用
+                root: $('#query-root').val() //字典类型
+            };
+        }
+
+        //查询列表
+        function queryForList(defaultRootV, parentKeyV, flag){
+            var $qr = $('#dict-query-result');
+            var obj = getQueryObj(defaultRootV, parentKeyV);
+
+            if(flag){
+                //点击返回查询
+                var dictObj = top.registry.sys.allDict.pop();
+                top.registry.sys.allCondition.pop();
+                //获取返回页面的查询条件
+                obj = top.registry.sys.allCondition[top.registry.sys.allCondition.length - 1];
+                //将查询条件赋值到查询区域
+                $('#query-dict-value').val(obj.dictValue);
+                $('#query-dict-key').val(obj.dictKey);
+                $('#query-py').val(obj.py);
+                $('#query-openflag').find('u[val="{0}"]'.format(obj.openFlag)).addClass('query-block-active').siblings('u').removeClass('query-block-active');
+                $('#query-root').val(obj.root);
+                //如果是返回到根节点，则隐藏返回按钮
+                top.registry.sys.allDict.length == 1 && top.registry.sys.allCondition.length == 1 && $('#dict-return-btn').addClass('hideplus');
+                //设置返回页面的currentPage
+                $qr.children('.paging').data('currentPage',dictObj.currentPage);
+            }
+            $.extend(obj, {dictLevel:top.registry.sys.allDict.length - 1});
+            $qr.pagingList({
+                action: dictQueryListAct,
+                currentPage: $qr.children('.paging').data('currentPage'),
+                jsonObj: obj,
+                callback: function(data){
+                    $('#dict-table').find('tbody').fixData({
+                        delLimit:delLimit,
+                        addLimit:addLimit,
+                        editLimit:editLimit
+                    }).template(data);
+                }
+            });
+        }
+
+        //打开新增页面
+        function intoDictAdd(obj){
+            var $div = $('#sys-dict-add-div');
+            var $rootKey = $('#add-root-key');
+            var dictObj = top.registry.sys.allDict[top.registry.sys.allDict.length - 1];
+
+            $div.find('input, textarea').val('');
+            $div.find('.dict-add-valid').removeClass('validatebox-invalid');
+            $div.find('u').removeClass('query-block-active');
+            $div.find('u.init').addClass('query-block-active');
+            $div.find('.prevSort').text(0);
+            $rootKey.removeAttr('readonly');
+
+            if(obj){
+                /*从列表进入新增, 新增对象的子节点*/
+                $('#add-parent-key').val(obj.dictKey);
+                $rootKey.val(obj.rootKey);
+                $rootKey.prop('readonly', true);
+                $div.find('#add-leaf-flag').val('1');
+                $div.find('#add-dict-level').val(top.registry.sys.allDict.length - 1 + 1);
+
+                //获取上一节点的顺序
+                getPrevSort(obj.rootKey, obj.dictKey).then(
+                        function(res){
+                            if(res.data.length > 0){
+                                var prevSort = res.data[0].sort;
+                                $div.find('.prevSort').text(prevSort?prevSort:0);
+                                $div.find('#add-sort').val(prevSort+1);
+                            }else{
+                                $div.find('.prevSort').text(0);
+                                $div.find('#add-sort').val(1);
+                            }
+                        }
+                );
+            }else{
+                //上级节点和字典类型处理
+                $('#add-parent-key').val((dictObj.dictKey || ''));
+                dictObj.rootKey && $rootKey.val(dictObj.rootKey) && $rootKey.prop('readonly', true);
+                //新增子节点，leafFlag = 1
+                dictObj.dictKey && $div.find('#add-leaf-flag').val('1');
+
+                //获取上一节点的顺序
+                getPrevSort(dictObj.rootKey, dictObj.dictKey).then(
+                        function(res){
+                            if(res.data.length > 0){
+                                var prevSort = res.data[0].sort;
+                                $div.find('.prevSort').text(prevSort?prevSort:0);
+                                $div.find('#add-sort').val(prevSort+1);
+                            }else{
+                                $div.find('.prevSort').text(0);
+                                $div.find('#add-sort').val(1);
+                            }
+                        }
+                );
+            }
+
+            $open('#sys-dict-add-div', {width: 470, title: '新增字典'});
+        }
+        //新增保存
+        function saveDictAdd(){
+            var $div = $('#sys-dict-add-div');
+            var saveObj;
+
+            $div.find('.dict-add-valid').validatebox();
+            if($div.find('.validatebox-invalid').length > 0){
+                return false;
+            }
+            saveObj = $div.children('#sys-dict-add-form').serializeObject();
+            saveObj = $.extend(saveObj, {
+                'dictLevel': $div.find('#add-dict-level').val() || top.registry.sys.allDict.length - 1,
+                'leafFlag':$div.find('#add-leaf-flag').val() || '0',
+                'openFlag':$div.find('#add-openflag').children('.query-block-active').attr('val')
+            });
+            $post(dictSaveAddAct, saveObj, function(res){
+                var dictObj = top.registry.sys.allDict[top.registry.sys.allDict.length - 1];
+                queryForList(dictObj.rootKey, dictObj.dictKey);
+                toast('保存成功！').ok();
+                $div.$close();
+            }, true);
+        }
+        //删除字典
+        function deleteDict(id){
+            $confirm('确定删除字典吗？', function(bol){
+                if(bol){
+                    $post(dictDelAct, {id:id}, function(res){
+                        var dictObj = top.registry.sys.allDict[top.registry.sys.allDict.length - 1];
+                        queryForList(dictObj.rootKey, dictObj.dictKey);
+                        toast('删除成功！').ok();
+                    }, true);
+                }
+            });
+        }
+        //进入修改
+        function intoDictEdit(id){
+            $post(dictIntoEditAct, {id:id}, function(res){
+                $open('#sys-dict-edit-div', {width: 450, title:'修改字典'});
+
+                $('#sys-dict-edit-form').template(res.data, function(item, i){
+                    if(item.openFlag == '0'){
+                        item.openFlagNo = 'query-block-active';
+                    }else if(item.openFlag == '1'){
+                        item.openFlagYes = 'query-block-active';
+                    }
+                });
+                if(res.data.isParent == '1'){
+                    $('#edit-root-key').prop('readonly', true);
+                    $('#edit-dict-key').prop('readonly', true);
+                }else{
+                    $('#edit-root-key').prop('readonly', false);
+                    $('#edit-dict-key').prop('readonly', false);
+                }
+            }, true);
+        }
+        //修改保存
+        function saveDictEdit(){
+            var $div = $('#sys-dict-edit-div');
+            var saveEditObj;
+
+            $div.find('.dict-edit-valid').validatebox();
+            if($div.find('.validatebox-invalid').length > 0){
+                return false;
+            }
+
+            saveEditObj = $('#sys-dict-edit-form').serializeObject();
+            saveEditObj = $.extend(saveEditObj, {
+                'id': $div.find('input[name="dictId"]').val(),
+                'openFlag':$div.find('#edit-openflag').children('.query-block-active').attr('val')
+            });
+
+            $post(dictSaveEditAct, saveEditObj, function(res){
+                var dictObj = top.registry.sys.allDict[top.registry.sys.allDict.length - 1];
+                queryForList(dictObj.rootKey, dictObj.dictKey);
+                toast('保存成功！').ok();
+                $div.$close();
+            }, true);
+        }
+
+        queryForList('', '');
+
+        $('#sys-dict-query-block').on('click', '#dict-query-btn', function(){
+            //查询时需要重置currentPage
+            $('#dict-query-result').children('.paging').data('currentPage', 0);
+
+            var dictObj = top.registry.sys.allDict[top.registry.sys.allDict.length - 1];
+
+            top.registry.sys.allCondition[top.registry.sys.allCondition.length - 1] = getQueryObj(dictObj.rootKey, dictObj.dictKey);
+
+            queryForList(dictObj.rootKey, dictObj.dictKey);
+        }).on('click', '#dict-reset-btn', function(){
+            var $div = $('#sys-dict-query-block');
+            $div.find('input').val('');
+            $div.find('u').removeClass('query-block-active');
+            $div.find('u.default').addClass('query-block-active');
+        }).on('click', '#dict-return-btn', function(){
+            queryForList('','', true);
+        }).on('click', 'u', function(){
+            $(this).addClass('query-block-active').siblings('u').removeClass('query-block-active');
+        });
+
+        $('#dict-query-result').on('click', '.into-sub-dict', function(){
+            var $div = $('#sys-dict-query-block');var $paging = $('#dict-query-result').children('.paging');
+            $div.find('input').val('');
+            $div.find('u').removeClass('query-block-active');
+            $div.find('u.default').addClass('query-block-active');
+
+            $('#dict-return-btn').removeClass('hideplus');
+
+            var dictKey = $(this).attr('dictKey');
+            var rootKey = $(this).attr('rootKey');
+
+            top.registry.sys.allDict.push({'dictKey':dictKey, 'rootKey':rootKey, 'currentPage':$paging.data('currentPage')});
+            top.registry.sys.allCondition.push(getQueryObj(rootKey, dictKey));
+
+            //点击字典名称跳转到下一节点列表时，初始化currentPage=0
+            $paging.data('currentPage', 0);
+            //查询下一节点的数据
+            queryForList(rootKey, dictKey);
+        }).on('click', '#into-dict-add', function(){
+            intoDictAdd();
+        }).on('click', '.delete-dict', function(){
+            deleteDict(this.getAttribute('paramid'));
+        }).on('click', '.into-dict-add', function(){
+            intoDictAdd({'dictKey':$(this).attr('dictKey'), 'rootKey':$(this).attr('rootKey')})
+        }).on('click', '.into-dict-edit', function(){
+            intoDictEdit($(this).attr('paramid'));
+        }).on('click', '#dict-excel', function(){
+            var count = parseInt($('#dict-query-result').find('.total-count').text());
+            if(count == 0){
+                toast(' 导出数据为空！').warn();
+            }else{
+                location.href = action2link(dictExcelAct);
+            }
+        });
+
+        $('#sys-dict-add-div').on('click', '#save-add-btn', function(){
+            saveDictAdd();
+        }).on('click', '#add-cancel-btn', function(){
+            var $div = $('#sys-dict-add-div');
+            $div.$close();
+        }).on('click', 'u', function(){
+            $(this).addClass('query-block-active').siblings('u').removeClass('query-block-active');
+        });
+
+        $('#sys-dict-edit-div').on('click', '#save-edit-btn', function(){
+            saveDictEdit();
+        }).on('click', '#edit-cancel-btn', function(){
+            var $div = $('#sys-dict-edit-div');
+            $div.$close();
+        }).on('click', 'u', function(){
+            $(this).addClass('query-block-active').siblings('u').removeClass('query-block-active');
+        });
+    });
+</script>
+</html>

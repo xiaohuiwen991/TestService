@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>evan's simple-template </title>
+    <link rel="stylesheet" href="../dist/css/base.css"/>
+    <link rel="stylesheet" href="../dist/css/database.css"/>
+</head>
+<body class="pd10">
+
+<h2>基本参数说明</h2>
+<pre>
+    [] : 指定一个集合
+    $n : 换行
+    $noSplit : 集合拼接时不设置分割符（默认为","）
+    $lastNo : 集合中最后一列将不展示$lastNo后面的内容
+    $tableName : 表名（不在集合内取选中的第一个，下同）
+    $tableAlias : 表别名（根据选择顺序取值T0 - Tn）
+    $tableCamelName : 表的驼峰名
+    $tableNameCn : 表备注
+    $submeter : 模版分表创建
+    $column : 列名
+    $columnAlias :列别名（取列的驼峰式命名）
+    $connect : 表连接拼接（用于多表关联查询）
+    $columnCn : 列的备注（无备注时取中文翻译）
+    $jdbcType : 列的java类型
+    $javaType : 列的jdbc类型
+    $type : 列的Oracle类型
+    $typeSub : 列的Oracle类型缩写（一般用于存储过程变量取值）
+    $noType : 集合中的列别名等不含类型信息
+    $noTableType : 表的别名等去除T_,A_等前缀
+    $noDuplicate : 去除集合中重复字段
+    $noFirstColumn : 在集合中移除选择的第一列
+    $firstUpperColumn : 列的驼峰式命名首字母大写（第二个字母为大写时首字母保持小写，可用于java的get和set方法拼接）
+    $trimColumnAlias : 对String类型的属性进行去空格处理， 如：this.$columnAlias = $trimColumnAlias
+                        可得到 this.id = id == null ? null : id.trim()
+</pre>
+<h2>标签说明</h2>
+<pre>
+    &lt;arr&gt;&lt;/arr&gt; : 指定集合，用法同[]
+    &lt;config&gt;&lt;/config&gt; : 只能出现在模版最开始，所有配置信息均写在此标签内
+    &lt;gegentypus&gt;&lt;/gegentypus&gt; : 自定义对照类型，如：&lt;gegentypus>[{"oracleType":"NUMBER","jdbcType":"NUMBER"}]&lt;/gegentypus&gt;
+    &lt;cludeColumn&gt;&lt;/cludeColumn&gt; : 过滤不包含字段，如&lt;cludeColumn&gt;CRAEATE_DATE,UPDATE_DATE&lt;/cludeColumn&gt;
+    &lt;excludeColumn&gt;&lt;/excludeColumn&gt; : 过滤字段，如&lt;excludeColumn&gt;CRAEATE_DATE,UPDATE_DATE&lt;/excludeColumn&gt;
+    &lt;excludeByTable&gt;&lt;/excludeByTable&gt; : 过滤表中的所有字段：如&lt;excludeByTable&gt;BZ_CASE_FEEDBACK&lt;/excludeByTable&gt;
+    &lt;replaceStr&gt;&lt;/replaceStr&gt; : 字符替换，可用于创建特殊字符，如：&lt;replaceStr&gt;{"$arrEnd":"]"}&lt;/replaceStr&gt;
+</pre>
+</body>
+<script src="../dist/js/base.js"></script>
+<style>
+    #myform{
+        padding: 10px;
+        height:320px;
+        text-align: center;
+    }
+    #myform input{
+        width:180px;
+        height:22px;
+        margin: 5px;
+    }
+    .mask{
+        width:100vw;
+        height:100vh;
+    }
+    pre {
+        font-size: 18px;
+        font-style: normal;
+    }
+</style>
+
+</html>

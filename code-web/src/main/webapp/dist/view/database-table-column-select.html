@@ -1,0 +1,177 @@
+<div id="add-table-column-block">
+    <div class="query-condition mt10 tac">
+        <form id="column-form">
+            <div class="query-condition-p">
+                <input id="tableNames" name="tableNames"  class="hide"/>
+                <span class="common-field w65">表名：</span>
+                <dict dict-type="select" id="tableName-select" dict-id="tableName-select-dict" dict-name="tableName" class="w260 tableName"></dict>
+                <span class="common-field w65">字段名：</span>
+                <input name="columnName" class="common-input mr15"/>
+                <p class="query-reset">
+                    <b class="cm-query-btn mr15" id="query-btn-column"></b>
+                    <b class="cm-reset-btn" id="reset-btn-column"></b>
+                </p>
+            </div>
+        </form>
+    </div>
+    <div id="query-result-column">
+        <div class="new-color-bar">
+            <span class="title">表连接信息（共找到<span class="total-count"></span>条数据）</span>
+            <div class="bar-btn-div">
+                <b class="column-ok cm-ok-btn open-no-fix-btn"></b>
+            </div>
+        </div>
+        <table id="column-column-table" class="typical-tb">
+            <thead>
+                <th class="text-center"><input type="checkbox" id="tableColumnCheckAll"/></th>
+                <th class="text-center">序号</th>
+                <th class="text-center">字段名</th>
+                <th class="text-center">字段描述</th>
+                <th class="text-center">表名</th>
+            </thead>
+            <tbody tpsource="#column-column-list"></tbody>
+        </table>
+        <div class="paging"></div>
+    </div>
+</div>
+<script type="text/template" id="column-column-list">
+    <tr class="{$nth2}">
+        <td><input type="checkbox" {_checked} class="tableCheckBox"  rownum="{rownum}"/></td>
+        <td>{rownum}</td>
+        <td>{columnName}</td>
+        <td>{comments}</td>
+        <td>{tableNameStr}</td>
+    </tr>
+</script>
+<script src="../../dist/js/base.js"></script>
+<script>
+    function intoTableColumnSelectMult(selectWin,pageNO) {
+        top.registry.database.selectTableColumnWin = selectWin;
+        top.registry.database.selectTableColumnPageNO = pageNO;
+    }
+
+    // 在doc准备好后,写js逻辑
+    importing('dict',function () {
+        var   columnListAction = top.path+'/api/0/database/column/list',
+                pageData = [];
+
+        $('#tableName-select').dict(top.registry.database.tableDict);
+
+        $('#add-table-column-block').on('change', '.tableName', function() {
+            loadColumnList();
+        });
+
+        $('.column-ok').click(function(){
+            if(top.registry.database.selectTableColumnPageNO == 'database-develop-add') {
+                developSqlAddTableColumn('add');
+            }
+        });
+
+        function loadColumnList(currentPage) {
+            top.registry.database.checkTableColumns = [];
+            var tableName = [];
+            for(var o in top.registry.database.tableDict) {
+                var obj = top.registry.database.tableDict[o];
+                tableName[o] = obj.key;
+            }
+            $('#tableNames').val(tableName);
+            $('#query-result-column').pagingList({
+                action:columnListAction,
+                currentPage:currentPage,
+                jsonObj:$('#column-form').serializeObject(),
+                callback:pageBack
+            });
+        }
+
+        //判断该页面是否进行全选
+        function judgeCheckAll(){
+            var checkAll = true;
+            var arryCheck = $(".tableCheckBox");
+            if(arryCheck.length == 0) {
+                checkAll = false;
+            }else {
+                $(arryCheck).each(function () {
+                    if (!this.checked) {
+                        checkAll = false;
+                    }
+                });
+            }
+            $('#tableColumnCheckAll').prop('checked',checkAll);
+        }
+
+        function pageBack(data) {
+            pageData = data;
+            $('#column-column-table').find('tbody').template(data, function(item, i){
+                for(var o in top.registry.database.tableDict) {
+                    var obj = top.registry.database.tableDict[o];
+                    if(item.tableName == obj.key) {
+                        item.tableNameStr = obj.value;
+                    }
+                }
+                var checkedTablesLen,
+                        j,
+                        checkedJ;
+                item._checked = null;
+                for(j=0,checkedTablesLen = top.registry.database.checkTableColumns.length;j<checkedTablesLen;j++){
+                    checkedJ = top.registry.database.checkTableColumns[j];
+                    if(checkedJ.rownum == item.rownum) {
+                        item._checked = 'checked';
+                        return false;
+                    }
+                }
+            });
+            judgeCheckAll();
+            $('.tableCheckBox').off('click').on('click',function(){
+                var i = $(this).index('.tableCheckBox');
+                var rownum=+(this.getAttribute('rownum'));
+                if(this.checked){
+                    top.registry.database.checkTableColumns.push({rownum:rownum,data:data[i]});
+                }else{
+                    if(top.registry.database.checkTableColumns && top.registry.database.checkTableColumns.length > 0){
+                        if(top.registry.database.checkTableColumns.where('o=>o.rownum == "1"')){
+                            var t_index = $.inArray(top.registry.database.checkTableColumns.where('o=>o.rownum == "'+rownum+'"')[0], top.registry.database.checkTableColumns);
+                            top.registry.database.checkTableColumns.splice(t_index, 1);
+                        }
+                    }
+                }
+                judgeCheckAll();
+            });
+            //全选操作
+            $('#tableColumnCheckAll').off('click').on('click',function(){
+                $(".tableCheckBox").prop('checked',$(this).prop('checked'));
+                var arryCheck = $(".tableCheckBox");
+                var t_rownum = '';
+                $(arryCheck).each(function(i){
+                    t_rownum = this.getAttribute('rownum');
+                    if(this.checked) {
+                        top.registry.database.checkTableColumns.push({rownum: t_rownum, data: data[i]});
+                    }else{
+                        var t_index = $.inArray(top.registry.database.checkTableColumns.where('o=>o.rownum == "'+t_rownum+'"')[0], top.registry.database.checkTableColumns);
+                        if(t_index > -1){
+                            top.registry.database.checkTableColumns.splice(t_index, 1);
+                        }
+                    }
+                });
+            });
+
+        }
+        function init() {
+            //加载表连接列表数据
+            loadColumnList();
+        }
+
+        init();
+
+        //查询
+        $('#query-btn-column').on('click',function () {
+            loadColumnList();
+        });
+        //重置
+        $('#reset-btn-column').on('click',function () {
+            $('#column-form')[0].reset();
+        });
+
+    });
+
+</script>
+</html>
