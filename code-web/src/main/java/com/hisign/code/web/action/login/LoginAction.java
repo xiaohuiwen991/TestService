@@ -48,76 +48,7 @@ public class LoginAction {
     @Resource
     private SysParameterService sysParameterService;
 
-//    //socket服务地址URL
-//    @Value("#{configProperties['socket.server.url']}")
-//    private String socketServer;
-//
-//    //upload服务地址URL
-//    @Value("#{configProperties['upload.server.url']}")
-//    private String uploadServer;
-
-//    @RequestMapping(value = "/intoLogin", method = RequestMethod.GET)
     public String intoLogin(HttpServletRequest request, HttpServletResponse response) {
-//        FileInputStream fis = null;
-//        InputStreamReader isr = null;
-//        BufferedReader br = null;
-//        StringBuffer sb = new StringBuffer();
-//        String path = request.getContextPath();
-//        try {
-//            fis = new FileInputStream(LoginAction.class.getClassLoader().getResource("../../dist").getPath() + "/login.html");
-//            isr = new InputStreamReader(fis, "UTF-8");
-//            br = new BufferedReader(isr);
-//            String str = null;
-//            while (null != (str = br.readLine())) {
-//                if (str.contains("${path}")) {
-//                    str = str.replace("${path}", path);
-//                }
-//                sb.append(str);
-//            }
-//            System.out.println(sb.toString());
-//            PrintWriter pw = null;
-//            response.setContentType("text/html");
-//            response.setCharacterEncoding("UTF-8");
-//            String msg = null;
-//            try {
-//                pw = response.getWriter();
-//                pw.write(sb.toString());
-//                pw.flush();
-//                pw.close();
-//            } catch (IOException e) {
-//                logger.error("writer error!", e);
-//                pw = response.getWriter();
-//                pw.write(msg);
-//                pw.flush();
-//                pw.close();
-//            }
-//        } catch (Exception e) {
-//            logger.error("read file dist/login.html error!", e);
-//        } finally {
-//            if (null != br) {
-//                try {
-//                    br.close();
-//                } catch (IOException e) {
-//                    logger.error("close br error!", e);
-//                }
-//            }
-//
-//            if (null != isr) {
-//                try {
-//                    isr.close();
-//                } catch (IOException e) {
-//                    logger.error("close isr error!", e);
-//                }
-//            }
-//
-//            if (null != fis) {
-//                try {
-//                    fis.close();
-//                } catch (IOException e) {
-//                    logger.error("close fis error!", e);
-//                }
-//            }
-//        }
         return "/login";
     }
 
@@ -214,7 +145,7 @@ public class LoginAction {
         try {
             List<SysModule> list = sysModuleService.findLogUserPower(user.getUserName());//查询所有页面权限
             for(int i=0 ; i<list.size();i++){
-                if(null==list.get(i).getParentId()){
+                if(null==list.get(i) || StringUtils.isEmpty(list.get(i).getParentId())){
                     parentList.add(list.get(i));
                 }else{
                     childList.add(list.get(i));
@@ -238,8 +169,6 @@ public class LoginAction {
             indexParam.setToken(tokenId);//接口id
             indexParam.setLimits(tempMap);//全部页面权限
             indexParam.setRoles(roleList);//用户角色
-//            indexParam.setSocketServer(socketServer);//socket
-//            indexParam.setUploadServer(uploadServer);//上传服务器地址
             indexParam.setCurrentUser(user);
             jsonResult.setData(indexParam);
             jsonResult.setFlag(1);

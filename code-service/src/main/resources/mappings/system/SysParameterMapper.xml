@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hisign.code.persist.mapper.system.SysParameterMapper" >
 	<select id="findSysConfigList"  resultType="com.hisign.code.model.system.SysParam">
-			SELECT t.*,rownum FROM (
 				SELECT
 					ID 			 	AS id,
 					CHINESE_NAME 	AS chineseName,
@@ -15,7 +14,7 @@
 					MODIFY_PID 	    AS updateUser,
 					MODIFY_DATE     AS updateDatetime
 				FROM SYS_PARAMETER
-				WHERE 1=1 ORDER BY createDatetime DESC) t
+				WHERE 1=1 ORDER BY createDatetime DESC
 	</select>
 
 	<insert id="insertSysParameter" parameterType="com.hisign.code.model.system.SysParam" >

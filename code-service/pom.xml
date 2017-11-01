@@ -19,6 +19,15 @@
         </dependency>
 
         <dependency>
+            <groupId>mysql-connector-java</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.44</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/mysql-connector-java-5.1.44-bin.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.hisign</groupId>
             <artifactId>dubbo-monitor-simple</artifactId>
         </dependency>

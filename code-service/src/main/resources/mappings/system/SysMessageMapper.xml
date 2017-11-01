@@ -5,25 +5,23 @@
     <select id="findSysMessageByFilter"
             parameterType="com.hisign.code.model.system.SysMessage"
             resultType="com.hisign.code.model.system.SysMessage">
-        select p.* from(
-        select
-            rownum,rownum as rn,a.* from (
+        select a.* from (
                 select  r.id as receiveId,
                         r.sender_name as senderName,
                         r.sender_id as senderId,
-                        get_dictValue_by_dictKey('GXSDM',r.sender_unit) as senderUnit,
+                        GET_DICTVALUE_BY_DICTKEY('GXSDM',r.sender_unit) as senderUnit,
                         r.msg_state as msgState,
                         r.msg_id as msgId,
                         t.id as id,
                         t.subject as subject,
                         t.content as content,
-                        get_dictValue_by_dictKey('XXLXDM',t.type) as msgType,
-                        get_dictValue_by_dictKey('XXDJDM',t.msg_level) as msgLevel,
-                        to_char(t.create_date, 'yyyy-MM-dd hh24:mi:ss') as msgDateStr,
+                        GET_DICTVALUE_BY_DICTKEY('XXLXDM',t.type) as msgType,
+                        GET_DICTVALUE_BY_DICTKEY('XXDJDM',t.msg_level) as msgLevel,
+                        date_format(t.create_date,'%Y-%m-%d %H%i%S')  as msgDateStr,
                         t.create_date as createDate,
                         t.tslb as tslb,
                         t.att_id as attId
-                from sys_message t ,sys_receive_box r
+                from SYS_MESSAGE t ,SYS_RECEIVE_BOX r
         where 1=1
             and t.id = r.msg_id
             and r.receiver_id = #{user.userName,jdbcType=VARCHAR}
@@ -59,12 +57,8 @@
               order by ${orderByString}
         </if>
         ) a
-        <if test="end != 0 and end !=null">
-        where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
-        </if>
-        ) p
-        <if test="begin != 0 and begin !=null">
-        where rn >= #{begin,jdbcType=INTEGER}
+        <if test="end != 0 and end !=null and begin != 0 and begin !=null">
+        limit #{begin,jdbcType=INTEGER}, #{and,jdbcType=INTEGER}
         </if>
     </select>
 
@@ -73,37 +67,37 @@
             resultType="java.lang.Integer">
         select
           count(1)
-        from sys_message t ,sys_receive_box r
+        from SYS_MESSAGE t ,SYS_RECEIVE_BOX r
         where 1=1
-            and t.id = r.msg_id
-            and r.receiver_id = #{user.userName,jdbcType=VARCHAR}
-            and r.del = '0'
+            and t.ID = r.MSG_ID
+            and r.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
+            and r.DEL = '0'
         <if test="msgState != null and msgState != ''">
-            and r.msg_state =  #{msgState,jdbcType=VARCHAR}
+            and r.MSG_STATE =  #{msgState,jdbcType=VARCHAR}
         </if>
         <if test="msgLevel != null and msgLevel != ''">
-            and t.msg_level =  #{msgLevel,jdbcType=VARCHAR}
+            and t.MSG_LEVEL =  #{msgLevel,jdbcType=VARCHAR}
         </if>
         <if test="msgVest != null and msgVest != ''">
-            and t.msg_vest =  #{msgVest,jdbcType=VARCHAR}
+            and t.MSG_VEST =  #{msgVest,jdbcType=VARCHAR}
         </if>
         <if test="msgType != null and msgType != ''">
-            and t.type =  #{msgType,jdbcType=VARCHAR}
+            and t.TYPE =  #{msgType,jdbcType=VARCHAR}
         </if>
         <if test="senderName != null and senderName != ''">
-            and r.sender_name like '%' || #{senderName,jdbcType=VARCHAR} || '%'
+            and r.SENDER_NAME like '%' || #{senderName,jdbcType=VARCHAR} || '%'
         </if>
         <if test="content != null and content != ''">
-            and t.content like '%' || #{content,jdbcType=VARCHAR} || '%'
+            and t.CONTENT like '%' || #{content,jdbcType=VARCHAR} || '%'
         </if>
         <if test="noTslbSql != null and noTslbSql != ''">
-            and t.tslb not in ${noTslbSql}
+            and t.TSLB not in ${noTslbSql}
         </if>
         <if test="msgDateBegin!=null and msgDateBegin!=''">
-            and t.create_date >= to_date(#{msgDateBegin},'yyyy-mm-dd')
+            and t.CREATE_DATE >= to_date(#{msgDateBegin},'yyyy-mm-dd')
         </if>
         <if test="msgDateEnd!=null and msgDateEnd!=''">
-            and t.create_date <![CDATA[<]]> to_date(#{msgDateEnd},'yyyy-mm-dd')+1
+            and t.CREATE_DATE <![CDATA[<]]> to_date(#{msgDateEnd},'yyyy-mm-dd')+1
         </if>
 
     </select>
@@ -113,49 +107,49 @@
             resultType="com.hisign.code.model.system.SysMessage">
         select  r.id as receiveId,
                 r.sender_name as senderName,
-                get_dictValue_by_dictKey('XXZTDM',r.msg_state) as msgState,
+                GET_DICTVALUE_BY_DICTKEY('XXZTDM',r.msg_state) as msgState,
                 r.msg_id as msgId,
                 t.id as id,
                 t.subject as subject,
                 t.content as content,
-                get_dictValue_by_dictKey('XXLXDM',t.type) as msgType,
-                get_dictValue_by_dictKey('XXDJDM',t.msg_level) as msgLevel,
+                GET_DICTVALUE_BY_DICTKEY('XXLXDM',t.type) as msgType,
+                GET_DICTVALUE_BY_DICTKEY('XXDJDM',t.msg_level) as msgLevel,
                 to_char(t.create_date, 'yyyy-MM-dd hh24:mi:ss') as msgDateStr
-        from sys_message t
-        left join sys_receive_box r
-        on t.id = r.msg_id
-        where t.id = #{id,jdbcType=VARCHAR}
-        and rownum = 1
+        from SYS_MESSAGE t
+        left join SYS_RECEIVE_BOX r
+        on t.ID = r.MSG_ID
+        where t.ID = #{id,jdbcType=VARCHAR}
+        LIMIT 0,1
     </select>
 
     <delete id="deleteSysMessageById"
             parameterType="java.lang.String">
-        delete from sys_message t where t.id=#{id,jdbcType=VARCHAR}
+        delete from SYS_MESSAGE t where t.ID=#{id,jdbcType=VARCHAR}
     </delete>
 
     <delete id="deleteSysReceiveByMsgId"
             parameterType="java.lang.String">
-        delete from sys_receive_box t where t.msg_id=#{id,jdbcType=VARCHAR}
+        delete from SYS_RECEIVE_BOX t where t.MSG_ID=#{id,jdbcType=VARCHAR}
     </delete>
 
     <update id="deleteSysReceiveByUser"
             parameterType="com.hisign.code.model.system.SysMessage">
-        update sys_receive_box t
-        set t.del = '1',
-        t.modify_pid = #{user.userName,jdbcType=VARCHAR},
-        t.modify_date = sysdate
-        where t.msg_id = #{id,jdbcType=VARCHAR}
-        and t.receiver_id = #{user.userName,jdbcType=VARCHAR}
+        update SYS_RECEIVE_BOX t
+        set t.DEL = '1',
+        t.MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
+        t.MODIFY_DATE = sysdate
+        where t.MSG_ID = #{id,jdbcType=VARCHAR}
+        and t.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
     </update>
 
     <update id="setSysMessageRead"
             parameterType="com.hisign.code.model.system.SysMessage">
-        update sys_receive_box t
-        set t.msg_state = '2',
-            t.modify_pid = #{user.userName,jdbcType=VARCHAR},
-            t.modify_date = sysdate
-        where t.msg_id = #{id,jdbcType=VARCHAR}
-          and t.receiver_id = #{user.userName,jdbcType=VARCHAR}
+        update SYS_RECEIVE_BOX t
+        set t.MSG_STATE = '2',
+            t.MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
+            t.MODIFY_DATE = sysdate
+        where t.MSG_ID = #{id,jdbcType=VARCHAR}
+          and t.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
     </update>
 
 </mapper>

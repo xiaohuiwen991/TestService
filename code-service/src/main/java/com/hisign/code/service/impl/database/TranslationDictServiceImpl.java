@@ -85,9 +85,9 @@ public class TranslationDictServiceImpl implements TranslationDictService{
      * @throws Exception
      */
     public void initTranslationMap()  {
-        List<TranslationDict> translationDict = translationDictMapper.findTranslationDict(new TranslationDict());
-        for (TranslationDict dict : translationDict) {
-            Constants.TRANSLATION_MAP.put(dict.getOriginalText(), dict.getTranslation());
-        }
+//        List<TranslationDict> translationDict = translationDictMapper.findTranslationDict(new TranslationDict());
+//        for (TranslationDict dict : translationDict) {
+//            Constants.TRANSLATION_MAP.put(dict.getOriginalText(), dict.getTranslation());
+//        }
     }
 }

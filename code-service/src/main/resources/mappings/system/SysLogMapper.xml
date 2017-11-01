@@ -92,10 +92,10 @@
       CREATE_DATE,
       CREATE_PID
     ) values (
-      sys_guid(),
+      REPLACE(UUID(),'-',''),
       #{sysUser.userName},
       #{sysUser.trueName,jdbcType=VARCHAR},
-      sysdate,
+      NOW(),
       #{operData},
       #{operType},
       #{moduleSon},
@@ -110,9 +110,9 @@
       </if>
       #{ip},
       '0',
-      sysdate,
+      NOW(),
       #{sysUser.userName},
-      sysdate,
+      NOW(),
       #{sysUser.userName}
     )
   </insert>

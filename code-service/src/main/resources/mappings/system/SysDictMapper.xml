@@ -5,27 +5,27 @@
 
   <select id="querySingleDictByRoot" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysDict">
       select
-        dict_key as key,
-        root_key as root,
-        dict_value1 as value
-      from sys_dict
+        DICT_KEY as keyStr,
+        ROOT_KEY as root,
+        DICT_VALUE1 as value
+      from SYS_DICT
       where open_flag = '1'
-      and dict_level = '1'
-      and root_key = #{root}
-      order by dict_Key
+      and DICT_LEVEL = '1'
+      and ROOT_KEY = #{root}
+      order by dict_key
   </select>
     
     <select id="queryMultiDictByRoot" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysDict">
       select
-        dict_key as key,
-        root_key as root,
-        dict_value1 as value,
-        parent_key as parentKey
-      from sys_dict
-      where open_flag = '1'
-      and root_key = #{root}
-      and dict_key != root_key
-      order by dict_Key
+        DICT_KEY as keyStr,
+        ROOT_KEY as root,
+        DICT_VALUE1 as value,
+        PARENT_KEY as parentKey
+      from SYS_DICT
+      where OPEN_FLAG = '1'
+      and ROOT_KEY = #{root}
+      and DICT_KEY != root_key
+      order by DICT_KEY
     </select>
 
     <select id="queryDictByKey" parameterType="com.hisign.code.model.system.SysDict" resultType="com.hisign.code.model.system.SysDict">

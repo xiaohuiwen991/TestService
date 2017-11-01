@@ -23,6 +23,17 @@ public class SysDict extends BaseModel {
 
     private String py;
 
+    private String keyStr;
+
+    public String getKeyStr() {
+        return keyStr;
+    }
+
+    public void setKeyStr(String keyStr) {
+        this.keyStr = keyStr;
+        this.setKey(this.keyStr);
+    }
+
     public String getPy() {
         return py;
     }

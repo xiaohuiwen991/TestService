@@ -28,23 +28,21 @@
   <select id="findSysUserListByFilter" parameterType="com.hisign.code.model.system.SysUser" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from sys_user
+    from SYS_USER
     <include refid="select_By_Filter_For_Where" />
   </select>
 
   <select id="findSysUserListByFilterForCount" parameterType="com.hisign.code.model.system.SysUser" resultType="java.lang.Integer">
     select
     <include refid="ForCount" />
-    from sys_user
+    from SYS_USER
     <include refid="select_By_Filter_For_Where" />
   </select>
 
   <select id="findSysUserByUserName" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
       <include refid="Base_Column_List" />
-      ,
-      (select t.CONNECTION_NAME from DB_USER_CONNECTION t where t.USER_NAME = username) as connectionName
-    from sys_user
+    from SYS_USER
     where username = #{userName,jdbcType=VARCHAR}
   </select>
 
@@ -315,7 +313,7 @@
       USER_ID,
       TOKEN
     ) values (
-      sys_guid(),
+      UUID(),
       #{userId,jdbcType=VARCHAR},
       #{token,jdbcType=VARCHAR}
     )
@@ -324,11 +322,9 @@
   <select id="getUserByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
-      ,
-      (select t.CONNECTION_NAME from DB_USER_CONNECTION t where t.USER_NAME = username) as connectionName
     from SYS_USER
     where 1= 1
-    and ID = (select USER_ID from SYS_USER_TOKEN where TOKEN = #{value,jdbcType=VARCHAR} and rownum = 1)
+    and ID = (select USER_ID from SYS_USER_TOKEN where TOKEN = #{value,jdbcType=VARCHAR} limit 0,1)
     and OPEN_FLAG = '1'
   </select>
 

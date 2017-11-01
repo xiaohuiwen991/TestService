@@ -3,43 +3,42 @@
 <mapper namespace="com.hisign.code.persist.mapper.system.SysModuleMapper" >
     <select id="findAllModuleList"  resultType="com.hisign.code.model.system.SysModule">
        	SELECT
-			ID                    AS id,
-			MODULE_NO             AS moduleNo,
-			PARENT_ID             AS parentId,
-			TITLE                 AS title,
-			DESCRIPTION           AS description,
-			to_number(OPEN_FLAG)  AS openFlag,
-			CREATE_PID            AS createUser,
-			CREATE_DATE           AS createDatetime,
-			MODIFY_PID            AS updateUser,
-			MODIFY_DATE           AS updateDatetime,
-			URL                   AS url,
-			SORT                  AS sort,
-			root_id               AS rootId
+			ID                                      AS id,
+			MODULE_NO                               AS moduleNo,
+			PARENT_ID                               AS parentId,
+			TITLE                                   AS title,
+			DESCRIPTION                             AS description,
+			CAST(OPEN_FLAG AS  SIGNED   INTEGER)   AS openFlag,
+			CREATE_PID                              AS createUser,
+			CREATE_DATE                             AS createDatetime,
+			MODIFY_PID                              AS updateUser,
+			MODIFY_DATE                             AS updateDatetime,
+			URL                                     AS url,
+			SORT                                    AS sort,
+			root_id                                 AS rootId
 		FROM SYS_MODULE
-		ORDER BY to_number(SORT) nulls LAST
+		ORDER BY CAST(SORT AS  SIGNED   INTEGER)
     </select>
 
     <select id="findSysModuleInfoById" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysModule">
         SELECT
-               M.ID 			                 AS moduleId,
-		 	   P.ID 			                 AS permissionId,
-		       R.ID 			                 AS resourceId,
-		       PR.ID 			                 AS permisResId,
-		 	   M.PARENT_ID                       AS parentId,
-		 	   M.DEFAULT_MODEL                   AS defaultInto,
-		       M.TITLE			                 AS title,
-		       M.DESCRIPTION 	                 AS description,
-		       P.DESCRIPTION	                 AS permissionDescription,
-		       M.MODULE_NO		                 AS moduleNo,
-		       to_number(M.OPEN_FLAG)            AS openFlag,
-		       R.RES_STRING 	                 AS operateNo,
-		       M.CREATE_DATE                     AS createDatetime,
-		       M.MODIFY_DATE                     AS updateDatetime,
-		       to_number(P.PERMISSION_FLAG)      AS permissionFlag,
-		       M.SORT                            AS sort,
-               M.URL                             AS url,
-			   m.root_id                         AS rootId
+               M.ID 			                                    AS moduleId,
+		 	   P.ID 			                                    AS permissionId,
+		       R.ID 			                                    AS resourceId,
+		       PR.ID 			                                    AS permisResId,
+		 	   M.PARENT_ID                                          AS parentId,
+		 	   M.DEFAULT_MODEL                                      AS defaultInto,
+		       M.TITLE			                                    AS title,
+		       M.DESCRIPTION 	                                    AS description,
+		       P.DESCRIPTION	                                    AS permissionDescription,
+		       M.MODULE_NO		                                    AS moduleNo,
+		       CAST(M.OPEN_FLAG AS  SIGNED   INTEGER)              AS openFlag,
+		       R.RES_STRING 	                                    AS operateNo,
+		       M.CREATE_DATE                                        AS createDatetime,
+		       M.MODIFY_DATE                                        AS updateDatetime,
+		       CAST(P.PERMISSION_FLAG AS  SIGNED   INTEGER)       AS permissionFlag,
+		       M.SORT                                               AS sort,
+               M.URL                                                AS url
 		  FROM SYS_MODULE M, SYS_PERMISSION P, SYS_PERMIS_RES PR, SYS_RESOURCE R
 		 WHERE M.ID = P.MODULE_ID
 		   AND P.ID = PR.PERMISSION_ID
@@ -48,25 +47,25 @@
     </select>
 
     <delete id="deleteResource" parameterType="java.lang.String" >
-      DELETE FROM sys_resource r
-        WHERE r.id IN
-            (SELECT pr.resource_id
-            FROM sys_permis_res pr
-                WHERE pr.permission_id IN
-                    (SELECT p.id
-                    FROM sys_permission p
-                        WHERE p.module_id = #{id}))
+      DELETE r.* FROM SYS_RESOURCE r
+        WHERE r.ID IN (SELECT n.RESOURCE_ID AS ID FROM
+            (SELECT pr.RESOURCE_ID
+            FROM SYS_PERMIS_RES pr
+                WHERE pr.PERMISSION_ID IN
+                    (SELECT p.ID
+                    FROM SYS_PERMISSION p
+                        WHERE p.MODULE_ID = #{id})) n)
     </delete>
 
     <delete id="deletePermisRes" parameterType="java.lang.String">
-        DELETE FROM sys_permis_res pr
-            WHERE pr.permission_id IN
-                (SELECT p.id FROM sys_permission p
-                    WHERE p.module_id = #{id})
+        DELETE pr.* FROM SYS_PERMIS_RES pr
+            WHERE pr.permission_id IN (SELECT n.id AS permission_id FROM
+                (SELECT p.id FROM SYS_PERMISSION p
+                    WHERE p.module_id = #{id}) n)
     </delete>
 
     <insert id="insertModule" parameterType="com.hisign.code.model.system.SysModule">
-        INSERT INTO sys_module
+        INSERT INTO SYS_MODULE
         (
             ID,
             PARENT_ID,
@@ -178,11 +177,11 @@
     </insert>
 
     <delete id="deletePermission" parameterType="java.lang.String">
-        DELETE FROM sys_permission p WHERE p.module_id = #{id}
+        DELETE p.* FROM SYS_PERMISSION p WHERE p.module_id = #{id}
     </delete>
 
     <delete id="deleteModule" parameterType="java.lang.String">
-        DELETE FROM sys_module m WHERE m.id = #{id}
+        DELETE m.* FROM SYS_MODULE m WHERE m.id = #{id}
     </delete>
 
     <update id="upDateModuleInfo" parameterType="com.hisign.code.model.system.SysModule">
@@ -266,27 +265,27 @@
     </update>
 
     <delete id="deleteResourceForPer" parameterType="java.lang.String">
-        DELETE FROM sys_resource r
+        DELETE FROM SYS_RESOURCE r
             WHERE r.id IN
             (SELECT pr.resource_id
-                FROM sys_permis_res pr
+                FROM SYS_PERMIS_RES pr
                 WHERE pr.permission_id IN
             (SELECT p.id
-                FROM sys_permission p
+                FROM SYS_PERMISSION p
                 WHERE p.module_id = #{id}
                   AND p.permission_flag = '1'))
     </delete>
 
     <delete id="deletePermisResForPer" parameterType="java.lang.String">
-        DELETE FROM sys_permis_res pr
+        DELETE FROM SYS_PERMIS_RES pr
             WHERE pr.permission_id IN
-                (SELECT p.id FROM sys_permission p
+                (SELECT p.id FROM SYS_PERMISSION p
             WHERE p.module_id = #{id}
               AND p.permission_flag = '1')
     </delete>
 
     <delete id="deletePermissionForPer" parameterType="java.lang.String">
-        DELETE FROM sys_permission p WHERE p.module_id = #{id} AND p.permission_flag = '1'
+        DELETE FROM SYS_PERMISSION p WHERE p.module_id = #{id} AND p.permission_flag = '1'
     </delete>
 
     <select id="findSysModuleInfoByModuleId" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysModule">
@@ -311,20 +310,20 @@
     </select>
 
     <select id="findLogUserPower" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysModule">
-        SELECT M.ID                         AS moduleId,
-               M.PARENT_ID                  AS parentId,
-               M.TITLE                      AS title,
-               M.SORT                       AS sort,
-               M.URL                        AS url,
-               M.DESCRIPTION                AS description,
-               P.DESCRIPTION                AS permissionDescription,
-               M.MODULE_NO                  AS moduleNo,
-               to_number(M.OPEN_FLAG)       AS openFlag,
-               R.RES_STRING                 AS pageNo,
-               M.DEFAULT_MODEL              AS defaultInto,
-               M.CREATE_DATE                AS createDatetime,
-               M.MODIFY_DATE                AS updateDatetime,
-               to_number(P.PERMISSION_FLAG) AS permissionFlag
+        SELECT M.ID                                             AS moduleId,
+               M.PARENT_ID                                      AS parentId,
+               M.TITLE                                          AS title,
+               M.SORT                                           AS sort,
+               M.URL                                            AS url,
+               M.DESCRIPTION                                    AS description,
+               P.DESCRIPTION                                    AS permissionDescription,
+               M.MODULE_NO                                      AS moduleNo,
+               CAST(M.OPEN_FLAG  as   SIGNED   INTEGER)       AS openFlag,
+               R.RES_STRING                                     AS pageNo,
+               M.DEFAULT_MODEL                                  AS defaultInto,
+               M.CREATE_DATE                                    AS createDatetime,
+               M.MODIFY_DATE                                    AS updateDatetime,
+               CAST(P.PERMISSION_FLAG  as   SIGNED   INTEGER) AS permissionFlag
           FROM SYS_MODULE M, SYS_PERMISSION P, SYS_PERMIS_RES PR, SYS_RESOURCE R
          WHERE M.ID = P.MODULE_ID
            AND P.ID = PR.PERMISSION_ID
@@ -336,26 +335,26 @@
                   RES_STRING
                 FROM SYS_RESOURCE
                 WHERE id IN
-                    (SELECT spr.resource_id FROM sys_permis_res spr WHERE spr.permission_id IN
-                    (SELECT srp.permission_id FROM sys_role_permis srp WHERE srp.role_id IN
-                    (SELECT sur.role_id FROM sys_user_role sur , sys_role sr WHERE  sur.ROLE_ID = sr.id AND sur.user_id  =
-                    (SELECT id FROM sys_user su WHERE su.username=#{userName} AND rownum=1 AND OPEN_FLAG = '1' ) AND sr.open_flag='1' ) ) ) )
-            ORDER BY to_number(SORT) nulls LAST
+                    (SELECT spr.RESOURCE_ID FROM SYS_PERMIS_RES spr WHERE spr.PERMISSION_ID IN
+                    (SELECT srp.PERMISSION_ID FROM SYS_ROLE_PERMIS srp WHERE srp.ROLE_ID IN
+                    (SELECT sur.ROLE_ID FROM SYS_USER_ROLE sur , SYS_ROLE sr WHERE  sur.ROLE_ID = sr.id AND sur.USER_ID  =
+                    (SELECT id FROM SYS_USER su WHERE su.USERNAME=#{userName} AND OPEN_FLAG = '1' limit 0,1 ) AND sr.OPEN_FLAG='1' ) ) ) )
+            ORDER BY CAST( SORT   as   SIGNED   INTEGER)
     </select>
 
     <select id="findLogUserPowerLimt" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysModule">
         SELECT
-            M.TITLE                      AS title,
-            M.SORT                       AS sort,
-            M.URL                        AS url,
-            M.DESCRIPTION                AS description,
-            P.DESCRIPTION                AS permissionDescription,
-            M.MODULE_NO                  AS moduleNo,
-            to_number(M.OPEN_FLAG)       AS openFlag,
-            R.RES_STRING                 AS operateNo,
-            M.CREATE_DATE                AS createDatetime,
-            M.MODIFY_DATE                AS updateDatetime,
-            to_number(P.PERMISSION_FLAG) AS permissionFlag
+            M.TITLE                                         AS title,
+            M.SORT                                          AS sort,
+            M.URL                                           AS url,
+            M.DESCRIPTION                                   AS description,
+            P.DESCRIPTION                                   AS permissionDescription,
+            M.MODULE_NO                                     AS moduleNo,
+            CAST(M.OPEN_FLAG as   SIGNED   INTEGER)       AS openFlag,
+            R.RES_STRING                                    AS operateNo,
+            M.CREATE_DATE                                   AS createDatetime,
+            M.MODIFY_DATE                                   AS updateDatetime,
+            CAST(P.PERMISSION_FLAG as   SIGNED   INTEGER)  AS permissionFlag
         FROM SYS_MODULE M, SYS_PERMISSION P, SYS_PERMIS_RES PR, SYS_RESOURCE R
         WHERE M.ID = P.MODULE_ID
           AND P.ID = PR.PERMISSION_ID
@@ -365,19 +364,19 @@
             SELECT
               RES_STRING
             FROM SYS_RESOURCE
-            WHERE id IN
-                (SELECT spr.resource_id FROM sys_permis_res spr WHERE spr.permission_id IN
-                (SELECT srp.permission_id FROM sys_role_permis srp WHERE srp.role_id IN
-                (SELECT sur.role_id FROM sys_user_role sur , sys_role sr WHERE  sur.ROLE_ID = sr.id AND sur.user_id  =
-                (SELECT id FROM sys_user su WHERE su.username=#{userName} AND rownum=1 AND OPEN_FLAG = '1') AND sr.open_flag='1' ) ) ) )
-            ORDER BY to_number(SORT) nulls LAST
+            WHERE ID IN
+                (SELECT spr.RESOURCE_ID FROM SYS_PERMIS_RES spr WHERE spr.PERMISSION_ID IN
+                (SELECT srp.PERMISSION_ID FROM SYS_ROLE_PERMIS srp WHERE srp.ROLE_ID IN
+                (SELECT sur.ROLE_ID FROM SYS_USER_ROLE sur , SYS_ROLE sr WHERE  sur.ROLE_ID = sr.id AND sur.USER_ID  =
+                (SELECT ID FROM SYS_USER su WHERE su.username=#{userName} AND OPEN_FLAG = '1' limit 0,1 ) AND sr.OPEN_FLAG='1' ) ) ) )
+            ORDER BY CAST( SORT   as   SIGNED   INTEGER)
     </select>
 
     <select id="findRoleList" parameterType="java.lang.String" resultType="java.util.HashMap">
         SELECT
             ROLE_NAME     AS ROLECN,
             ROLE_NAME_EN  AS ROLEEN
-        FROM SYS_ROLE sr,SYS_User su,SYS_USER_ROLE sur
+        FROM SYS_ROLE sr,SYS_USER su,SYS_USER_ROLE sur
         WHERE su.id = sur.User_Id
         AND sr.id = sur.role_id
         AND su.USERNAME = #{userName}
