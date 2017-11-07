@@ -64,6 +64,11 @@ public class BaseModel implements Serializable {
     private String key;
 
     /**
+     * 字典键值
+     */
+    private String keyStr;
+
+    /**
      * 字典值
      */
     private String value;
@@ -99,6 +104,15 @@ public class BaseModel implements Serializable {
             return getSortName()  + " " + getSortOrder();
         }
         return orderByString;
+    }
+
+    public String getKeyStr() {
+        return keyStr;
+    }
+
+    public void setKeyStr(String keyStr) {
+        this.keyStr = keyStr;
+        this.setKey(this.keyStr);
     }
 
     public void setOrderByString(String orderByString) {

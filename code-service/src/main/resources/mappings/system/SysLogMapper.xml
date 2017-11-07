@@ -39,7 +39,7 @@
           <if test="userUnit == null or userUnit == '' ">
           '000000000000',
           </if>
-          sysdate,
+          now(),
           '0',
           <if test="userUnit != null and userUnit != '' ">
           #{userUnit},
@@ -50,16 +50,16 @@
           #{userName},
           #{ipAddress},
           #{userName},
-          sysdate,
-          sysdate
+          now(),
+          now()
         )
     </insert>
 
     <update id="updateLogUserInfo" parameterType="com.hisign.code.model.system.SysUser" >
       UPDATE  sys_online_log SET
-        OFF_TIME  = sysdate,
+        OFF_TIME  = now(),
         MODIFY_PID = #{userName},
-        MODIFY_DATE = sysdate
+        MODIFY_DATE = now()
       WHERE 1=1
         AND id = (
           SELECT  t.id FROM (
@@ -67,7 +67,7 @@
                 WHERE  OPR_USER =  #{userName}
                   ORDER BY CREATE_DATE DESC
             ) t
-          WHERE rownum = 1
+          LIMIT 0,1
         )
     </update>
 

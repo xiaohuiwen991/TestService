@@ -1,9 +1,9 @@
 package com.hisign.code.service.impl.database;
 
-import com.hisign.code.api.database.ConnectionInfoService;
-import com.hisign.code.model.database.ConnectionInfo;
+import com.hisign.code.api.business.CompanyManageService;
+import com.hisign.code.model.database.CompanyInfo;
 import com.hisign.code.model.database.UserConnection;
-import com.hisign.code.persist.mapper.database.ConnectionInfoMapper;
+import com.hisign.code.persist.mapper.database.CompanyManageMapper;
 import com.hisign.code.persist.mapper.database.UserConnectionMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +12,17 @@ import java.util.List;
 
 /**
  * 数据库连接接口实现类
- * @author jiangpeng
+ * @author xiaohuwien
  * @since 2017/05/23 18:19
  */
-@Service("connectionInfoService")
-public class ConnectionInfoServiceImpl implements ConnectionInfoService {
+@Service("companyManageService")
+public class CompanyManageServiceImpl implements CompanyManageService {
 
     /**
      *数据库连接mapper
      */
     @Resource
-    public ConnectionInfoMapper connectionInfoMapper;
+    public CompanyManageMapper companyManageMapper;
 
     @Resource
     public UserConnectionMapper userConnectionMapper;
@@ -33,8 +33,8 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @return 数据库连接列表信息
      * @throws Exception
      */
-    public List<ConnectionInfo> findConnectionInfoList(ConnectionInfo connectionInfo) throws Exception {
-        return connectionInfoMapper.findConnectionInfoList(connectionInfo);
+    public List<CompanyInfo> findConnectionInfoList(CompanyInfo connectionInfo) throws Exception {
+        return companyManageMapper.findConnectionInfoList(connectionInfo);
     }
 
     /**
@@ -43,8 +43,8 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @return 数据库连接列表信息数量
      * @throws Exception
      */
-    public int findConnectionInfoListForCount(ConnectionInfo connectionInfo) throws Exception {
-        return connectionInfoMapper.findConnectionInfoListForCount(connectionInfo);
+    public int findConnectionInfoListForCount(CompanyInfo connectionInfo) throws Exception {
+        return companyManageMapper.findConnectionInfoListForCount(connectionInfo);
     }
 
     /**
@@ -52,8 +52,8 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @param connectionInfo 数据库连接信息
      * @throws Exception
      */
-    public void deleteConnectionInfo(ConnectionInfo connectionInfo) throws Exception {
-        connectionInfoMapper.deleteConnectionInfo(connectionInfo);
+    public void deleteConnectionInfo(CompanyInfo connectionInfo) throws Exception {
+        companyManageMapper.deleteConnectionInfo(connectionInfo);
     }
 
     /**
@@ -61,8 +61,8 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @param connectionInfo 数据库连接信息
      * @throws Exception
      */
-    public void updateConnectionInfo(ConnectionInfo connectionInfo) throws Exception {
-        connectionInfoMapper.updateConnectionInfo(connectionInfo);
+    public void updateConnectionInfo(CompanyInfo connectionInfo) throws Exception {
+        companyManageMapper.updateConnectionInfo(connectionInfo);
     }
 
     /**
@@ -71,8 +71,8 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @return 数据库连接编号
      * @throws Exception
      */
-    public String insertConnectionInfo(ConnectionInfo connectionInfo) throws Exception {
-        connectionInfoMapper.insertConnectionInfo(connectionInfo);
+    public String insertConnectionInfo(CompanyInfo connectionInfo) throws Exception {
+        companyManageMapper.insertConnectionInfo(connectionInfo);
         return null;
     }
 
@@ -82,8 +82,8 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @return 数据库连接信息
      * @throws Exception
      */
-    public ConnectionInfo findConnectionInfoInfo(ConnectionInfo connectionInfo) throws Exception {
-        return connectionInfoMapper.findConnectionInfoInfo(connectionInfo);
+    public CompanyInfo findConnectionInfoInfo(CompanyInfo connectionInfo) throws Exception {
+        return companyManageMapper.findConnectionInfoInfo(connectionInfo);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService {
      * @throws Exception
      */
     @Override
-    public void connect(ConnectionInfo connectionInfo) throws Exception {
+    public void connect(CompanyInfo connectionInfo) throws Exception {
         UserConnection userConnection = new UserConnection(connectionInfo.getUser().getUserName(), connectionInfo.getName());
         userConnectionMapper.deleteUserConnection(userConnection);
         userConnectionMapper.insertUserConnection(userConnection);

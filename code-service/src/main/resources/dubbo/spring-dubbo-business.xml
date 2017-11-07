@@ -14,16 +14,16 @@
       	http://www.springframework.org/schema/context/spring-context.xsd
         ">
 
-    <dubbo:service interface="com.hisign.code.api.database.ConnectionInfoService" protocol="rmi" ref="connectionInfoService" />
+    <dubbo:service interface="com.hisign.code.api.business.CompanyManageService" protocol="rmi" ref="companyManageService" />
 
-    <dubbo:service interface="com.hisign.code.api.database.TableColumnService" protocol="rmi" ref="tableColumnService" />
+    <dubbo:service interface="com.hisign.code.api.business.TableColumnService" protocol="rmi" ref="tableColumnService" />
 
-    <dubbo:service interface="com.hisign.code.api.database.TemplateSqlService" protocol="rmi" ref="templateSqlService" />
+    <dubbo:service interface="com.hisign.code.api.business.TemplateSqlService" protocol="rmi" ref="templateSqlService" />
 
-    <dubbo:service interface="com.hisign.code.api.database.DevelopSqlService" protocol="rmi" ref="developSqlService" />
+    <dubbo:service interface="com.hisign.code.api.business.DevelopSqlService" protocol="rmi" ref="developSqlService" />
 
-    <dubbo:service interface="com.hisign.code.api.database.TableConnectionService" protocol="rmi" ref="tableConnectionService" />
+    <dubbo:service interface="com.hisign.code.api.business.TableConnectionService" protocol="rmi" ref="tableConnectionService" />
 
-    <dubbo:service interface="com.hisign.code.api.database.TranslationDictService" protocol="rmi" ref="translationDictService"/>
+    <dubbo:service interface="com.hisign.code.api.business.TranslationDictService" protocol="rmi" ref="translationDictService"/>
 
 </beans>

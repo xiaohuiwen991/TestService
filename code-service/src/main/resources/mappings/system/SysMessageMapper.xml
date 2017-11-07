@@ -137,7 +137,7 @@
         update SYS_RECEIVE_BOX t
         set t.DEL = '1',
         t.MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
-        t.MODIFY_DATE = sysdate
+        t.MODIFY_DATE = now()
         where t.MSG_ID = #{id,jdbcType=VARCHAR}
         and t.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
     </update>
@@ -147,7 +147,7 @@
         update SYS_RECEIVE_BOX t
         set t.MSG_STATE = '2',
             t.MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
-            t.MODIFY_DATE = sysdate
+            t.MODIFY_DATE = now()
         where t.MSG_ID = #{id,jdbcType=VARCHAR}
           and t.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
     </update>

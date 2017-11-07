@@ -16,23 +16,20 @@
     </select>
 
 
-    <select id="findAllRole"
-            resultType="com.hisign.code.model.system.SysRole">
+    <select id="findAllRole" resultType="com.hisign.code.model.system.SysRole">
         select
-            ID as key,
+            ID as keyStr,
             ROLE_NAME as value
         from SYS_ROLE
         where 1=1
         and OPEN_FLAG =  '1'
     </select>
 
-    <select id="findSysRoleByFilter"
-            parameterType="com.hisign.code.model.system.SysRole"
-            resultType="com.hisign.code.model.system.SysRole">
-        select p.* from(
+    <select id="findSysRoleByFilter"  parameterType="com.hisign.code.model.system.SysRole" resultType="com.hisign.code.model.system.SysRole">
         select
-            rownum,rownum as rn,a.* from (
+            @rownum:=@rownum+1 as rownum,a.* from (
             select
+                @rownum:=0,
                 ID as id,
                 ROLE_NAME as roleName,
                 DESCRIPTION as description,
@@ -45,24 +42,20 @@
             and OPEN_FLAG =  #{openFlag,jdbcType=VARCHAR}
         </if>
         <if test="roleName != null and roleName != ''">
-            and ROLE_NAME like '%' || #{roleName,jdbcType=VARCHAR} || '%' escape '\'
+            and ROLE_NAME like concat('%' , #{roleName,jdbcType=VARCHAR} , '%')
         </if>
         <if test="description != null and description != ''">
-            and DESCRIPTION like '%' || #{description,jdbcType=VARCHAR} || '%' escape '\'
+            and DESCRIPTION like concat('%' , #{description,jdbcType=VARCHAR},'%')
         </if>
         <if test="orderByString != null and orderByString != ''">
               order by ${orderByString}
         </if>
         <if test="orderByString == null or orderByString == ''">
-            order by CREATE_DATE desc nulls last
+            order by CREATE_DATE desc
         </if>
         ) a
-        <if test="end != 0 and end !=null">
-        where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
-        </if>
-        ) p
-        <if test="begin != 0 and begin !=null">
-        where rn >= #{begin,jdbcType=INTEGER}
+        <if test="end != 0 and end !=null and begin != 0 and begin !=null">
+          LIMIT #{begin,jdbcType=INTEGER} , #{end,jdbcType=INTEGER}
         </if>
     </select>
 
@@ -74,10 +67,10 @@
         from SYS_ROLE
         where 1=1
         <if test="roleName != null and roleName != ''">
-            and ROLE_NAME like '%' || #{roleName,jdbcType=VARCHAR} || '%' escape '\'
+            and ROLE_NAME like concat('%' , #{roleName,jdbcType=VARCHAR} , '%')
         </if>
         <if test="description != null and description != ''">
-            and DESCRIPTION like '%' || #{description,jdbcType=VARCHAR} || '%' escape '\'
+            and DESCRIPTION like concat('%' , #{description,jdbcType=VARCHAR} , '%')
         </if>
 
     </select>
@@ -101,24 +94,24 @@
         delete from SYS_USER_ROLE where ROLE_ID=#{id,jdbcType=VARCHAR}
     </delete>
 
-    <select id="findSysRoleList"
-            parameterType="com.hisign.code.model.system.SysRole"
-            resultType="com.hisign.code.model.system.SysRole">
-        select
-            rownum,
-            ID as id,
-            ROLE_NAME as roleName,
-            DESCRIPTION as description,
-            OPEN_FLAG as openFlag,
-            get_dictValue_by_dictKey('QYZTDM',OPEN_FLAG) as openFlagZw
-        from SYS_ROLE
-        where 1=1
-        <if test="roleName != null and roleName != ''">
-            and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
-        </if>
-        <if test="id != null and id != ''">
-            and ID = #{id,jdbcType=VARCHAR}
-        </if>
+    <select id="findSysRoleList" parameterType="com.hisign.code.model.system.SysRole" resultType="com.hisign.code.model.system.SysRole">
+        SELECT @rownum:=@rownum+1 AS rownum ,t.* FROM (
+            SELECT
+                @rownum:=0,
+                ID as id,
+                ROLE_NAME as roleName,
+                DESCRIPTION as description,
+                OPEN_FLAG as openFlag,
+                get_dictValue_by_dictKey('QYZTDM',OPEN_FLAG) as openFlagZw
+            FROM SYS_ROLE
+            WHERE 1=1
+          <if test="roleName != null and roleName != ''">
+              AND ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+          </if>
+          <if test="id != null and id != ''">
+              AND ID = #{id,jdbcType=VARCHAR}
+          </if>
+        ) t
     </select>
 
     <insert id="insertSysRole"
@@ -139,9 +132,9 @@
             #{description,jdbcType=VARCHAR},
             #{openFlag,jdbcType=VARCHAR},
             #{user.trueName,jdbcType=VARCHAR},
-            sysdate,
+            now(),
             #{user.trueName,jdbcType=VARCHAR},
-            sysdate
+            now()
         )
     </insert>
 
@@ -152,7 +145,7 @@
             DESCRIPTION = #{description,jdbcType=VARCHAR},
             OPEN_FLAG = #{openFlag,jdbcType=VARCHAR},
             MODIFY_PID = #{user.trueName,jdbcType=VARCHAR},
-            MODIFY_DATE = sysdate
+            MODIFY_DATE = now()
         WHERE ID = #{roleId,jdbcType=VARCHAR}
     </update>
 
@@ -182,7 +175,7 @@
             #{userId,jdbcType=VARCHAR},
             #{roleId,jdbcType=VARCHAR},
             #{user.trueName,jdbcType=VARCHAR},
-            sysdate
+            now()
         )
     </insert>
 
@@ -200,8 +193,8 @@
 			TITLE as title,
 			DESCRIPTION as description
         from SYS_MODULE
-        where PARENT_ID is null
-        ORDER BY to_number(SORT) nulls LAST
+        where PARENT_ID = ''
+        ORDER BY CAST(SORT AS SIGNED  INTEGER)
     </select>
 
     <select id="findSysPermissionListByFilter"
@@ -267,7 +260,7 @@
             #{roleId},
             #{permissionId},
             #{user.userName},
-            sysdate
+            now()
         )
     </insert>
 

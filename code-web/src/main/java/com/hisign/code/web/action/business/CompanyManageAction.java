@@ -1,9 +1,9 @@
-package com.hisign.code.web.action.database;
+package com.hisign.code.web.action.business;
 
 import com.alibaba.fastjson.JSON;
-import com.hisign.code.api.database.ConnectionInfoService;
+import com.hisign.code.api.business.CompanyManageService;
 import com.hisign.code.model.common.JsonResult;
-import com.hisign.code.model.database.ConnectionInfo;
+import com.hisign.code.model.database.CompanyInfo;
 import com.hisign.code.model.system.SysUser;
 import com.hisign.code.web.bind.annotation.CurrentUser;
 import com.hisign.code.web.bind.annotation.TranslateObject;
@@ -18,13 +18,13 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 数据库连接action
- * @author jiangpeng
+ * 公司管理action
+ * @author xiaohuiwen
  * @since 2017/05/23 18:19
  */
 @Controller
-@RequestMapping(value="/api/{recordLog}/database/connection")
-public class ConnectionInfoAction {
+@RequestMapping(value="/api/{recordLog}/business/company")
+public class CompanyManageAction {
 
     /**
      * 记录日志
@@ -35,27 +35,28 @@ public class ConnectionInfoAction {
      * 数据库连接接口
      */
     @Resource
-    private ConnectionInfoService connectionInfoService;
+    private CompanyManageService companyManageService;
 
     /**
      * 获取数据库连接列表信息
-     * @param connectionInfo 数据库连接查询条件
+     * @param companyinfo 数据库连接查询条件
      * @return 数据库连接列表信息
      * @throws InterruptedException
      */
     @RequestMapping(value="/list", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult findConnectionInfoList(@TranslateObject ConnectionInfo connectionInfo) throws InterruptedException {
+    public JsonResult findConnectionInfoList(@TranslateObject CompanyInfo companyinfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(connectionInfo);
-        logger.info("获取数据库连接列表信息");
+        String paraStr = JSON.toJSONString(companyinfo);
+        logger.info("获取公司数据列表信息");
         try {
-            List<ConnectionInfo> list = connectionInfoService.findConnectionInfoList(connectionInfo);
-            int count =  connectionInfoService.findConnectionInfoListForCount(connectionInfo);
+            companyinfo.setBegin(companyinfo.getBegin()-1);
+            List<CompanyInfo> list = companyManageService.findConnectionInfoList(companyinfo);
+            int count =  companyManageService.findConnectionInfoListForCount(companyinfo);
             jsonResult.setSuccessData(list, count);
         } catch (Exception e) {
-            logger.error("获取数据库连接列表信息失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("获取数据库连接列表信息失败");
+            logger.error("获取公司数据列表信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("获取公司数据列表信息失败");
         }
         return jsonResult;
     }
@@ -63,27 +64,27 @@ public class ConnectionInfoAction {
     /**
      * 新增数据库连接
      * @param user 当前用户
-     * @param connectionInfo 数据库连接信息
+     * @param companyinfo 数据库连接信息
      * @return 新增编号
      * @throws InterruptedException
      */
     @RequestMapping(value="/add", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult insertConnectionInfo(@CurrentUser SysUser user, @TranslateObject ConnectionInfo connectionInfo) throws InterruptedException {
+    public JsonResult insertConnectionInfo(@CurrentUser SysUser user, @TranslateObject CompanyInfo companyinfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(connectionInfo);
-        logger.info("新增数据库连接");
+        String paraStr = JSON.toJSONString(companyinfo);
+        logger.info("新增公司数据");
         try {
-            ConnectionInfo info = connectionInfoService.findConnectionInfoInfo(connectionInfo);
+            CompanyInfo info = companyManageService.findConnectionInfoInfo(companyinfo);
             if(info != null) {
-                return new JsonResult(0, "连接名已存在!");
+                return new JsonResult(0, "公司名称已存在!");
             }
-            connectionInfo.setUser(user);
-            String id = connectionInfoService.insertConnectionInfo(connectionInfo);
+            companyinfo.setUser(user);
+            String id = companyManageService.insertConnectionInfo(companyinfo);
             jsonResult.setSuccessData(id);
         } catch (Exception e) {
-            logger.error("新增数据库连接失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("新增数据库连接失败");
+            logger.error("新增公司数据失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("新增公司数据失败");
         }
         return jsonResult;
     }
@@ -91,19 +92,19 @@ public class ConnectionInfoAction {
     /**
      * 修改数据库连接信息
      * @param user 当前用户
-     * @param connectionInfo 数据库连接信息
+     * @param companyinfo 数据库连接信息
      * @return 修改标志
      * @throws InterruptedException
      */
-    @RequestMapping(value="/edit", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value="/update", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult updateConnectionInfo(@CurrentUser SysUser user, @TranslateObject ConnectionInfo connectionInfo) throws InterruptedException {
+    public JsonResult updateConnectionInfo(@CurrentUser SysUser user, @TranslateObject CompanyInfo companyinfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(connectionInfo);
+        String paraStr = JSON.toJSONString(companyinfo);
         logger.info("修改数据库连接信息");
         try {
-            connectionInfo.setUser(user);
-            connectionInfoService.updateConnectionInfo(connectionInfo);
+            companyinfo.setUser(user);
+            companyManageService.updateConnectionInfo(companyinfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("修改数据库连接信息失败,请求参数为[{}]", paraStr, e);
@@ -114,40 +115,40 @@ public class ConnectionInfoAction {
 
     /**
      * 删除数据库连接
-     * @param connectionInfo 数据库连接信息
+     * @param companyinfo 数据库连接信息
      * @return 删除标志
      * @throws InterruptedException
      */
     @RequestMapping(value="/delete", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult deleteConnectionInfo(@TranslateObject ConnectionInfo connectionInfo) throws InterruptedException {
+    public JsonResult deleteConnectionInfo(@TranslateObject CompanyInfo companyinfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(connectionInfo);
-        logger.info("删除数据库连接");
+        String paraStr = JSON.toJSONString(companyinfo);
+        logger.info("删除公司信息");
         try {
-            connectionInfoService.deleteConnectionInfo(connectionInfo);
+            companyManageService.deleteConnectionInfo(companyinfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {
-            logger.error("删除数据库连接失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("删除数据库连接失败");
+            logger.error("删除公司信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("删除公司信息失败");
         }
         return jsonResult;
     }
 
     /**
      * 获取数据库连接信息
-     * @param connectionInfo 数据库连接信息
+     * @param companyinfo 数据库连接信息
      * @return 删除标志
      * @throws InterruptedException
      */
     @RequestMapping(value="/info", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult findConnectionInfoInfo(@TranslateObject ConnectionInfo connectionInfo) throws InterruptedException {
+    public JsonResult findConnectionInfoInfo(@TranslateObject CompanyInfo companyinfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(connectionInfo);
+        String paraStr = JSON.toJSONString(companyinfo);
         logger.info("获取数据库连接信息");
         try {
-            ConnectionInfo info = connectionInfoService.findConnectionInfoInfo(connectionInfo);
+            CompanyInfo info = companyManageService.findConnectionInfoInfo(companyinfo);
             jsonResult.setSuccessData(info);
         } catch (Exception e) {
             logger.error("获取数据库连接信息失败,请求参数为[{}]", paraStr, e);
@@ -159,19 +160,19 @@ public class ConnectionInfoAction {
 
     /**
      * 连接数据库
-     * @param connectionInfo 数据库连接信息
+     * @param companyinfo 数据库连接信息
      * @return 删除标志
      * @throws InterruptedException
      */
     @RequestMapping(value="/connect", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult findConnectionInfoInfo(@TranslateObject ConnectionInfo connectionInfo, @CurrentUser SysUser user) throws InterruptedException {
+    public JsonResult findConnectionInfoInfo(@TranslateObject CompanyInfo companyinfo, @CurrentUser SysUser user) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(connectionInfo);
+        String paraStr = JSON.toJSONString(companyinfo);
         logger.info("连接数据库");
         try {
-            connectionInfo.setUser(user);
-            connectionInfoService.connect(connectionInfo);
+            companyinfo.setUser(user);
+            companyManageService.connect(companyinfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("连接数据库失败,请求参数为[{}]", paraStr, e);

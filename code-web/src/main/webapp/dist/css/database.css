@@ -1,12 +1,12 @@
 @charset "utf-8";
-/*@group database-connection.html*/
+/*@group business-connection.html*/
 .icon-circle-blank {
     color: #2a770b !important;
     cursor: pointer;
 }
-/*@end database-connection.html**/
+/*@end business-connection.html**/
 
-/*@group database-template-sql.html*/
+/*@group business-template-sql.html*/
 .sql-text{
     height: 147px;
 }
@@ -25,9 +25,9 @@
     top: 0;
     left: 3000px;
 }
-/*@end database-template-sql.html**/
+/*@end business-template-sql.html**/
 
-/*@group database-develop-sql.html*/
+/*@group business-develop-sql.html*/
 #confirm-save-btn:after {
   content: "是";
 }
@@ -141,11 +141,11 @@ th.text-center {
 .cpr{
     cursor: pointer;
 }
-/*@end database-develop-sql.html**/
+/*@end business-develop-sql.html**/
 
-/*@group database-translation-dict.html*/
+/*@group business-translation-dict.html*/
 .mr10 {
     margin-right: 10px;
 }
-/*@end database-translation-dict.html**/
+/*@end business-translation-dict.html**/
 

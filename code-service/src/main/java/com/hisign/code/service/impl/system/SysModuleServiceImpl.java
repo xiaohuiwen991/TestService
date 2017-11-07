@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 系统模块管理接口实现
@@ -129,19 +130,19 @@ public class SysModuleServiceImpl implements SysModuleService {
         String resourceId ;
         String permisResId ;
         sysModule.setPermissionFlag(0);
-        moduleId = sysModuleMapper.getGuid();
+        moduleId =  UUID.randomUUID().toString().replace("-","");
         sysModule.setModuleId(moduleId);
         sysModuleMapper.insertModule(sysModule); //增加一个module
 
-        permissionId =  sysModuleMapper.getGuid();
+        permissionId =   UUID.randomUUID().toString().replace("-","");
         sysModule.setId(permissionId);
         sysModuleMapper.insertPermission(sysModule); //增加一个权限
 
-        resourceId = sysModuleMapper.getGuid();
+        resourceId =  UUID.randomUUID().toString().replace("-","");
         sysModule.setResourceId(resourceId);
         sysModuleMapper.insertResource(sysModule); //增加一个资源
 
-        permisResId = sysModuleMapper.getGuid();
+        permisResId =  UUID.randomUUID().toString().replace("-","");
         sysModule.setPermisResId(permisResId);
         sysModuleMapper.insertPermisRes(sysModule); //增加一个对应关系
 

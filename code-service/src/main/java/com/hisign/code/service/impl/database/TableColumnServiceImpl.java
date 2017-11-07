@@ -1,21 +1,18 @@
 package com.hisign.code.service.impl.database;
 
-import com.hisign.code.api.database.TableColumnService;
-import com.hisign.code.api.database.TranslationDictService;
+import com.hisign.code.api.business.TableColumnService;
+import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.constant.Constants;
-import com.hisign.code.model.database.ConnectionInfo;
 import com.hisign.code.model.database.TableColumn;
 import com.hisign.code.model.database.TranslationDict;
 import com.hisign.code.model.system.SysUser;
-import com.hisign.code.persist.mapper.database.ConnectionInfoMapper;
+import com.hisign.code.persist.mapper.database.CompanyManageMapper;
 import com.hisign.code.persist.mapper.database.TableColumnMapper;
 import com.hisign.multiDatabase.ILoadBean;
-import com.hisign.multiDatabase.SqlSessionGetFactory;
 import com.hisign.trans.model.TransResult;
 import com.hisign.trans.util.TransUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,7 +37,7 @@ public class TableColumnServiceImpl implements TableColumnService {
     public TableColumnMapper tableColumnMapper;
 
     @Resource
-    public ConnectionInfoMapper connectionInfoMapper;
+    public CompanyManageMapper companyManageMapper;
 
     @Resource
     public ILoadBean loadBean;
@@ -309,9 +306,9 @@ public class TableColumnServiceImpl implements TableColumnService {
      */
     public SqlSession getSqlSession(String name) throws Exception {
         if(StringUtils.isEmpty(name)) name = "default";
-        ConnectionInfo connectionInfo = connectionInfoMapper.findConnectionInfoInfo(new ConnectionInfo(name));
-        SqlSessionFactory sqlSessionFactory = SqlSessionGetFactory.getConnection(connectionInfo.getSpringBeanInfo(), loadBean, SqlSessionFactory.class);
-        return sqlSessionFactory.openSession();
+//        CompanyInfo connectionInfo = companyManageMapper.findConnectionInfoInfo(new CompanyInfo(name));
+//        SqlSessionFactory sqlSessionFactory = SqlSessionGetFactory.getConnection(connectionInfo.getSpringBeanInfo(), loadBean, SqlSessionFactory.class);
+        return null;
     }
 
 }

@@ -10,24 +10,54 @@ import java.util.Date;
 
 /**
  *
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/5/23 17:35
  */
-public class ConnectionInfo extends BaseModel {
-    private String name;
+public class CompanyInfo extends BaseModel {
 
-    private String url;
+    /**
+     *
+     */
+    private String id;
 
-    private String username;
+    /**
+     *
+     */
+    private String companyName;
 
-    private String password;
+    /**
+     *
+     */
+    private String reportAdress;
 
+    /**
+     *
+     */
+    private String email;
+
+    /**
+     *
+     */
+    private String invoiceAdress;
+
+    /**
+     *
+     */
     private String createPid;
 
+    /**
+     *
+     */
     private Date createDate;
 
+    /**
+     *
+     */
     private String modifyPid;
 
+    /**
+     *
+     */
     private Date modifyDate;
 
     /**
@@ -35,43 +65,59 @@ public class ConnectionInfo extends BaseModel {
      */
     private int operateFlag;
 
-    public ConnectionInfo() {
+    private String contact;
+
+    @Override
+    public String getId() {
+        return id;
     }
 
-    public ConnectionInfo(String name) {
-        this.name = name;
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public CompanyInfo() {
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public String getContact() {
+        return contact;
     }
 
-    public String getUrl() {
-        return url;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public String getUsername() {
-        return username;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public String getEmail() {
+        return email;
     }
 
-    public String getPassword() {
-        return password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public String getReportAdress() {
+        return reportAdress;
+    }
+
+    public void setReportAdress(String reportAdress) {
+        this.reportAdress = reportAdress;
+    }
+
+    public String getInvoiceAdress() {
+        return invoiceAdress;
+    }
+
+    public void setInvoiceAdress(String invoiceAdress) {
+        this.invoiceAdress = invoiceAdress;
     }
 
     public String getCreatePid() {

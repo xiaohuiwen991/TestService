@@ -2,7 +2,7 @@ package com.hisign.code.service.impl.database;
 
 import com.hisign.code.model.database.TableConnection;
 import com.hisign.code.persist.mapper.database.TableConnectionMapper;
-import com.hisign.code.api.database.TableConnectionService;
+import com.hisign.code.api.business.TableConnectionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

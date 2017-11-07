@@ -65,7 +65,9 @@ public class SysUserServiceImpl implements SysUserService {
         } else {
             sysUser.setOrderByString("createDatetime desc");
         }
-        return sysUserMapper.findSysUserListByUserFilter(sysUser);
+        sysUser.setBegin(sysUser.getBegin()-1);
+        List<SysUser> list = sysUserMapper.findSysUserListByUserFilter(sysUser);
+        return list;
     }
 
     /**

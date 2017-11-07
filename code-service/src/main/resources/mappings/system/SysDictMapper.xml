@@ -38,7 +38,7 @@
         where open_flag = '1'
         and root_key = #{root}
         and dict_key = #{key}
-        and rownum = 1
+        LIMIT 0,1
     </select>
 
     <select id="queryDictListByKeys" parameterType="com.hisign.code.model.system.SysDict" resultType="com.hisign.code.model.system.SysDict">

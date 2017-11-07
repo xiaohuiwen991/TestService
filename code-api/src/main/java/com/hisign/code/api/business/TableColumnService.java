@@ -1,4 +1,4 @@
-package com.hisign.code.api.database;
+package com.hisign.code.api.business;
 
 import com.hisign.code.model.database.TableColumn;
 import java.util.List;

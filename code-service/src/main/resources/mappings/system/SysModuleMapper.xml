@@ -14,8 +14,7 @@
 			MODIFY_PID                              AS updateUser,
 			MODIFY_DATE                             AS updateDatetime,
 			URL                                     AS url,
-			SORT                                    AS sort,
-			root_id                                 AS rootId
+			SORT                                    AS sort
 		FROM SYS_MODULE
 		ORDER BY CAST(SORT AS  SIGNED   INTEGER)
     </select>
@@ -83,8 +82,7 @@
         <if test="sort != null and sort != ''">
             SORT,
         </if>
-            CREATE_DATE,
-            root_id
+            CREATE_DATE
         )
         VALUES
         (
@@ -104,8 +102,7 @@
         <if test="sort != null and sort != ''">
             #{sort},
         </if>
-            sysdate,
-            decode(#{parentId}, null, #{moduleId}, #{rootId})
+            now()
         )
     </insert>
 
@@ -129,7 +126,7 @@
             #{permissionDescription},
             #{openFlag},
             #{createUser},
-            sysdate,
+            now(),
             #{permissionFlag}
         )
     </insert>
@@ -153,7 +150,7 @@
             #{resourceStr},
             #{description},
             #{createUser},
-            sysdate
+            now()
         )
     </insert>
 
@@ -172,7 +169,7 @@
 				#{id},
 				#{resourceId},
 				#{createUser},
-				sysdate
+				now()
 			)
     </insert>
 
@@ -217,7 +214,7 @@
         <if test="sort == null or sort == ''">
             SORT='',
         </if>
-          MODIFY_DATE=sysdate
+          MODIFY_DATE=now()
         WHERE ID = #{moduleId}
     </update>
 
@@ -233,7 +230,7 @@
         <if test="updateUser != null and updateUser != ''">
           MODIFY_PID=#{updateUser},
         </if>
-          MODIFY_DATE=sysdate
+          MODIFY_DATE=now()
         WHERE ID = #{permissionId}
     </update>
 
@@ -242,7 +239,7 @@
         <if test="updateUser != null and updateUser != ''">
           MODIFY_PID = #{updateUser},
         </if>
-          MODIFY_DATE = sysdate
+          MODIFY_DATE = now()
         WHERE ID = #{permisResId}
     </update>
 
@@ -260,49 +257,50 @@
         <if test="updateUser != null and updateUser != ''">
           MODIFY_PID=#{updateUser},
         </if>
-          MODIFY_DATE=sysdate
+          MODIFY_DATE=now()
         WHERE ID = #{resourceId}
     </update>
 
     <delete id="deleteResourceForPer" parameterType="java.lang.String">
-        DELETE FROM SYS_RESOURCE r
-            WHERE r.id IN
+        DELETE r.* FROM SYS_RESOURCE r
+            WHERE r.id IN ( SELECT n.resource_id AS id FROM
             (SELECT pr.resource_id
                 FROM SYS_PERMIS_RES pr
                 WHERE pr.permission_id IN
             (SELECT p.id
                 FROM SYS_PERMISSION p
                 WHERE p.module_id = #{id}
-                  AND p.permission_flag = '1'))
+                  AND p.permission_flag = '1')) n)
     </delete>
 
     <delete id="deletePermisResForPer" parameterType="java.lang.String">
-        DELETE FROM SYS_PERMIS_RES pr
+        DELETE pr.* FROM SYS_PERMIS_RES pr
             WHERE pr.permission_id IN
+            ( SELECT n.id AS permission_id FROM
                 (SELECT p.id FROM SYS_PERMISSION p
             WHERE p.module_id = #{id}
-              AND p.permission_flag = '1')
+              AND p.permission_flag = '1') n)
     </delete>
 
     <delete id="deletePermissionForPer" parameterType="java.lang.String">
-        DELETE FROM SYS_PERMISSION p WHERE p.module_id = #{id} AND p.permission_flag = '1'
+        DELETE p.* FROM SYS_PERMISSION p WHERE p.module_id = #{id} AND p.permission_flag = '1'
     </delete>
 
     <select id="findSysModuleInfoByModuleId" parameterType="java.lang.String" resultType="com.hisign.code.model.system.SysModule">
-		SELECT M.ID 			             AS moduleId,
-		       M.TITLE			             AS title,
-		       M.DESCRIPTION 	             AS description,
-		       M.MODULE_NO		             AS moduleNo,
-		       to_number(M.OPEN_FLAG)		 AS openFlag,
-		       M.CREATE_PID 	             AS createUser,
-		       M.CREATE_DATE                 AS createDatetime,
-		       M.MODIFY_DATE                 AS updateDatetime,
-		       M.MODIFY_PID                  AS updateUser,
-		       SORT                          AS sort,
-		       URL                           AS url
+		SELECT M.ID 			                              AS moduleId,
+		       M.TITLE			                              AS title,
+		       M.DESCRIPTION 	                              AS description,
+		       M.MODULE_NO		                              AS moduleNo,
+		       CAST(M.OPEN_FLAG AS  SIGNED   INTEGER)       AS openFlag,
+		       M.CREATE_PID 	                              AS createUser,
+		       M.CREATE_DATE                                  AS createDatetime,
+		       M.MODIFY_DATE                                  AS updateDatetime,
+		       M.MODIFY_PID                                   AS updateUser,
+		       SORT                                           AS sort,
+		       URL                                            AS url
 		  FROM SYS_MODULE M
 		 WHERE M.ID = #{id}
-		   AND ROWNUM = 1
+		   LIMIT 0,1
     </select>
 
     <select id="getGuid"  resultType="java.lang.String">

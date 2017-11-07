@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisign.code.persist.mapper.database.CompanyManageMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.CompanyInfo" >
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="URL" property="url" jdbcType="VARCHAR" />
+        <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+             NAME, URL, USERNAME, PASSWORD
+    </sql>
+
+    <sql id="select_By_Filter_For_Where" >
+        <where>
+            <if test="name != null and name != ''">
+                  AND NAME like '%' || #{name,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="url != null and url != ''">
+                   AND URL like '%' || #{url,jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="username != null and username != ''">
+                   AND USERNAME like '%' || #{username,jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </sql>
+
+    <sql id="select_By_Filter_For_Where2" >
+        <where>
+            <choose>
+                <when test="name != null and name != ''">
+                    and NAME = #{name,jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and 1 = 2
+                </otherwise>
+            </choose>
+            and rownum = 1
+        </where>
+    </sql>
+
+    <select id="findConnectionInfoList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.CompanyInfo" >
+        SELECT t.*,@rownum := @rownum + 1 AS rownum FROM (
+            SELECT
+                @rownum := 0,
+                ID                      AS id,
+                COMPANY_NAME            AS companyName,
+                CONTACT                 AS contact,
+                REPORT_ADRESS           AS reportAdress,
+                INVOICE_ADRESS          AS invoiceAdress,
+                E_MAIL                  AS email
+            FROM BUS_COMPANY t
+            WHERE 1=1
+            <if test="companyName != '' and companyName != null">
+                AND COMPANY_NAME LIKE concat('%',#{companyName},'%')
+            </if>
+            <if test="contact != '' and contact != null">
+                AND CONTACT LIKE concat('%',#{contact},'%')
+            </if>
+            <if test="reportAdress != '' and reportAdress != null">
+                AND REPORT_ADRESS LIKE concat('%',#{reportAdress},'%')
+            </if>
+        ) t
+        <if test=" begin !=null and end != 0 and end !=null">
+            LIMIT #{begin},#{end}
+        </if>
+    </select>
+
+    <select id="findConnectionInfoListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.CompanyInfo" >
+        SELECT COUNT(1) FROM BUS_COMPANY t
+        WHERE 1=1
+      <if test="companyName != '' and companyName != null">
+          AND COMPANY_NAME LIKE concat('%',#{companyName},'%')
+      </if>
+      <if test="contact != '' and contact != null">
+          AND CONTACT LIKE concat('%',#{contact},'%')
+      </if>
+      <if test="reportAdress != '' and reportAdress != null">
+          AND REPORT_ADRESS LIKE concat('%',#{reportAdress},'%')
+      </if>
+    </select>
+
+    <delete id="deleteConnectionInfo" parameterType="com.hisign.code.model.database.CompanyInfo">
+        DELETE t.* FROM BUS_COMPANY t
+        WHERE ID = #{id}
+    </delete>
+
+    <insert id="insertConnectionInfo" parameterType="com.hisign.code.model.database.CompanyInfo" >
+        insert into BUS_COMPANY (
+            ID,
+        <if test=" companyName != '' and companyName != null">
+            COMPANY_NAME,
+        </if>
+        <if test=" contact != '' and contact != null">
+            CONTACT,
+        </if>
+        <if test=" reportAdress != '' and reportAdress != null">
+            REPORT_ADRESS,
+        </if>
+        <if test=" email != '' and email != null">
+            E_MAIL,
+        </if>
+        <if test=" invoiceAdress != '' and invoiceAdress != null">
+            INVOICE_ADRESS,
+        </if>
+        <if test=" user.userName != '' and user.userName != null">
+            CREATE_PID,
+        </if>
+            CREATE_DATE,
+        <if test="user.userName != '' and user.userName != null">
+            MODIFY_PID,
+        </if>
+            MODIFY_DATE
+        ) values (
+            REPLACE(UUID(),'-',''),
+        <if test=" companyName != '' and companyName != null">
+            #{companyName,jdbcType=VARCHAR},
+        </if>
+        <if test=" contact != '' and contact != null">
+            #{contact,jdbcType=VARCHAR},
+        </if>
+        <if test=" reportAdress != '' and reportAdress != null">
+            #{reportAdress,jdbcType=VARCHAR},
+        </if>
+        <if test=" email != '' and email != null">
+            #{email,jdbcType=VARCHAR},
+        </if>
+        <if test=" invoiceAdress != '' and invoiceAdress != null">
+            #{invoiceAdress,jdbcType=VARCHAR},
+        </if>
+        <if test=" user.userName != '' and user.userName != null">
+            #{user.userName,jdbcType=VARCHAR},
+        </if>
+            NOW(),
+        <if test="user.userName != '' and user.userName != null">
+            #{user.userName,jdbcType=VARCHAR},
+        </if>
+            NOW()
+        )
+    </insert>
+
+    <update id="updateConnectionInfo" parameterType="com.hisign.code.model.database.CompanyInfo" >
+        update BUS_COMPANY set
+        <if test="companyName != null">
+            COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+        </if>
+        <if test="contact != null">
+            CONTACT = #{contact,jdbcType=VARCHAR},
+        </if>
+        <if test="reportAdress != null">
+            REPORT_ADRESS = #{reportAdress,jdbcType=VARCHAR},
+        </if>
+        <if test="email != null">
+            E_MAIL = #{email,jdbcType=VARCHAR},
+        </if>
+        <if test="invoiceAdress != null">
+            INVOICE_ADRESS = #{invoiceAdress,jdbcType=VARCHAR},
+        </if>
+        <if test="user.userName != null">
+            MODIFY_PID = #{user.userName},
+        </if>
+            MODIFY_DATE = NOW()
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="findConnectionInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.CompanyInfo" >
+        SELECT
+            ID AS id,
+            COMPANY_NAME AS companyName,
+            CONTACT AS contact,
+            REPORT_ADRESS AS reportAdress,
+            E_MAIL AS email
+        FROM BUS_COMPANY t
+        WHERE 1=1
+        <if test="companyName != '' and companyName != null">
+            AND COMPANY_NAME = #{companyName}
+        </if>
+    </select>
+
+</mapper>

@@ -1,6 +1,6 @@
 package com.hisign.code.service.impl.database;
 
-import com.hisign.code.api.database.TemplateSqlService;
+import com.hisign.code.api.business.TemplateSqlService;
 import com.hisign.code.model.database.TemplateSql;
 import com.hisign.code.persist.mapper.database.TemplateSqlMapper;
 import org.springframework.stereotype.Service;

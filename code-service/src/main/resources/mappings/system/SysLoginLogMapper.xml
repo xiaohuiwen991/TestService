@@ -33,7 +33,7 @@
             and LOG_TIME <![CDATA[<]]> to_date(#{logDateEnd},'yyyy-mm-dd')+1
         </if>
         <if test="oprUser!=null and oprUser!=''">
-            and opr_user LIKE '%'||#{oprUser}||'%' ESCAPE '\'
+            and opr_user LIKE '%'||#{oprUser}||'%'
         </if>
         <if test="orderByString!=null and orderByString!=''">
             ${orderByString}
@@ -55,7 +55,7 @@
             and log_time <![CDATA[<]]> to_date(#{logDateEnd},'yyyy-mm-dd')+1
         </if>
         <if test="oprUser!=null and oprUser!=''">
-            and opr_user LIKE '%'||#{oprUser}||'%' ESCAPE '\'
+            and opr_user LIKE '%'||#{oprUser}||'%'
         </if>
         <if test="orderByString!=null and orderByString!=''">
             ${orderByString}

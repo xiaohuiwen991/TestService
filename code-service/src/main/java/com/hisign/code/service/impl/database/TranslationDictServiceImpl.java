@@ -1,6 +1,6 @@
 package com.hisign.code.service.impl.database;
 
-import com.hisign.code.api.database.TranslationDictService;
+import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.constant.Constants;
 import com.hisign.code.model.database.TranslationDict;
 import com.hisign.code.persist.mapper.database.TranslationDictMapper;

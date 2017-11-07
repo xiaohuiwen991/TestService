@@ -1,6 +1,6 @@
 package com.hisign.code.persist.mapper.database;
 
-import com.hisign.code.model.database.ConnectionInfo;
+import com.hisign.code.model.database.CompanyInfo;
 import java.util.List;
 
 /**
@@ -8,45 +8,45 @@ import java.util.List;
  * @author jiangpeng
  * @since 2017/05/23 18:19
  */
-public interface ConnectionInfoMapper {
+public interface CompanyManageMapper {
 
     /**
      * 获取数据库连接列表信息
      * @param connectionInfo 数据库连接查询条件
      * @return 数据库连接列表信息
      */
-    List<ConnectionInfo> findConnectionInfoList(ConnectionInfo connectionInfo);
+    List<CompanyInfo> findConnectionInfoList(CompanyInfo connectionInfo);
 
     /**
      * 获取数据库连接列表信息数量
      * @param connectionInfo 数据库连接查询条件
      * @return 数据库连接列表信息数量
      */
-    int findConnectionInfoListForCount(ConnectionInfo connectionInfo);
+    int findConnectionInfoListForCount(CompanyInfo connectionInfo);
 
     /**
      * 删除数据库连接
      * @param connectionInfo 数据库连接信息
      */
-    void deleteConnectionInfo(ConnectionInfo connectionInfo);
+    void deleteConnectionInfo(CompanyInfo connectionInfo);
 
     /**
      * 修改数据库连接信息
      * @param connectionInfo 数据库连接信息
      */
-    void updateConnectionInfo(ConnectionInfo connectionInfo);
+    void updateConnectionInfo(CompanyInfo connectionInfo);
 
     /**
      * 新增数据库连接
      * @param connectionInfo 数据库连接信息
      */
-    void insertConnectionInfo(ConnectionInfo connectionInfo);
+    void insertConnectionInfo(CompanyInfo connectionInfo);
 
     /**
      * 获得数据库连接信息
      * @param connectionInfo 数据库连接信息
      * @return 数据库连接信息
      */
-    ConnectionInfo findConnectionInfoInfo(ConnectionInfo connectionInfo);
+    CompanyInfo findConnectionInfoInfo(CompanyInfo connectionInfo);
 
 }

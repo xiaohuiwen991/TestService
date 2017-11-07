@@ -1,8 +1,8 @@
-package com.hisign.code.web.action.database;
+package com.hisign.code.web.action.business;
 
 import com.alibaba.fastjson.JSON;
-import com.hisign.code.api.database.TableColumnService;
-import com.hisign.code.api.database.TranslationDictService;
+import com.hisign.code.api.business.TableColumnService;
+import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.model.common.JsonResult;
 import com.hisign.code.model.database.TableColumn;
 import com.hisign.code.model.system.SysUser;

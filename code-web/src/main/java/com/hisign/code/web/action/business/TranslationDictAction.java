@@ -1,13 +1,13 @@
-package com.hisign.code.web.action.database;
+package com.hisign.code.web.action.business;
 
 
 
 import com.alibaba.fastjson.JSON;
-import com.hisign.code.api.database.ConnectionInfoService;
-import com.hisign.code.api.database.TableColumnService;
-import com.hisign.code.api.database.TranslationDictService;
+import com.hisign.code.api.business.CompanyManageService;
+import com.hisign.code.api.business.TableColumnService;
+import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.model.common.JsonResult;
-import com.hisign.code.model.database.ConnectionInfo;
+import com.hisign.code.model.database.CompanyInfo;
 import com.hisign.code.model.database.TableColumn;
 import com.hisign.code.model.database.TranslationDict;
 import com.hisign.code.model.system.SysUser;
@@ -52,7 +52,7 @@ public class TranslationDictAction {
      * 数据库连接接口
      */
     @Resource
-    private ConnectionInfoService connectionInfoService;
+    private CompanyManageService companyManageService;
 
 
     @RequestMapping(value = "/list",method = RequestMethod.POST,produces = {"application/json;charset=utf-8"})
@@ -148,14 +148,14 @@ public class TranslationDictAction {
     @Scheduled(cron = "* * 2 * * ?")
     public void findAndInsertTranslationDict() throws InterruptedException{
         TableColumn tableColumn=new TableColumn();
-        ConnectionInfo connectionInfo=new ConnectionInfo();
+        CompanyInfo connectionInfo=new CompanyInfo();
         SysUser user=new SysUser();
         logger.info("正在定时插入字段信息");
         try {
             //获取所有数据库连接对象集合
-            List<ConnectionInfo> connectionInfoList=connectionInfoService.findConnectionInfoList(connectionInfo);
+            List<CompanyInfo> connectionInfoList=companyManageService.findConnectionInfoList(connectionInfo);
             //遍历每个数据库连接对象
-            for (ConnectionInfo connectionInfo2:connectionInfoList) {
+            for (CompanyInfo connectionInfo2:connectionInfoList) {
                 //获取连接名并设置给表字段信息
                 user.setConnectionName(connectionInfo2.getName());
                 tableColumn.setUser(user);

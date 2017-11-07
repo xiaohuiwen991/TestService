@@ -1,6 +1,6 @@
 package com.hisign.code.service.listener;
 
-import com.hisign.code.api.database.TranslationDictService;
+import com.hisign.code.api.business.TranslationDictService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;

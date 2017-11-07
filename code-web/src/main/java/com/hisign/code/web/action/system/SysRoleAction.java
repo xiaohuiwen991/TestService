@@ -55,6 +55,7 @@ public class SysRoleAction {
             if(filter.getDescription() != null) {
                 filter.setDescription(filter.getDescription().replaceAll("%", "\\\\%").replaceAll("_", "\\\\_"));
             }
+            filter.setBegin(filter.getBegin()-1);
             List<SysRole> list = sysRoleService.findSysRoleByFilter(filter);
             int count = sysRoleService.findSysRoleByFilterForCount(filter);
             jsonResult.setSuccessData(list, count);

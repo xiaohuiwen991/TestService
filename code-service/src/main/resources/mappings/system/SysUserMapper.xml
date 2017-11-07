@@ -47,10 +47,9 @@
   </select>
 
   <select id="findSysUserListByUserFilter" parameterType="com.hisign.code.model.system.SysUser" resultType="com.hisign.code.model.system.SysUser">
-    select p.* from(
     select
-      rownum,rownum as rn,a.* from (
-      select t.* from (
+      @rownum:=@rownum+1 AS rownum,a.* from (
+      select @rownum:=0,t.* from (
         select
           ID as id,
           USERNAME as userName,
@@ -75,35 +74,31 @@
         from SYS_USER
         where 1= 1
         <if test="userName != null and userName != ''">
-          and USERNAME like '%' || #{userName,jdbcType=VARCHAR} || '%' escape '\'
+          and USERNAME like concat('%',#{userName},'%')
         </if>
         <if test="notContainUserName != null and notContainUserName != ''">
           and USERNAME not in ${notContainUserName}
         </if>
         <if test="openFlag != null and openFlag != ''">
-          and OPEN_FLAG = #{openFlag,jdbcType=VARCHAR}
+          and OPEN_FLAG = #{openFlag}
         </if>
         <if test="trueName != null and trueName != ''">
-          and TRUE_NAME like '%' || #{trueName,jdbcType=VARCHAR} || '%' escape '\'
+          and TRUE_NAME like concat('%',#{trueName},'%')
         </if>
         <if test="userUnit != null and userUnit != ''">
-          and USER_UNIT like #{userUnit,jdbcType=VARCHAR}|| '%'
+          and USER_UNIT like concat(#{userUnit},'%')
         </if>) t
       where 1=1
       <if test="roleName != null and roleName != ''">
-        and roleNameString like '%' || #{roleName,jdbcType=VARCHAR} || '%'
+        and roleNameString like concat('%',#{roleName},'%')
       </if>
       <if test="orderByString != null and orderByString != ''">
         order by ${orderByString}
       </if>
       ) a
-      <if test="end !=null and end !=0">
-        where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
+      <if test="end !=null and end !=0 and begin !=null and begin!=0">
+        LIMIT #{begin},#{end}
       </if>
-      ) p
-    <if test="begin !=null and begin !=0">
-      where rn >= #{begin,jdbcType=INTEGER}
-    </if>
   </select>
 
   <select id="findSysUserListByUserFilterForCount" parameterType="com.hisign.code.model.system.SysUser" resultType="java.lang.Integer">
@@ -115,21 +110,21 @@
         from SYS_USER
         where 1=1
         <if test="userName != null and userName != ''">
-          and USERNAME like '%' || #{userName,jdbcType=VARCHAR} || '%' escape '\'
+          and USERNAME like concat('%',#{userName},'%')
         </if>
         <if test="openFlag != null and openFlag != ''">
           and OPEN_FLAG = #{openFlag,jdbcType=VARCHAR}
         </if>
         <if test="trueName != null and trueName != ''">
-          and TRUE_NAME like '%' || #{trueName,jdbcType=VARCHAR} || '%' escape '\'
+          and TRUE_NAME like concat('%',#{trueName},'%')
         </if>
         <if test="userUnit != null and userUnit != ''">
-          and USER_UNIT like #{userUnit,jdbcType=VARCHAR}|| '%'
+          and USER_UNIT like concat(#{userUnit},'%')
         </if>
         ) t
       where 1=1
       <if test="roleName != null and roleName != ''">
-        and roleNameString like '%' || #{roleName,jdbcType=VARCHAR} || '%'
+        and roleNameString like concat('%',#{roleName},'%')
       </if>
   </select>
 
@@ -140,34 +135,36 @@
 
 
   <select id="findSysUserList" parameterType="com.hisign.code.model.system.SysUser" resultType="com.hisign.code.model.system.SysUser">
-    select
-      rownum,
-      ID as id,
-      USERNAME as userName,
-      USER_LEVEL as userLevel,
-      PASSWORD as userPwd,
-      TRUE_NAME as trueName,
-      OPEN_FLAG as openFlag,
-      get_dictValue_by_dictKey('QYZTDM',OPEN_FLAG) as openFlagZw,
-      DEFAULT_MODULE as defaultModule,
-      REMARK as remark,
-      CREATE_PID as createUser,
-      CREATE_DATE as createDatetime,
-      MODIFY_PID as updateUser,
-      POLICE_ID as policeId,
-      CARD_ID as cardId,
-      USER_TEL as userTel,
-      USER_UNIT as userUnit,
-      get_dictValue_by_dictKey('GXSDM',USER_UNIT) as userUnitZh,
-      MODIFY_DATE as modifyDatetime
-    from SYS_USER
-    where 1=1
-    <if test="id != null and id != ''">
-      and ID = #{id,jdbcType=VARCHAR}
-    </if>
-    <if test="userName != null and userName != ''">
-      and USERNAME = #{userName,jdbcType=VARCHAR}
-    </if>
+    SELECT t.*,@rownum:=@rownum+1 AS rownum FROM (
+      SELECT
+        @rownum:=0,
+        ID AS id,
+        USERNAME AS userName,
+        USER_LEVEL AS userLevel,
+        PASSWORD AS userPwd,
+        TRUE_NAME AS trueName,
+        OPEN_FLAG AS openFlag,
+        get_dictValue_by_dictKey('QYZTDM',OPEN_FLAG) AS openFlagZw,
+        DEFAULT_MODULE AS defaultModule,
+        REMARK AS remark,
+        CREATE_PID AS createUser,
+        CREATE_DATE AS createDatetime,
+        MODIFY_PID AS updateUser,
+        POLICE_ID AS policeId,
+        CARD_ID AS cardId,
+        USER_TEL AS userTel,
+        USER_UNIT AS userUnit,
+        get_dictValue_by_dictKey('GXSDM',USER_UNIT) AS userUnitZh,
+        MODIFY_DATE AS modifyDatetime
+      FROM SYS_USER
+      WHERE 1=1
+      <if test="id != null and id != ''">
+        AND ID = #{id,jdbcType=VARCHAR}
+      </if>
+      <if test="userName != null and userName != ''">
+        AND USERNAME = #{userName,jdbcType=VARCHAR}
+      </if>
+    ) t
   </select>
 
   <delete id="deleteSysUserRoleByUserId"
@@ -207,7 +204,7 @@
       #{userId,jdbcType=VARCHAR},
       #{roleId,jdbcType=VARCHAR},
       #{user.trueName,jdbcType=VARCHAR},
-      sysdate
+      now()
     )
   </insert>
 
@@ -227,7 +224,7 @@
       CARD_ID = #{cardId,jdbcType=VARCHAR},
       USER_TEL = #{userTel,jdbcType=VARCHAR},
       USER_UNIT = #{userUnit,jdbcType=VARCHAR},
-      MODIFY_DATE = sysdate
+      MODIFY_DATE = now()
       WHERE ID = #{id,jdbcType=VARCHAR}
   </update>
 
@@ -262,9 +259,9 @@
       #{userLevel,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR},
       #{createUser,jdbcType=VARCHAR},
-      sysdate,
+      now(),
       #{modifyUser,jdbcType=VARCHAR},
-      sysdate,
+      now(),
       #{policeId,jdbcType=VARCHAR},
       #{cardId,jdbcType=VARCHAR},
       #{userTel,jdbcType=VARCHAR},
@@ -339,7 +336,7 @@
     UPDATE SYS_USER SET
       PASSWORD = #{newPassword,jdbcType=VARCHAR},
       MODIFY_PID = #{userName,jdbcType=VARCHAR},
-      MODIFY_DATE = sysdate
+      MODIFY_DATE = now()
     WHERE ID = #{id, jdbcType=VARCHAR}
   </update>
 </mapper>
