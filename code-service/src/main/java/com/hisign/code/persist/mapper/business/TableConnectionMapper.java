@@ -1,6 +1,6 @@
-package com.hisign.code.persist.mapper.database;
+package com.hisign.code.persist.mapper.business;
 
-import com.hisign.code.model.database.TableConnection;
+import com.hisign.code.model.business.TableConnection;
 import java.util.List;
 
 /**

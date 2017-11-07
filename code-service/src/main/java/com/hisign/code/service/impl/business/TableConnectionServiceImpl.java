@@ -1,7 +1,7 @@
-package com.hisign.code.service.impl.database;
+package com.hisign.code.service.impl.business;
 
-import com.hisign.code.model.database.TableConnection;
-import com.hisign.code.persist.mapper.database.TableConnectionMapper;
+import com.hisign.code.model.business.TableConnection;
+import com.hisign.code.persist.mapper.business.TableConnectionMapper;
 import com.hisign.code.api.business.TableConnectionService;
 import org.springframework.stereotype.Service;
 

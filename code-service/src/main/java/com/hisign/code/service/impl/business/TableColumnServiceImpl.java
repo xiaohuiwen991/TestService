@@ -1,13 +1,13 @@
-package com.hisign.code.service.impl.database;
+package com.hisign.code.service.impl.business;
 
 import com.hisign.code.api.business.TableColumnService;
 import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.constant.Constants;
-import com.hisign.code.model.database.TableColumn;
-import com.hisign.code.model.database.TranslationDict;
+import com.hisign.code.model.business.TableColumn;
+import com.hisign.code.model.business.TranslationDict;
 import com.hisign.code.model.system.SysUser;
-import com.hisign.code.persist.mapper.database.CompanyManageMapper;
-import com.hisign.code.persist.mapper.database.TableColumnMapper;
+import com.hisign.code.persist.mapper.business.CompanyManageMapper;
+import com.hisign.code.persist.mapper.business.TableColumnMapper;
 import com.hisign.multiDatabase.ILoadBean;
 import com.hisign.trans.model.TransResult;
 import com.hisign.trans.util.TransUtil;

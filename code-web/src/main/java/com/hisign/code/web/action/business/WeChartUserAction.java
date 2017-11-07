@@ -1,12 +1,13 @@
 package com.hisign.code.web.action.business;
 
 import com.alibaba.fastjson.JSON;
-import com.hisign.code.api.business.DevelopSqlService;
+import com.hisign.code.api.business.WeChartUserService;
 import com.hisign.code.api.business.TableColumnService;
+import com.hisign.code.model.business.WeChartUserInfo;
 import com.hisign.code.model.common.JsonResult;
-import com.hisign.code.model.database.CreateSql;
-import com.hisign.code.model.database.DevelopSql;
-import com.hisign.code.model.database.TableColumn;
+import com.hisign.code.model.business.CreateSql;
+import com.hisign.code.model.business.DevelopSql;
+import com.hisign.code.model.business.TableColumn;
 import com.hisign.code.model.system.SysUser;
 import com.hisign.code.web.bind.annotation.CurrentUser;
 import com.hisign.code.web.bind.annotation.TranslateObject;
@@ -28,8 +29,8 @@ import java.util.List;
  * @since 2017/05/26 09:41
  */
 @Controller
-@RequestMapping(value="/api/{recordLog}/database/develop_sql")
-public class DevelopSqlAction {
+@RequestMapping(value="/api/{recordLog}/business/user")
+public class WeChartUserAction {
 
     /**
      * 记录日志
@@ -40,7 +41,7 @@ public class DevelopSqlAction {
      * 开发语句接口
      */
     @Resource
-    private DevelopSqlService developSqlService;
+    private WeChartUserService weChartUserService;
 
     /**
      * 字段信息接口
@@ -50,19 +51,20 @@ public class DevelopSqlAction {
 
     /**
      * 获取开发语句列表信息
-     * @param developSql 开发语句查询条件
+     * @param weChartUserInfo 开发语句查询条件
      * @return 开发语句列表信息
      * @throws InterruptedException
      */
     @RequestMapping(value="/list", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult findDevelopSqlList(@TranslateObject DevelopSql developSql) throws InterruptedException {
+    public JsonResult findDevelopSqlList(@TranslateObject WeChartUserInfo weChartUserInfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(developSql);
+        String paraStr = JSON.toJSONString(weChartUserInfo);
         logger.info("获取开发语句列表信息");
         try {
-            List<DevelopSql> list = developSqlService.findDevelopSqlList(developSql);
-            int count =  developSqlService.findDevelopSqlListForCount(developSql);
+            weChartUserInfo.setBegin(weChartUserInfo.getBegin()-1);
+            List<DevelopSql> list = weChartUserService.findDevelopSqlList(weChartUserInfo);
+            int count =  weChartUserService.findDevelopSqlListForCount(weChartUserInfo);
             jsonResult.setSuccessData(list, count);
         } catch (Exception e) {
             logger.error("获取开发语句列表信息失败,请求参数为[{}]", paraStr, e);
@@ -85,12 +87,12 @@ public class DevelopSqlAction {
         String paraStr = JSON.toJSONString(developSql);
         logger.info("新增开发语句");
         try {
-            DevelopSql info = developSqlService.findDevelopSqlInfo(developSql);
+            DevelopSql info = weChartUserService.findDevelopSqlInfo(developSql);
             if(info != null) {
                 return new JsonResult(0, "语句名已存在!");
             }
             developSql.setUser(user);
-            String id = developSqlService.insertDevelopSql(developSql);
+            String id = weChartUserService.insertDevelopSql(developSql);
             jsonResult.setSuccessData(id);
         } catch (Exception e) {
             logger.error("新增开发语句失败,请求参数为[{}]", paraStr, e);
@@ -114,7 +116,7 @@ public class DevelopSqlAction {
         logger.info("修改开发语句信息");
         try {
             developSql.setUser(user);
-            developSqlService.updateDevelopSql(developSql);
+            weChartUserService.updateDevelopSql(developSql);
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("修改开发语句信息失败,请求参数为[{}]", paraStr, e);
@@ -136,7 +138,7 @@ public class DevelopSqlAction {
         String paraStr = JSON.toJSONString(developSql);
         logger.info("删除开发语句");
         try {
-            developSqlService.deleteDevelopSql(developSql);
+            weChartUserService.deleteDevelopSql(developSql);
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("删除开发语句失败,请求参数为[{}]", paraStr, e);
@@ -158,7 +160,7 @@ public class DevelopSqlAction {
         String paraStr = JSON.toJSONString(developSql);
         logger.info("获取开发语句信息");
         try {
-            DevelopSql info = developSqlService.findDevelopSqlInfo(developSql);
+            DevelopSql info = weChartUserService.findDevelopSqlInfo(developSql);
             jsonResult.setSuccessData(info);
         } catch (Exception e) {
             logger.error("获取开发语句信息失败,请求参数为[{}]", paraStr, e);

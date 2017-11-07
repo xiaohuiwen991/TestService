@@ -1,8 +1,7 @@
-package com.hisign.code.model.database;
+package com.hisign.code.model.business;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hisign.code.constant.GegentypusEnum;
 import com.hisign.code.constant.LableEnum;

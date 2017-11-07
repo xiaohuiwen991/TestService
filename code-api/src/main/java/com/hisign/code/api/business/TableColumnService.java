@@ -1,6 +1,6 @@
 package com.hisign.code.api.business;
 
-import com.hisign.code.model.database.TableColumn;
+import com.hisign.code.model.business.TableColumn;
 import java.util.List;
 
 /**

@@ -18,7 +18,7 @@
     <div class="query-condition-p">
         <span class="common-field w65">用户姓名：</span><input id="trueName" type="text" class="common-input"/>
         <span class="common-field w100">用户账号：</span><input id="userName" type="text" class="common-input"/>
-        <span class="common-field w100">角色：</span><dict id="dict-query-role" dict-id="query-role" dict-name="queryRole" dict-type="select" dict-root="custom" return-value="true"></dict>
+        <span class="common-field w100">所属公司：</span><input id="companyName" type="text" class="common-input"/>
         <p class="query-reset">
             <b id="user-query-btn" class="cm-query-btn"></b>
             <b id="user-reset-btn" class="cm-reset-btn"></b>
@@ -35,10 +35,11 @@
     <table id="user-table" class="typical-tb" cellpadding="3">
         <thead>
         <th width="5%">序号</th>
-        <th width="10%" sort-name="truename">用户姓名</th>
-        <th width="10%" sort-name="username">用户账号</th>
+        <th width="15%" sort-name="truename">用户姓名</th>
+        <th width="15%" sort-name="username">用户账号</th>
         <th width="10%">状态</th>
-        <th width="55%">所属角色</th>
+        <th width="25%">所属公司</th>
+        <th width="20%">注册时间</th>
         <th width="10%">操作</th>
         </thead>
         <tbody tpsource="#user-list"></tbody>
@@ -153,8 +154,9 @@
         <td>
             <a class="into-user-view" param="{id}">{userName}</a>
         </td>
-        <td>{openFlagTxt}</td>
-        <td>{roleNameString}</td>
+        <td>{statusTxt}</td>
+        <td>{companyName}</td>
+        <td>{createDateStr}</td>
         <td>
             <a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>
             <a class="delete-for-user icon-remove-btn" param="{id}" paramName="{userName}" title="删除"></a><br>
@@ -177,5 +179,254 @@
 </body>
 <script src="../js/base.js?version=0.99"></script>
 <script src="../js/sys.js?version=0.99"></script>
-<script>typeof sysUserMngFn=='function' && sysUserMngFn();</script>
+<script>
+        importing('dict',function() {
+
+            var searchAction = top.path+'/api/0/business/user/list';
+            var viewAction = top.path+'/api/0/system/user/view';
+            var editAction = top.path+'/api/0/system/user/_edit';
+            var roleAction = top.path+'/api/0/system/role/list';
+            var deleteAction = top.path+'/api/1/system/user/delete';
+            var saveAction = top.path+'/api/1/system/user/add';
+            var updateAction = top.path+'/api/1/system/user/edit';
+            var roleDict = top.path + '/api/0/system/role/roleDict';
+            var editingUser;
+
+            $(".dict").dict();
+
+            //设置密码填写规则
+            $.extend($.fn.validatebox.defaults.rules, {
+                password: {
+                    validator: function (val) {
+                        return /^[a-zA-Z]\w{2,20}$/.test(val);
+                    },
+                    message: '请以字母开头，长度在3~20之间，只能包含字母、数字和下划线'
+                },
+                username: {
+                    validator: function(val){
+                        return /^[a-zA-Z]\w{0,50}$/.test(val);
+                    },
+                    message: '请以字母开头，只能包含字母、数字和下划线，长度小于50'
+                }
+            });
+
+            //角色字典查询
+//            function initRoleDict(){
+//                $get(roleDict,{},function(res){
+//                    $('#dict-query-role').dict(res.data);
+//                });
+//            }
+            //查询用户
+            function queryForUser(iflog,currentPage){
+                $('#user-query-result').pagingList({
+                    action:iflog?searchAction:searchAction,
+                    currentPage:currentPage,
+                    jsonObj:{
+                        //sortName:sortName||'',
+                        //order:order||'asc',
+                        userName:$('#userName').val().trim(),
+                        trueName:$('#trueName').val().trim(),
+                        companyName:$('#companyName').val()
+                    },
+                    callback:function(data){
+                        $template('#user-table tbody',data,function(item,i){
+                            var status = item.status;
+                            item.statusTxt = item.status=='1'?'启用':'禁用';
+                        });
+                    }
+                });
+            }
+            //重置
+            function resetForQuery(){
+                $('#trueName').val('');
+                $('#userName').val('');
+                $('#companyName').val('');
+            }
+            //进入新增页面
+            function intoUserAdd(){
+                $("#user-add-form")[0].reset();
+                $open('#user-add-div',{width:800,height:360,title:'用户新增'});
+                $('#add-openFlag').dictSelect('1');
+                // $('#add-userUnit').dictSelect('000000000000');
+            }
+            //进入查看页面
+            function intoUserView(id) {
+                $get(viewAction,{id:id},function(msg){
+                    window.newwin = $open('#user-view-div', {width: 800, height: 310, title: '用户查看'});
+                    $template('#user-view-value', msg.data,function(item,i){
+                        var t_openFlag = item.openFlag;
+                        item.openFlag = t_openFlag=='1'?'启用':'禁用';
+                    });
+                });
+            }
+            //进入修改页面
+            function intoUserEdit(id){
+                $get(editAction,{id:id},function(msg) {
+                    editingUser=msg.data;
+                    // queryForRole();
+                    window.newwin=$open('#user-edit-div',{width:800, title:'用户修改'});
+                    $template('#user-edit-form',editingUser.sysUser[0]);
+                    $('#edit-openflag').dictSelect(editingUser.sysUser[0].openFlag);
+                    top.registry.sys.checkRoles=[];
+                    top.registry.sys.checkRoleIds=[];
+                    $template('#role-table tbody',editingUser.roleList,function(item,i){
+                        if(editingUser.sysUserRoleIds.indexOf(item.id)>-1){
+                            //如果用户已有该项权限则勾上，但前提是没有手动操作过
+                            if(typeof top.registry.sys.checkRoles[item.rownum]=='undefined'){
+                                item._checked=top.registry.sys.checkRoles[item.rownum]='checked';
+                                top.registry.sys.checkRoleIds[item.rownum]=item.id;
+                            }
+                        }
+                        item._checked=top.registry.sys.checkRoles[item.rownum];
+                    });
+                });
+            }
+            //查询所有角色
+            function queryForRole(){
+                top.registry.sys.checkRoles=[];
+                top.registry.sys.checkRoleIds=[];
+                $('#role-result').pagingList({
+                    pageOnce:5,
+                    //  useCache:false,
+                    begin:1,
+                    end:5,
+                    action:roleAction,
+                    callback:function(data){
+                        $template('#role-table tbody',data,function(item,i){
+                            if(editingUser.sysUserRoleIds.indexOf(item.id)>-1){
+                                //如果用户已有该项权限则勾上，但前提是没有手动操作过
+                                if(typeof top.registry.sys.checkRoles[item.rownum]=='undefined'){
+                                    item._checked=top.registry.sys.checkRoles[item.rownum]='checked';
+                                    top.registry.sys.checkRoleIds[item.rownum]=item.id;
+                                }
+                            }
+                            item._checked=top.registry.sys.checkRoles[item.rownum];
+                            /*var t_openFlag = item.openFlag;
+                             item.openFlag = t_openFlag=='1'?'启用':'禁用';*/
+                        });
+                        $('.check-role').on('click',function(i,ele){
+                            var rownum=+(this.getAttribute('rownum'));
+                            var roleId=this.getAttribute('id');
+                            if(this.checked){
+                                top.registry.sys.checkRoles[rownum]='checked';
+                                top.registry.sys.checkRoleIds[rownum]=roleId;
+                                //this.setAttribute('checked','true');
+                            }else{
+                                top.registry.sys.checkRoles[rownum]=null;
+                                top.registry.sys.checkRoleIds[rownum]=null;
+                                //this.removeAttribute('checked');
+                            }
+                        });
+                    },
+                    jsonObj:{}
+                });
+            }
+            //删除用户
+            function deleteForUser(id,userName){
+                $confirm('确定删除【'+userName+'】用户吗？',function(bol){
+                    if(bol){
+                        $post(deleteAction,{id:id},function(res){
+                            toast('删除成功！').ok();
+                            queryForUser(false, getCurrentPage2LastPageDel($('#user-table tbody tr').length, 1));
+                        },true);
+                    }
+                });
+            }
+            //新增保存用户
+            function saveUser(){
+                trimAll();
+                $('.user-add-valid').validatebox();
+                if($('.validatebox-invalid').length > 0){
+                    return false;
+                }
+                $post(saveAction,$("#user-add-form").serializeObject(), function(res){
+                    userCloseWin('user-add-div');
+                    toast('保存成功！',600,function(){
+                        intoUserEdit(res.id);
+                    }).ok();
+                    queryForUser(false);
+                },true);
+            }
+            //修改保存用户
+            function updateUser(){
+                trimAll();
+                $('.user-edit-valid').validatebox();
+                if($('.validatebox-invalid').length > 0){
+                    return false;
+                }
+                $('#sysUserRoleIds').val(top.registry.sys.checkRoleIds.where('item=>item!=null').join());
+
+                $post(updateAction,$("#user-edit-form").serializeObject(),function(res){
+                    userCloseWin('user-edit-div');
+                    toast('保存成功！').ok();
+                    queryForUser(false,$('.paging').data('currentPage'));
+                },true);
+            }
+            //关闭窗口
+            function userCloseWin(id){
+                $('#'+id).$close();
+                $('.user-add-valid').removeClass("validatebox-invalid");
+                $('.user-edit-valid').removeClass("validatebox-invalid");
+            }
+            //点击事件绑定页面列表排序函数
+            function regOrder(){
+                var flag=0;//desc
+                var sortName;
+                var order;
+            }
+
+            regOrder();
+
+            //初始化角色字典
+//            initRoleDict();
+
+            queryForUser(false);
+
+            $('#user-add').click(function(){
+                intoUserAdd();
+            });
+            $('#user-query-btn').on('click',function(){
+                if($('.sort-arrow')) $('.sort-arrow').remove();
+                queryForUser(true);
+            });
+            $('#user-reset-btn').on('click',function(){
+                resetForQuery();
+            });
+            $('#save-user').on('click',function(){
+                saveUser();
+            });
+            $('#user-add-cancel').on('click',function(){
+                userCloseWin('user-add-div');
+            });
+            $('#update-user').on('click',function(){
+                updateUser();
+            });
+            $('#user-edit-cancel').on('click',function(){
+                userCloseWin('user-edit-div');
+            });
+            $('#user-view-cancel').on('click',function(){
+                userCloseWin('user-view-div');
+            });
+            $('#user-table').on('click','.into-user-view',function(){
+                intoUserView(this.getAttribute('param'));
+            }).on('click','.into-user-edit',function(){
+                intoUserEdit(this.getAttribute('param'));
+            }).on('click','.delete-for-user',function(){
+                deleteForUser(this.getAttribute('param'),this.getAttribute('paramName'));
+            });
+            $('#role-table').on('click','.check-role',function(i,ele){
+                var rownum=+(this.getAttribute('rownum'));
+                var roleId=this.getAttribute('id');
+                if(this.checked){
+                    top.registry.sys.checkRoles[rownum]='checked';
+                    top.registry.sys.checkRoleIds[rownum]=roleId;
+                    //this.setAttribute('checked','true');
+                }else{
+                    top.registry.sys.checkRoles[rownum]=null;
+                    top.registry.sys.checkRoleIds[rownum]=null;
+                    //this.removeAttribute('checked');
+                }
+            });
+        });
+</script>
 </html>

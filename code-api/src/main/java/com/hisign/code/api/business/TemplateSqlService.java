@@ -1,6 +1,6 @@
 package com.hisign.code.api.business;
 
-import com.hisign.code.model.database.TemplateSql;
+import com.hisign.code.model.business.TemplateSql;
 import java.util.List;
 
 /**

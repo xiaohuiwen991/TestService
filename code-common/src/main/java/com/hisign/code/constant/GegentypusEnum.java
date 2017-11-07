@@ -1,6 +1,6 @@
 package com.hisign.code.constant;
 
-import com.hisign.code.model.database.Gegentypus;
+import com.hisign.code.model.business.Gegentypus;
 
 import java.util.HashMap;
 import java.util.Map;

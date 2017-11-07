@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.database.DevelopSqlMapper" >
-    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.DevelopSql" >
+<mapper namespace="com.hisign.code.persist.mapper.business.WeChartUserMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.business.DevelopSql" >
         <result column="NAME" property="name" jdbcType="VARCHAR" />
         <result column="TYPE" property="type" jdbcType="VARCHAR" />
         <result column="SQL" property="sql" jdbcType="VARCHAR" />
@@ -55,43 +55,59 @@
         </where>
     </sql>
 
-    <select id="findDevelopSqlList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.DevelopSql" >
-        select p.* from(
-        select
-        rownum,rownum as rn,a.* from (
-        select
-        <include refid="Base_Column_List" />
-        from DB_DEVELOP_SQL t
-        <include refid="select_By_Filter_For_Where" />
-        <if test="orderByString != null and orderByString != ''">
-            order by ${orderByString}
-        </if>
-        <if test="orderByString == null or orderByString == ''">
-            order by CREATE_DATE desc nulls last
-        </if>
-        ) a
-        <if test="end != 0 and end !=null">
-            where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
-        </if>
-        ) p
-        <if test="begin != 0 and begin !=null">
-            where rn >= #{begin, jdbcType=INTEGER}
+    <select id="findDevelopSqlList" resultType="com.hisign.code.model.business.WeChartUserInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
+        SELECT t.*,@rownum := @rownum + 1 AS rownum FROM (
+            SELECT
+                @rownum := 0,
+                t1.ID                                             AS id,
+                t1.USER_NAME                                      AS userName,
+                t1.TRUE_NAME                                      AS trueName,
+                t1.PASS_WORD                                      AS password,
+                t1.QUESTION1                                      AS question1,
+                t1.ANSWER1                                        AS answer1,
+                t1.QUESTION2                                      AS question2,
+                t1.ANSWER2                                        AS answer2,
+                t2.COMPANY_NAME                                   AS companyName,
+                t1.COMPANY_ID                                     AS companyId,
+                DATE_FORMAT(t1.CREATE_DATE,'%y-%m-%d %T 24')    AS createDateStr,
+                t1.STATUS                                         AS status
+            FROM BUS_USER t1,BUS_COMPANY t2
+            WHERE t1.COMPANY_ID = t2.ID
+            <if test="userName != '' and userName != null">
+                AND t1.USER_NAME LIKE concat('%',#{userName},'%')
+            </if>
+            <if test="trueName != '' and trueName != null">
+                AND t1.TRUE_NAME LIKE concat('%',#{trueName},'%')
+            </if>
+            <if test="companyName != '' and companyName != null">
+                AND t2.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+            </if>
+        ) t
+        <if test=" begin !=null and end != 0 and end !=null">
+            LIMIT #{begin},#{end}
         </if>
     </select>
 
-    <select id="findDevelopSqlListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.DevelopSql" >
-        select
-        count(1)
-        from DB_DEVELOP_SQL t
-        <include refid="select_By_Filter_For_Where" />
+    <select id="findDevelopSqlListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
+        SELECT COUNT(1) FROM BUS_USER t1,BUS_COMPANY t2
+        WHERE t1.COMPANY_ID = t2.ID
+        <if test="userName != '' and userName != null">
+            AND t1.USER_NAME LIKE concat('%',#{userName},'%')
+        </if>
+        <if test="trueName != '' and trueName != null">
+            AND t1.TRUE_NAME LIKE concat('%',#{trueName},'%')
+        </if>
+        <if test="companyName != '' and companyName != null">
+            AND t2.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+        </if>
     </select>
 
-    <delete id="deleteDevelopSql" parameterType="com.hisign.code.model.database.DevelopSql">
+    <delete id="deleteDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql">
         DELETE FROM DB_DEVELOP_SQL
         <include refid="select_By_Filter_For_Where2" />
     </delete>
 
-    <insert id="insertDevelopSql" parameterType="com.hisign.code.model.database.DevelopSql" >
+    <insert id="insertDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql" >
         insert into DB_DEVELOP_SQL (
         NAME,
         TYPE,
@@ -113,7 +129,7 @@
         )
     </insert>
 
-    <update id="updateDevelopSql" parameterType="com.hisign.code.model.database.DevelopSql" >
+    <update id="updateDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql" >
         update DB_DEVELOP_SQL set
         TYPE = #{type,jdbcType=VARCHAR},
         SQL = #{sql,jdbcType=VARCHAR},
@@ -123,7 +139,7 @@
         <include refid="select_By_Filter_For_Where2" />
     </update>
 
-    <select id="findDevelopSqlInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.DevelopSql" >
+    <select id="findDevelopSqlInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.DevelopSql" >
         select
         <include refid="Base_Column_List" />
         from DB_DEVELOP_SQL t

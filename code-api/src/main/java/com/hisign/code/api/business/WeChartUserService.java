@@ -1,6 +1,8 @@
 package com.hisign.code.api.business;
 
-import com.hisign.code.model.database.DevelopSql;
+import com.hisign.code.model.business.DevelopSql;
+import com.hisign.code.model.business.WeChartUserInfo;
+
 import java.util.List;
 
 /**
@@ -8,23 +10,23 @@ import java.util.List;
  * @author jiangpeng
  * @since 2017/05/26 09:41
  */
-public interface DevelopSqlService {
+public interface WeChartUserService {
 
     /**
      * 获取开发语句列表信息
-     * @param developSql 开发语句查询条件
+     * @param weChartUserInfo 开发语句查询条件
      * @return 开发语句列表信息
      * @throws Exception
      */
-    List<DevelopSql> findDevelopSqlList(DevelopSql developSql) throws Exception;
+    List<DevelopSql> findDevelopSqlList(WeChartUserInfo weChartUserInfo) throws Exception;
 
     /**
      * 获取开发语句列表信息数量
-     * @param developSql 开发语句查询条件
+     * @param weChartUserInfo 开发语句查询条件
      * @return 开发语句列表信息数量
      * @throws Exception
      */
-    int findDevelopSqlListForCount(DevelopSql developSql) throws Exception;
+    int findDevelopSqlListForCount(WeChartUserInfo weChartUserInfo) throws Exception;
 
     /**
      * 删除开发语句

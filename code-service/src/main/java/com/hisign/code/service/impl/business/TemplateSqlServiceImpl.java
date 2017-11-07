@@ -1,8 +1,8 @@
-package com.hisign.code.service.impl.database;
+package com.hisign.code.service.impl.business;
 
 import com.hisign.code.api.business.TemplateSqlService;
-import com.hisign.code.model.database.TemplateSql;
-import com.hisign.code.persist.mapper.database.TemplateSqlMapper;
+import com.hisign.code.model.business.TemplateSql;
+import com.hisign.code.persist.mapper.business.TemplateSqlMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.database.CompanyManageMapper" >
-    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.CompanyInfo" >
+<mapper namespace="com.hisign.code.persist.mapper.business.CompanyManageMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.business.CompanyInfo" >
         <result column="NAME" property="name" jdbcType="VARCHAR" />
         <result column="URL" property="url" jdbcType="VARCHAR" />
         <result column="USERNAME" property="username" jdbcType="VARCHAR" />
@@ -40,7 +40,7 @@
         </where>
     </sql>
 
-    <select id="findConnectionInfoList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.CompanyInfo" >
+    <select id="findConnectionInfoList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.CompanyInfo" >
         SELECT t.*,@rownum := @rownum + 1 AS rownum FROM (
             SELECT
                 @rownum := 0,
@@ -67,7 +67,7 @@
         </if>
     </select>
 
-    <select id="findConnectionInfoListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.CompanyInfo" >
+    <select id="findConnectionInfoListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.CompanyInfo" >
         SELECT COUNT(1) FROM BUS_COMPANY t
         WHERE 1=1
       <if test="companyName != '' and companyName != null">
@@ -81,12 +81,12 @@
       </if>
     </select>
 
-    <delete id="deleteConnectionInfo" parameterType="com.hisign.code.model.database.CompanyInfo">
+    <delete id="deleteConnectionInfo" parameterType="com.hisign.code.model.business.CompanyInfo">
         DELETE t.* FROM BUS_COMPANY t
         WHERE ID = #{id}
     </delete>
 
-    <insert id="insertConnectionInfo" parameterType="com.hisign.code.model.database.CompanyInfo" >
+    <insert id="insertConnectionInfo" parameterType="com.hisign.code.model.business.CompanyInfo" >
         insert into BUS_COMPANY (
             ID,
         <if test=" companyName != '' and companyName != null">
@@ -140,7 +140,7 @@
         )
     </insert>
 
-    <update id="updateConnectionInfo" parameterType="com.hisign.code.model.database.CompanyInfo" >
+    <update id="updateConnectionInfo" parameterType="com.hisign.code.model.business.CompanyInfo" >
         update BUS_COMPANY set
         <if test="companyName != null">
             COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
@@ -164,7 +164,7 @@
         where ID = #{id,jdbcType=VARCHAR}
     </update>
 
-    <select id="findConnectionInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.CompanyInfo" >
+    <select id="findConnectionInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.CompanyInfo" >
         SELECT
             ID AS id,
             COMPANY_NAME AS companyName,

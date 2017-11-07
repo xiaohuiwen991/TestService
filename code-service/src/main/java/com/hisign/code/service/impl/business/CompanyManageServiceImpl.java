@@ -1,10 +1,10 @@
-package com.hisign.code.service.impl.database;
+package com.hisign.code.service.impl.business;
 
 import com.hisign.code.api.business.CompanyManageService;
-import com.hisign.code.model.database.CompanyInfo;
-import com.hisign.code.model.database.UserConnection;
-import com.hisign.code.persist.mapper.database.CompanyManageMapper;
-import com.hisign.code.persist.mapper.database.UserConnectionMapper;
+import com.hisign.code.model.business.CompanyInfo;
+import com.hisign.code.model.business.UserConnection;
+import com.hisign.code.persist.mapper.business.CompanyManageMapper;
+import com.hisign.code.persist.mapper.business.UserConnectionMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

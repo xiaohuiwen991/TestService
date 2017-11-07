@@ -1,4 +1,4 @@
-package com.hisign.code.model.database;
+package com.hisign.code.model.business;
 
 import com.hisign.code.model.common.BaseModel;
 import org.apache.commons.lang.StringUtils;

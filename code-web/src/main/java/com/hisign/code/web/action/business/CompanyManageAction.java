@@ -3,7 +3,7 @@ package com.hisign.code.web.action.business;
 import com.alibaba.fastjson.JSON;
 import com.hisign.code.api.business.CompanyManageService;
 import com.hisign.code.model.common.JsonResult;
-import com.hisign.code.model.database.CompanyInfo;
+import com.hisign.code.model.business.CompanyInfo;
 import com.hisign.code.model.system.SysUser;
 import com.hisign.code.web.bind.annotation.CurrentUser;
 import com.hisign.code.web.bind.annotation.TranslateObject;
@@ -134,56 +134,4 @@ public class CompanyManageAction {
         }
         return jsonResult;
     }
-
-    /**
-     * 获取数据库连接信息
-     * @param companyinfo 数据库连接信息
-     * @return 删除标志
-     * @throws InterruptedException
-     */
-    @RequestMapping(value="/info", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-    @ResponseBody
-    public JsonResult findConnectionInfoInfo(@TranslateObject CompanyInfo companyinfo) throws InterruptedException {
-        JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(companyinfo);
-        logger.info("获取数据库连接信息");
-        try {
-            CompanyInfo info = companyManageService.findConnectionInfoInfo(companyinfo);
-            jsonResult.setSuccessData(info);
-        } catch (Exception e) {
-            logger.error("获取数据库连接信息失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("获取数据库连接信息失败");
-        }
-        return jsonResult;
-    }
-
-
-    /**
-     * 连接数据库
-     * @param companyinfo 数据库连接信息
-     * @return 删除标志
-     * @throws InterruptedException
-     */
-    @RequestMapping(value="/connect", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-    @ResponseBody
-    public JsonResult findConnectionInfoInfo(@TranslateObject CompanyInfo companyinfo, @CurrentUser SysUser user) throws InterruptedException {
-        JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(companyinfo);
-        logger.info("连接数据库");
-        try {
-            companyinfo.setUser(user);
-            companyManageService.connect(companyinfo);
-            jsonResult.setFlag(1);
-        } catch (Exception e) {
-            logger.error("连接数据库失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("连接数据库失败");
-        }
-        return jsonResult;
-    }
-
-
-
-
-
-
 }

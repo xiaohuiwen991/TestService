@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.database.TableColumnMapper" >
-    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.TableColumn" >
+<mapper namespace="com.hisign.code.persist.mapper.business.TableColumnMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.business.TableColumn" >
         <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
         <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
         <result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
@@ -53,7 +53,7 @@
 
 
 
-    <select id="findTableColumnList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableColumn" >
+    <select id="findTableColumnList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TableColumn" >
         select p.* from(
             select
                 rownum,rownum as rn,a.* from (
@@ -87,7 +87,7 @@
     </select>
 
 
-    <select id="findColumnList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableColumn" >
+    <select id="findColumnList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TableColumn" >
         SELECT
             T.COLUMN_NAME as key,
             T.COLUMN_NAME || nvl2(T1.COMMENTS, '(' || T1.COMMENTS || ')', '') as value
@@ -99,7 +99,7 @@
         </if>
     </select>
 
-    <select id="findTableColumnListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TableColumn" >
+    <select id="findTableColumnListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.TableColumn" >
         SELECT count(1)
         FROM USER_TAB_COLUMNS T, USER_COL_COMMENTS T1, USER_TAB_COMMENTS T2
         <include refid="select_By_Filter_For_Where" />
@@ -109,7 +109,7 @@
     </select>
 
 
-    <select id="findTableList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableColumn" >
+    <select id="findTableList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TableColumn" >
         select p.* from(
         select
         rownum,rownum as rn,a.* from (
@@ -134,7 +134,7 @@
         </if>
     </select>
 
-    <select id="findTableListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TableColumn" >
+    <select id="findTableListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.TableColumn" >
         SELECT
           count(1)
         FROM user_tab_comments T

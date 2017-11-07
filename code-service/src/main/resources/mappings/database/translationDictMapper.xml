@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.database.TranslationDictMapper" >
-  <resultMap id="BaseResultMap" type="com.hisign.code.model.database.TranslationDict" >
+<mapper namespace="com.hisign.code.persist.mapper.business.TranslationDictMapper" >
+  <resultMap id="BaseResultMap" type="com.hisign.code.model.business.TranslationDict" >
     <id column="ORIGINAL_TEXT" property="originalText" jdbcType="VARCHAR" />
     <result column="TRANSLATION" property="translation" jdbcType="VARCHAR" />
     <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
@@ -52,7 +52,7 @@
     </where>
   </sql>
 
-  <select id="findTranslationDict" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TranslationDict">
+  <select id="findTranslationDict" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">
     select p.* from(
     select
     rownum,rownum as rn,a.* from (
@@ -76,19 +76,19 @@
     </if>
   </select>
 
-  <select id="findTranslationDictForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TranslationDict">
+  <select id="findTranslationDictForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.TranslationDict">
     select count(1) from DB_TRANSLATION_DICT
     <include refid="select_By_Filter_For_Where" />
   </select>
 
-  <select id="findTranslationDictInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TranslationDict">
+  <select id="findTranslationDictInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">
     select
     <include refid="Base_Column_List" />
     from DB_TRANSLATION_DICT
     <include refid="select_By_Filter_For_Where2" />
   </select>
 
-  <insert id="insertTranslationDict" parameterType="com.hisign.code.model.database.TranslationDict">
+  <insert id="insertTranslationDict" parameterType="com.hisign.code.model.business.TranslationDict">
   insert into db_translation_dict
   (original_text,
   translation,
@@ -104,12 +104,12 @@
   )
   </insert>
 
-  <delete id="deleteTranslationDict" parameterType="com.hisign.code.model.database.TranslationDict">
+  <delete id="deleteTranslationDict" parameterType="com.hisign.code.model.business.TranslationDict">
     DELETE FROM db_translation_dict
     <include refid="select_By_Filter_For_Where2"/>
   </delete>
 
-  <update id="updateTranslationDict" parameterType="com.hisign.code.model.database.TranslationDict">
+  <update id="updateTranslationDict" parameterType="com.hisign.code.model.business.TranslationDict">
     UPDATE db_translation_dict SET
     TRANSLATION = #{translation,jdbcType=VARCHAR},
     DESCRIPTION = #{description,jdbcType=VARCHAR}

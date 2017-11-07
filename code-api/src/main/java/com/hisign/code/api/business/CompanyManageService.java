@@ -1,6 +1,6 @@
 package com.hisign.code.api.business;
 
-import com.hisign.code.model.database.CompanyInfo;
+import com.hisign.code.model.business.CompanyInfo;
 import java.util.List;
 
 /**

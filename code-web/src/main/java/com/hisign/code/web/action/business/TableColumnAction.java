@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hisign.code.api.business.TableColumnService;
 import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.model.common.JsonResult;
-import com.hisign.code.model.database.TableColumn;
+import com.hisign.code.model.business.TableColumn;
 import com.hisign.code.model.system.SysUser;
 import com.hisign.code.web.bind.annotation.CurrentUser;
 import com.hisign.code.web.bind.annotation.TranslateObject;

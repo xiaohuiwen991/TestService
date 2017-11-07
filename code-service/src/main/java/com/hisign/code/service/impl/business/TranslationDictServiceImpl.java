@@ -1,9 +1,9 @@
-package com.hisign.code.service.impl.database;
+package com.hisign.code.service.impl.business;
 
 import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.constant.Constants;
-import com.hisign.code.model.database.TranslationDict;
-import com.hisign.code.persist.mapper.database.TranslationDictMapper;
+import com.hisign.code.model.business.TranslationDict;
+import com.hisign.code.persist.mapper.business.TranslationDictMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

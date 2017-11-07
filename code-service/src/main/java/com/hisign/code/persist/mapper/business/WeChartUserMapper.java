@@ -1,6 +1,8 @@
-package com.hisign.code.persist.mapper.database;
+package com.hisign.code.persist.mapper.business;
 
-import com.hisign.code.model.database.DevelopSql;
+import com.hisign.code.model.business.DevelopSql;
+import com.hisign.code.model.business.WeChartUserInfo;
+
 import java.util.List;
 
 /**
@@ -8,21 +10,21 @@ import java.util.List;
  * @author jiangpeng
  * @since 2017/05/26 09:41
  */
-public interface DevelopSqlMapper {
+public interface WeChartUserMapper {
 
     /**
      * 获取开发语句列表信息
      * @param developSql 开发语句查询条件
      * @return 开发语句列表信息
      */
-    List<DevelopSql> findDevelopSqlList(DevelopSql developSql);
+    List<DevelopSql> findDevelopSqlList(WeChartUserInfo weChartUserInfo);
 
     /**
      * 获取开发语句列表信息数量
      * @param developSql 开发语句查询条件
      * @return 开发语句列表信息数量
      */
-    int findDevelopSqlListForCount(DevelopSql developSql);
+    int findDevelopSqlListForCount(WeChartUserInfo weChartUserInfo);
 
     /**
      * 删除开发语句

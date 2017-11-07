@@ -1,7 +1,7 @@
-package com.hisign.code.persist.mapper.database;
+package com.hisign.code.persist.mapper.business;
 
 
-import com.hisign.code.model.database.TranslationDict;
+import com.hisign.code.model.business.TranslationDict;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.database.TableConnectionMapper" >
-    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.TableConnection" >
+<mapper namespace="com.hisign.code.persist.mapper.business.TableConnectionMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.business.TableConnection" >
         <id column="ID" property="id" jdbcType="VARCHAR" />
         <result column="CONNECTION_NAME" property="connectionName" jdbcType="VARCHAR" />
         <result column="TABLE_NAME1" property="tableName1" jdbcType="VARCHAR" />
@@ -56,7 +56,7 @@
         </where>
     </sql>
 
-    <select id="findTableConnectionList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableConnection" >
+    <select id="findTableConnectionList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TableConnection" >
         select p.* from(
             select
                 rownum,rownum as rn,a.* from (
@@ -80,19 +80,19 @@
         </if>
     </select>
 
-    <select id="findTableConnectionListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.database.TableConnection" >
+    <select id="findTableConnectionListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.TableConnection" >
         select
             count(1)
         from DB_TABLE_CONNECTION t
         <include refid="select_By_Filter_For_Where" />
     </select>
 
-    <delete id="deleteTableConnection" parameterType="com.hisign.code.model.database.TableConnection">
+    <delete id="deleteTableConnection" parameterType="com.hisign.code.model.business.TableConnection">
         DELETE FROM DB_TABLE_CONNECTION
         <include refid="select_By_Filter_For_Where2" />
     </delete>
 
-    <insert id="insertTableConnection" parameterType="com.hisign.code.model.database.TableConnection" >
+    <insert id="insertTableConnection" parameterType="com.hisign.code.model.business.TableConnection" >
         insert into DB_TABLE_CONNECTION (
             ID,
             CONNECTION_NAME,
@@ -120,7 +120,7 @@
         )
     </insert>
 
-    <update id="updateTableConnection" parameterType="com.hisign.code.model.database.TableConnection" >
+    <update id="updateTableConnection" parameterType="com.hisign.code.model.business.TableConnection" >
         update DB_TABLE_CONNECTION set
             TABLE_NAME1 = #{tableName1,jdbcType=VARCHAR},
             COLUMN1 = #{column1,jdbcType=VARCHAR},
@@ -132,7 +132,7 @@
         <include refid="select_By_Filter_For_Where2" />
     </update>
 
-    <select id="findTableConnectionInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.TableConnection" >
+    <select id="findTableConnectionInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TableConnection" >
         select
             <include refid="Base_Column_List" />
         from DB_TABLE_CONNECTION t

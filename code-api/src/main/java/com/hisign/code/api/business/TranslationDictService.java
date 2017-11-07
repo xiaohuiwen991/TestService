@@ -1,6 +1,6 @@
 package com.hisign.code.api.business;
 
-import com.hisign.code.model.database.TranslationDict;
+import com.hisign.code.model.business.TranslationDict;
 
 import java.util.List;
 

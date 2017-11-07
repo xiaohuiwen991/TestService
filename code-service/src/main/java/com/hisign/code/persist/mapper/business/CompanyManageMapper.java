@@ -1,6 +1,6 @@
-package com.hisign.code.persist.mapper.database;
+package com.hisign.code.persist.mapper.business;
 
-import com.hisign.code.model.database.CompanyInfo;
+import com.hisign.code.model.business.CompanyInfo;
 import java.util.List;
 
 /**

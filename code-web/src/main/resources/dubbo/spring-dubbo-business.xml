@@ -20,7 +20,7 @@
 
     <dubbo:reference id="templateSqlService" interface="com.hisign.code.api.business.TemplateSqlService" timeout="20000" retries="0"/>
 
-    <dubbo:reference id="developSqlService" interface="com.hisign.code.api.business.DevelopSqlService" timeout="20000" retries="0"/>
+    <dubbo:reference id="weChartUserService" interface="com.hisign.code.api.business.WeChartUserService" timeout="20000" retries="0"/>
 
     <dubbo:reference id="tableConnectionService" interface="com.hisign.code.api.business.TableConnectionService" timeout="20000" retries="0"/>
 

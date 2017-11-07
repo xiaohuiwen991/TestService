@@ -1,4 +1,4 @@
-package com.hisign.code.model.database;
+package com.hisign.code.model.business;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;

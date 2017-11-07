@@ -1,6 +1,6 @@
-package com.hisign.code.persist.mapper.database;
+package com.hisign.code.persist.mapper.business;
 
-import com.hisign.code.model.database.UserConnection;
+import com.hisign.code.model.business.UserConnection;
 
 /**
  *

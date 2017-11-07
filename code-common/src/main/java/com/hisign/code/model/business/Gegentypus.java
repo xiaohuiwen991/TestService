@@ -1,4 +1,4 @@
-package com.hisign.code.model.database;
+package com.hisign.code.model.business;
 
 /**
  * 比对类型

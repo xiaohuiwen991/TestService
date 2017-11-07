@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.database.UserConnectionMapper" >
-    <resultMap id="BaseResultMap" type="com.hisign.code.model.database.UserConnection" >
+<mapper namespace="com.hisign.code.persist.mapper.business.UserConnectionMapper" >
+    <resultMap id="BaseResultMap" type="com.hisign.code.model.business.UserConnection" >
         <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
         <result column="CONNECTION_NAME" property="connectionName" jdbcType="VARCHAR" />
     </resultMap>
@@ -26,12 +26,12 @@
     </sql>
     
 
-    <delete id="deleteUserConnection" parameterType="com.hisign.code.model.database.UserConnection">
+    <delete id="deleteUserConnection" parameterType="com.hisign.code.model.business.UserConnection">
         DELETE FROM DB_USER_CONNECTION
         <include refid="select_By_Filter_For_Where2" />
     </delete>
 
-    <insert id="insertUserConnection" parameterType="com.hisign.code.model.database.UserConnection" >
+    <insert id="insertUserConnection" parameterType="com.hisign.code.model.business.UserConnection" >
         insert into DB_USER_CONNECTION (
             USER_NAME,
             CONNECTION_NAME
@@ -41,7 +41,7 @@
         )
     </insert>
     
-    <select id="findUserConnectionInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.database.UserConnection" >
+    <select id="findUserConnectionInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.UserConnection" >
         select
         <include refid="Base_Column_List" />
         from DB_USER_CONNECTION t

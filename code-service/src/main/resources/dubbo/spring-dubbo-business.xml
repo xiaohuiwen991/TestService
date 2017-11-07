@@ -20,7 +20,7 @@
 
     <dubbo:service interface="com.hisign.code.api.business.TemplateSqlService" protocol="rmi" ref="templateSqlService" />
 
-    <dubbo:service interface="com.hisign.code.api.business.DevelopSqlService" protocol="rmi" ref="developSqlService" />
+    <dubbo:service interface="com.hisign.code.api.business.WeChartUserService" protocol="rmi" ref="weChartUserService" />
 
     <dubbo:service interface="com.hisign.code.api.business.TableConnectionService" protocol="rmi" ref="tableConnectionService" />
 
