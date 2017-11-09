@@ -68,6 +68,7 @@
                 t1.QUESTION2                                      AS question2,
                 t1.ANSWER2                                        AS answer2,
                 t2.COMPANY_NAME                                   AS companyName,
+                t1.TELPHONE                                       AS telphone,
                 t1.COMPANY_ID                                     AS companyId,
                 DATE_FORMAT(t1.CREATE_DATE,'%y-%m-%d %T 24')    AS createDateStr,
                 t1.STATUS                                         AS status
@@ -102,48 +103,81 @@
         </if>
     </select>
 
-    <delete id="deleteDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql">
-        DELETE FROM DB_DEVELOP_SQL
-        <include refid="select_By_Filter_For_Where2" />
+    <delete id="deleteDevelopSql" parameterType="com.hisign.code.model.business.WeChartUserInfo">
+        DELETE t.* FROM BUS_USER t
+        WHERE t.ID = #{id}
     </delete>
 
     <insert id="insertDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql" >
-        insert into DB_DEVELOP_SQL (
-        NAME,
-        TYPE,
-        SQL,
-        DESCRIPTION,
-        CREATE_PID,
-        CREATE_DATE,
-        MODIFY_PID,
-        MODIFY_DATE
+        INSERT INTO BUS_USER (
+            ID,
+            USER_NAME,
+            TRUE_NAME,
+            PASS_WORD,
+            QUESTION1,
+            ANSWER1,
+            QUESTION2,
+            ANSWER2,
+            COMPANY_ID,
+            STATUS,
+            TELPHONE,
+            CREATE_PID,
+            CREATE_DATE
         ) values (
-        #{name,jdbcType=VARCHAR},
-        #{type,jdbcType=VARCHAR},
-        #{sql,jdbcType=VARCHAR},
-        #{description,jdbcType=VARCHAR},
-        #{user.userName,jdbcType=VARCHAR},
-        sysdate,
-        #{user.userName,jdbcType=VARCHAR},
-        sysdate
+            REPLACE(UUID(),'-',''),
+            #{userName,jdbcType=VARCHAR},
+            #{trueName,jdbcType=VARCHAR},
+            #{password,jdbcType=VARCHAR},
+            #{question1,jdbcType=VARCHAR},
+            #{answer1,jdbcType=VARCHAR},
+            #{question2,jdbcType=VARCHAR},
+            #{answer2,jdbcType=VARCHAR},
+            #{companyId,jdbcType=VARCHAR},
+            #{status,jdbcType=VARCHAR},
+            #{telphone,jdbcType=VARCHAR},
+            #{user.userName,jdbcType=VARCHAR},
+            NOW()
         )
     </insert>
 
     <update id="updateDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql" >
-        update DB_DEVELOP_SQL set
-        TYPE = #{type,jdbcType=VARCHAR},
-        SQL = #{sql,jdbcType=VARCHAR},
-        DESCRIPTION = #{description,jdbcType=VARCHAR},
+        update BUS_USER set
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+        TRUE_NAME = #{trueName,jdbcType=VARCHAR},
+        PASS_WORD = #{password,jdbcType=VARCHAR},
+        QUESTION1 = #{question1,jdbcType=VARCHAR},
+        ANSWER1 = #{answer1,jdbcType=VARCHAR},
+        QUESTION2 = #{question2,jdbcType=VARCHAR},
+        ANSWER2 = #{answer2,jdbcType=VARCHAR},
+        COMPANY_ID = #{companyId,jdbcType=VARCHAR},
+        STATUS = #{status,jdbcType=VARCHAR},
+        TELPHONE = #{telphone,jdbcType=VARCHAR},
         MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
         MODIFY_DATE = sysdate
-        <include refid="select_By_Filter_For_Where2" />
+        WHERE ID = #{id}
     </update>
 
-    <select id="findDevelopSqlInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.DevelopSql" >
-        select
-        <include refid="Base_Column_List" />
-        from DB_DEVELOP_SQL t
-        <include refid="select_By_Filter_For_Where2" />
+    <select id="findDevelopSqlInfo" resultType="com.hisign.code.model.business.WeChartUserInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
+        SELECT
+            t1.ID                                             AS id,
+            t1.USER_NAME                                      AS userName,
+            t1.TRUE_NAME                                      AS trueName,
+            t1.PASS_WORD                                      AS password,
+            t1.QUESTION1                                      AS question1,
+            t1.ANSWER1                                        AS answer1,
+            t1.QUESTION2                                      AS question2,
+            t1.ANSWER2                                        AS answer2,
+            t1.TELPHONE                                       AS telphone,
+            t2.COMPANY_NAME                                   AS companyName,
+            t1.COMPANY_ID                                     AS companyId
+        FROM BUS_USER t1,BUS_COMPANY t2
+        WHERE t1.COMPANY_ID = t2.ID
+      <if test="userName != null and userName != ''">
+          AND t1.USER_NAME = #{userName}
+      </if>
+      <if test="id != null and id != ''">
+          AND t1.ID = #{id}
+      </if>
     </select>
 
 

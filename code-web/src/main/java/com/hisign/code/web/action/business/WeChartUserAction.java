@@ -76,23 +76,23 @@ public class WeChartUserAction {
     /**
      * 新增开发语句
      * @param user 当前用户
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 新增编号
      * @throws InterruptedException
      */
     @RequestMapping(value="/add", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult insertDevelopSql(@CurrentUser SysUser user, @TranslateObject DevelopSql developSql) throws InterruptedException {
+    public JsonResult insertDevelopSql(@CurrentUser SysUser user, @TranslateObject WeChartUserInfo weChartUserInfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(developSql);
-        logger.info("新增开发语句");
+        String paraStr = JSON.toJSONString(weChartUserInfo);
+        logger.info("新增微信用户");
         try {
-            DevelopSql info = weChartUserService.findDevelopSqlInfo(developSql);
+            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(weChartUserInfo);
             if(info != null) {
-                return new JsonResult(0, "语句名已存在!");
+                return new JsonResult(0, "用户名已存在!");
             }
-            developSql.setUser(user);
-            String id = weChartUserService.insertDevelopSql(developSql);
+            weChartUserInfo.setUser(user);
+            String id = weChartUserService.insertDevelopSql(weChartUserInfo);
             jsonResult.setSuccessData(id);
         } catch (Exception e) {
             logger.error("新增开发语句失败,请求参数为[{}]", paraStr, e);
@@ -104,19 +104,23 @@ public class WeChartUserAction {
     /**
      * 修改开发语句信息
      * @param user 当前用户
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 修改标志
      * @throws InterruptedException
      */
     @RequestMapping(value="/edit", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult updateDevelopSql(@CurrentUser SysUser user, @TranslateObject DevelopSql developSql) throws InterruptedException {
+    public JsonResult updateDevelopSql(@CurrentUser SysUser user, @TranslateObject WeChartUserInfo weChartUserInfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(developSql);
+        String paraStr = JSON.toJSONString(weChartUserInfo);
         logger.info("修改开发语句信息");
         try {
-            developSql.setUser(user);
-            weChartUserService.updateDevelopSql(developSql);
+            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(weChartUserInfo);
+            if(info != null) {
+                return new JsonResult(0, "用户名已存在!");
+            }
+            weChartUserInfo.setUser(user);
+            weChartUserService.updateDevelopSql(weChartUserInfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("修改开发语句信息失败,请求参数为[{}]", paraStr, e);
@@ -127,44 +131,44 @@ public class WeChartUserAction {
 
     /**
      * 删除开发语句
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 删除标志
      * @throws InterruptedException
      */
     @RequestMapping(value="/delete", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult deleteDevelopSql(@TranslateObject DevelopSql developSql) throws InterruptedException {
+    public JsonResult deleteDevelopSql(@TranslateObject WeChartUserInfo weChartUserInfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(developSql);
+        String paraStr = JSON.toJSONString(weChartUserInfo);
         logger.info("删除开发语句");
         try {
-            weChartUserService.deleteDevelopSql(developSql);
+            weChartUserService.deleteDevelopSql(weChartUserInfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {
-            logger.error("删除开发语句失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("删除开发语句失败");
+            logger.error("删除微信用户失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("删除微信用户失败");
         }
         return jsonResult;
     }
 
     /**
      * 获取开发语句信息
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 删除标志
      * @throws InterruptedException
      */
-    @RequestMapping(value="/info", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value="/view", method= RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult findDevelopSqlInfo(@TranslateObject DevelopSql developSql) throws InterruptedException {
+    public JsonResult findDevelopSqlInfo(@TranslateObject WeChartUserInfo weChartUserInfo) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(developSql);
-        logger.info("获取开发语句信息");
+        String paraStr = JSON.toJSONString(weChartUserInfo);
+        logger.info("获取微信用户信息");
         try {
-            DevelopSql info = weChartUserService.findDevelopSqlInfo(developSql);
+            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(weChartUserInfo);
             jsonResult.setSuccessData(info);
         } catch (Exception e) {
-            logger.error("获取开发语句信息失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("获取开发语句信息失败");
+            logger.error("获取微信用户信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("获取微信用户信息失败");
         }
         return jsonResult;
     }

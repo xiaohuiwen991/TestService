@@ -49,4 +49,10 @@ public interface CompanyManageMapper {
      */
     CompanyInfo findConnectionInfoInfo(CompanyInfo connectionInfo);
 
+    /**
+     * 查询公司信息
+     * @return
+     */
+    List<CompanyInfo> queryCompanyDict();
+
 }

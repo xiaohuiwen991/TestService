@@ -134,4 +134,25 @@ public class CompanyManageAction {
         }
         return jsonResult;
     }
+
+    /**
+     * 删除数据库连接
+     * @return 删除标志
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/dict", method= RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult queryCompanyDict() throws InterruptedException {
+        JsonResult jsonResult = new JsonResult();
+        logger.info("查询公司信息");
+        try {
+            List<CompanyInfo> list = companyManageService.queryCompanyDict();
+            jsonResult.setData(list);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            logger.error("删除公司信息失败,请求参数为[{}]", e);
+            jsonResult.setErrorMsg("删除公司信息失败");
+        }
+        return jsonResult;
+    }
 }

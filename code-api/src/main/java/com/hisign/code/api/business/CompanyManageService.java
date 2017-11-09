@@ -62,4 +62,11 @@ public interface CompanyManageService {
      * @throws Exception
      */
     void connect(CompanyInfo connectionInfo) throws Exception;
+
+    /**
+     * 查询
+     * @return
+     * @throws Exception
+     */
+    List<CompanyInfo> queryCompanyDict() throws Exception;
 }

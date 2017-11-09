@@ -14,41 +14,41 @@ public interface WeChartUserMapper {
 
     /**
      * 获取开发语句列表信息
-     * @param developSql 开发语句查询条件
+     * @param weChartUserInfo 开发语句查询条件
      * @return 开发语句列表信息
      */
     List<DevelopSql> findDevelopSqlList(WeChartUserInfo weChartUserInfo);
 
     /**
      * 获取开发语句列表信息数量
-     * @param developSql 开发语句查询条件
+     * @param weChartUserInfo 开发语句查询条件
      * @return 开发语句列表信息数量
      */
     int findDevelopSqlListForCount(WeChartUserInfo weChartUserInfo);
 
     /**
      * 删除开发语句
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      */
-    void deleteDevelopSql(DevelopSql developSql);
+    void deleteDevelopSql(WeChartUserInfo weChartUserInfo);
 
     /**
      * 修改开发语句信息
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      */
-    void updateDevelopSql(DevelopSql developSql);
+    void updateDevelopSql(WeChartUserInfo weChartUserInfo);
 
     /**
      * 新增开发语句
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      */
-    void insertDevelopSql(DevelopSql developSql);
+    void insertDevelopSql(WeChartUserInfo weChartUserInfo);
 
     /**
      * 获得开发语句信息
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 开发语句信息
      */
-    DevelopSql findDevelopSqlInfo(DevelopSql developSql);
+    WeChartUserInfo findDevelopSqlInfo(WeChartUserInfo weChartUserInfo);
 
 }

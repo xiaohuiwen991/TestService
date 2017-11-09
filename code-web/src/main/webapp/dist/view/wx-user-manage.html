@@ -39,7 +39,8 @@
         <th width="15%" sort-name="username">用户账号</th>
         <th width="10%">状态</th>
         <th width="25%">所属公司</th>
-        <th width="20%">注册时间</th>
+        <th width="10%">联系电话</th>
+        <th width="10%">注册时间</th>
         <th width="10%">操作</th>
         </thead>
         <tbody tpsource="#user-list"></tbody>
@@ -57,17 +58,26 @@
         <p class="mt10">
             <span class="common-field"><span class="orangered">★ </span>密码：</span>
             <input name="password" class="user-add-valid common-input" type="password" data-options="required:true,validType:'length[3,20]'" placeholder="3~20个字符"/>
-            <span class="common-field">状态：</span>
-            <dict dict-id="add-openFlag" dict-name="openFlag" dict-type="select" dict-root="QYZTDM" class="dict" empty="false"></dict>
+            <span class="common-field"><span class="orangered">★ </span>所属公司：</span>
+            <dict id="dict-query-company" dict-id="query-company" dict-name="companyId" dict-type="select" dict-root="custom" return-value="false"></dict>
         </p>
         <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>账号状态：</span>
+            <dict id="status-dict" dict-name="status" dict-type="select" dict-root="ZHZTDM"  class="dict" empty="false"></dict>
             <span class="common-field">联系方式：</span>
-            <input name="userTel" class="user-add-valid common-input" type="text" data-options="validType:'mobile'" placeholder="请输入联系电话"/>
-            <!--<span class="common-field">所属地：</span>-->
-            <!--<dict dict-id="add-userUnit" dict-name="userUnit" dict-type="select" dict-root="GXSDM" class="dict" empty="false"></dict>-->
+            <input name="telphone" class="user-add-valid common-input" type="text" data-options="validType:'mobile'" placeholder="请输入联系电话"/>
         </p>
         <p class="mt10">
-            <span class="common-field fl">备注：</span><textarea name="remark" rows="5"></textarea>
+            <span class="common-field">提示问题1：</span>
+            <input name="question1" class="user-add-valid common-input" type="text" placeholder="请输入密码提示问题"/>
+            <span class="common-field">提示问题答案1：</span>
+            <input name="answer1" class="user-add-valid common-input" type="text" placeholder="请输入密码提示问题答案"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field">提示问题2：</span>
+            <input name="question2" class="user-add-valid common-input" type="text" placeholder="请输入密码提示问题"/>
+            <span class="common-field">提示问题答案2：</span>
+            <input name="answer2" class="user-add-valid common-input" type="text" placeholder="请输入密码提示问题答案"/>
         </p>
     </form>
     <p class="tcenter mt10">
@@ -84,13 +94,10 @@
             <input name="trueName" type="text" class="common-input" unselectable="on" readonly="true" value="{trueName}"/>
         </p>
         <p class="mt10">
-            <span class="common-field">状态：</span>
-            <input name="openFlag" type="text" class="common-input" unselectable="on" readonly="true" value="{openFlag}"/>
             <span class="common-field">联系方式：</span>
-            <input name="userTel" type="text" class="common-input" unselectable="on" readonly="true" value="{userTel}"/>
-        </p>
-        <p class="mt10">
-            <span class="common-field fl">备注：</span><textarea unselectable="on" readonly="true" rows="5">{remark}</textarea>
+            <input name="telphone" type="text" class="common-input" unselectable="on" readonly="true" value="{telphone}"/>
+            <span class="common-field">所属公司：</span>
+            <input name="companyName" type="text" class="common-input" unselectable="on" readonly="true" value="{companyName}"/>
         </p>
     </div>
     <p class="tcenter mt20">
@@ -156,6 +163,7 @@
         </td>
         <td>{statusTxt}</td>
         <td>{companyName}</td>
+        <td>{telphone}</td>
         <td>{createDateStr}</td>
         <td>
             <a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>
@@ -183,14 +191,15 @@
         importing('dict',function() {
 
             var searchAction = top.path+'/api/0/business/user/list';
-            var viewAction = top.path+'/api/0/system/user/view';
+            var viewAction = top.path+'/api/0/business/user/view';
             var editAction = top.path+'/api/0/system/user/_edit';
             var roleAction = top.path+'/api/0/system/role/list';
-            var deleteAction = top.path+'/api/1/system/user/delete';
-            var saveAction = top.path+'/api/1/system/user/add';
+            var deleteAction = top.path+'/api/1/business/user/delete';
+            var saveAction = top.path+'/api/1/business/user/add';
             var updateAction = top.path+'/api/1/system/user/edit';
-            var roleDict = top.path + '/api/0/system/role/roleDict';
+            var companyDict = top.path + '/api/0/business/company/dict';
             var editingUser;
+            var pageDate;
 
             $(".dict").dict();
 
@@ -211,24 +220,23 @@
             });
 
             //角色字典查询
-//            function initRoleDict(){
-//                $get(roleDict,{},function(res){
-//                    $('#dict-query-role').dict(res.data);
-//                });
-//            }
+            function initCompanyDict(){
+                $get(companyDict,{},function(res){
+                    $('#dict-query-company').dict(res.data);
+                });
+            }
             //查询用户
             function queryForUser(iflog,currentPage){
                 $('#user-query-result').pagingList({
                     action:iflog?searchAction:searchAction,
                     currentPage:currentPage,
                     jsonObj:{
-                        //sortName:sortName||'',
-                        //order:order||'asc',
                         userName:$('#userName').val().trim(),
                         trueName:$('#trueName').val().trim(),
                         companyName:$('#companyName').val()
                     },
                     callback:function(data){
+                        pageDate = data;
                         $template('#user-table tbody',data,function(item,i){
                             var status = item.status;
                             item.statusTxt = item.status=='1'?'启用':'禁用';
@@ -254,8 +262,8 @@
                 $get(viewAction,{id:id},function(msg){
                     window.newwin = $open('#user-view-div', {width: 800, height: 310, title: '用户查看'});
                     $template('#user-view-value', msg.data,function(item,i){
-                        var t_openFlag = item.openFlag;
-                        item.openFlag = t_openFlag=='1'?'启用':'禁用';
+                        var status = item.status;
+                        item.statusTxt = item.status=='1'?'启用':'禁用';
                     });
                 });
             }
@@ -266,19 +274,6 @@
                     // queryForRole();
                     window.newwin=$open('#user-edit-div',{width:800, title:'用户修改'});
                     $template('#user-edit-form',editingUser.sysUser[0]);
-                    $('#edit-openflag').dictSelect(editingUser.sysUser[0].openFlag);
-                    top.registry.sys.checkRoles=[];
-                    top.registry.sys.checkRoleIds=[];
-                    $template('#role-table tbody',editingUser.roleList,function(item,i){
-                        if(editingUser.sysUserRoleIds.indexOf(item.id)>-1){
-                            //如果用户已有该项权限则勾上，但前提是没有手动操作过
-                            if(typeof top.registry.sys.checkRoles[item.rownum]=='undefined'){
-                                item._checked=top.registry.sys.checkRoles[item.rownum]='checked';
-                                top.registry.sys.checkRoleIds[item.rownum]=item.id;
-                            }
-                        }
-                        item._checked=top.registry.sys.checkRoles[item.rownum];
-                    });
                 });
             }
             //查询所有角色
@@ -342,9 +337,8 @@
                 $post(saveAction,$("#user-add-form").serializeObject(), function(res){
                     userCloseWin('user-add-div');
                     toast('保存成功！',600,function(){
-                        intoUserEdit(res.id);
+                        queryForUser(false);
                     }).ok();
-                    queryForUser(false);
                 },true);
             }
             //修改保存用户
@@ -377,8 +371,8 @@
 
             regOrder();
 
-            //初始化角色字典
-//            initRoleDict();
+            //初始化公司字典
+            initCompanyDict();
 
             queryForUser(false);
 

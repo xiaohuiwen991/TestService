@@ -67,6 +67,53 @@ public class CompanyInfo extends BaseModel {
 
     private String contact;
 
+    private String key;
+
+    private String value;
+
+    private String keyStr;
+
+    private String telphone;
+
+    public String getTelphone() {
+        return telphone;
+    }
+
+    public void setTelphone(String telphone) {
+        this.telphone = telphone;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String getKeyStr() {
+        return keyStr;
+    }
+
+    @Override
+    public void setKeyStr(String keyStr) {
+        this.keyStr = keyStr;
+        this.setKey(this.keyStr);
+    }
+
     @Override
     public String getId() {
         return id;

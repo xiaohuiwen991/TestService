@@ -29,6 +29,16 @@ public class WeChartUserInfo extends BaseModel {
 
     private String createDateStr;
 
+    private String telphone;
+
+    public String getTelphone() {
+        return telphone;
+    }
+
+    public void setTelphone(String telphone) {
+        this.telphone = telphone;
+    }
+
     public String getCreateDateStr() {
         return createDateStr;
     }

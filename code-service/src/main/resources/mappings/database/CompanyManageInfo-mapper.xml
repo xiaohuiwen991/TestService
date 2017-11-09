@@ -40,6 +40,13 @@
         </where>
     </sql>
 
+    <select id="queryCompanyDict" resultType="com.hisign.code.model.business.CompanyInfo">
+        SELECT
+                COMPANY_NAME            AS value,
+                ID                      AS keyStr
+        FROM BUS_COMPANY
+    </select>
+
     <select id="findConnectionInfoList" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.CompanyInfo" >
         SELECT t.*,@rownum := @rownum + 1 AS rownum FROM (
             SELECT
@@ -48,6 +55,7 @@
                 COMPANY_NAME            AS companyName,
                 CONTACT                 AS contact,
                 REPORT_ADRESS           AS reportAdress,
+                TELPHONE                AS telphone,
                 INVOICE_ADRESS          AS invoiceAdress,
                 E_MAIL                  AS email
             FROM BUS_COMPANY t

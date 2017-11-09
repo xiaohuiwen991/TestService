@@ -4,6 +4,7 @@ import com.hisign.code.api.business.WeChartUserService;
 import com.hisign.code.model.business.DevelopSql;
 import com.hisign.code.model.business.WeChartUserInfo;
 import com.hisign.code.persist.mapper.business.WeChartUserMapper;
+import com.hisign.code.util.Md5Helper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,41 +46,42 @@ public class WeChartUserServiceImpl implements WeChartUserService {
 
     /**
      * 删除开发语句
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @throws Exception
      */
-    public void deleteDevelopSql(DevelopSql developSql) throws Exception {
-        weChartUserMapper.deleteDevelopSql(developSql);
+    public void deleteDevelopSql(WeChartUserInfo weChartUserInfo) throws Exception {
+        weChartUserMapper.deleteDevelopSql(weChartUserInfo);
     }
 
     /**
      * 修改开发语句信息
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @throws Exception
      */
-    public void updateDevelopSql(DevelopSql developSql) throws Exception {
-        weChartUserMapper.updateDevelopSql(developSql);
+    public void updateDevelopSql(WeChartUserInfo weChartUserInfo) throws Exception {
+        weChartUserMapper.updateDevelopSql(weChartUserInfo);
     }
 
     /**
      * 新增开发语句
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 开发语句编号
      * @throws Exception
      */
-    public String insertDevelopSql(DevelopSql developSql) throws Exception {
-        weChartUserMapper.insertDevelopSql(developSql);
+    public String insertDevelopSql(WeChartUserInfo weChartUserInfo) throws Exception {
+        weChartUserInfo.setPassword(Md5Helper.getMD5(weChartUserInfo.getPassword()));
+        weChartUserMapper.insertDevelopSql(weChartUserInfo);
         return null;
     }
 
     /**
      * 获得开发语句信息
-     * @param developSql 开发语句信息
+     * @param weChartUserInfo 开发语句信息
      * @return 开发语句信息
      * @throws Exception
      */
-    public DevelopSql findDevelopSqlInfo(DevelopSql developSql) throws Exception {
-        return weChartUserMapper.findDevelopSqlInfo(developSql);
+    public WeChartUserInfo findDevelopSqlInfo(WeChartUserInfo weChartUserInfo) throws Exception {
+        return weChartUserMapper.findDevelopSqlInfo(weChartUserInfo);
     }
 
 }

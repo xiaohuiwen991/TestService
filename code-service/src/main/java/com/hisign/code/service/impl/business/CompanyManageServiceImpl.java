@@ -98,4 +98,15 @@ public class CompanyManageServiceImpl implements CompanyManageService {
         userConnectionMapper.insertUserConnection(userConnection);
     }
 
+    /**
+     * 查询机构字典
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<CompanyInfo> queryCompanyDict() throws Exception {
+        List<CompanyInfo> list = companyManageMapper.queryCompanyDict();
+        return list;
+    }
+
 }
