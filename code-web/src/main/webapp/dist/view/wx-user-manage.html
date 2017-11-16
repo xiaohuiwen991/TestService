@@ -19,6 +19,7 @@
         <span class="common-field w65">用户姓名：</span><input id="trueName" type="text" class="common-input"/>
         <span class="common-field w100">用户账号：</span><input id="userName" type="text" class="common-input"/>
         <span class="common-field w100">所属公司：</span><input id="companyName" type="text" class="common-input"/>
+        <span class="common-field w100">账号状态：</span><dict id="dict-status-user" dict-id="status-user" dict-name="status" dict-type="select" class="dict" dict-root="ZHZTDM" ></dict>
         <p class="query-reset">
             <b id="user-query-btn" class="cm-query-btn"></b>
             <b id="user-reset-btn" class="cm-reset-btn"></b>
@@ -99,6 +100,18 @@
             <span class="common-field">所属公司：</span>
             <input name="companyName" type="text" class="common-input" unselectable="on" readonly="true" value="{companyName}"/>
         </p>
+        <p class="mt10">
+            <span class="common-field">提示问题1：</span>
+            <input name="question1" type="text" class="common-input" unselectable="on" readonly="true" value="{question1}"/>
+            <span class="common-field">提示问题答案1：</span>
+            <input name="answer1" type="text" class="common-input" unselectable="on" readonly="true" value="{answer1}"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field">提示问题2：</span>
+            <input name="question2" type="text" class="common-input" unselectable="on" readonly="true" value="{question2}"/>
+            <span class="common-field">提示问题答案2：</span>
+            <input name="answer2" type="text" class="common-input" unselectable="on" readonly="true" value="{answer2}"/>
+        </p>
     </div>
     <p class="tcenter mt20">
         <b id="user-view-cancel" class="cm-close-btn"></b>
@@ -106,49 +119,38 @@
 </div>
 <div id="user-edit-div" class="hide">
     <form id="user-edit-form">
-        <input name="userId" value="{id}" type="hidden"/>
-        <input id="sysUserRoleIds" name="sysUserRoleIds" type="hidden" />
         <p class="mt10">
-            <span class="common-field">用户账号：</span>
-            <input name="userName" type="text" class="common-input" unselectable="on" readonly="true" value="{userName}"/>
+            <span class="common-field"><span class="orangered">★ </span>用户账号：</span>
+            <input name="userName" class="user-add-valid common-input" type="text" data-options="required:true,validType:'username'" value="{userName}" placeholder="0~50个字符，包含字母、数字和下划线"/>
             <span class="common-field"><span class="orangered">★ </span>用户姓名：</span>
-            <input name="trueName" type="text" class="user-edit-valid common-input" data-options="required:true,validType:'length[0,50]'" value="{trueName}" placeholder="小于等于50个字"/>
+            <input name="trueName" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,50]'" value="{trueName}" placeholder="小于等于50个字"/>
         </p>
         <p class="mt10">
             <span class="common-field">密码：</span>
-            <input name="newPassword"  type="password" class="user-edit-valid common-input" data-options="validType:'length[3,20]'" placeholder="不输入新密码，原始密码不变"/>
-            <span class="common-field">状态：</span>
-            <dict dict-id="edit-openflag" dict-name="openFlag" dict-type="select" dict-root="QYZTDM" class="dict" empty="false"></dict>
+            <input name="password" class="user-add-valid common-input" type="password" data-options="required:true,validType:'length[3,20]'" placeholder="不输入新密码,原始密码保持不变"/>
+            <span class="common-field"><span class="orangered">★ </span>所属公司：</span>
+            <dict id="dict-edit-company" dict-id="edit-company" dict-name="companyId" dict-type="select" dict-root="custom" return-value="false"></dict>
         </p>
         <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>账号状态：</span>
+            <dict id="status-dict-edit"  dict-id="edit-edit" dict-name="status" dict-type="select" dict-root="ZHZTDM"  class="dict" empty="false"></dict>
             <span class="common-field">联系方式：</span>
-            <input name="userTel" type="text" class="user-edit-valid common-input" data-options="validType:'mobile'" placeholder="请输入联系电话" value="{userTel}"/>
+            <input name="telphone" class="user-add-valid common-input" type="text" data-options="validType:'mobile'" value="{telphone}" placeholder="请输入联系电话"/>
         </p>
         <p class="mt10">
-            <span class="common-field fl">备注：</span><textarea name="remark">{remark}</textarea>
+            <span class="common-field">提示问题1：</span>
+            <input name="question1" class="user-add-valid common-input" type="text" value="{question1}" placeholder="请输入密码提示问题"/>
+            <span class="common-field">提示问题答案1：</span>
+            <input name="answer1" class="user-add-valid common-input" type="text" value="{answer1}" placeholder="请输入密码提示问题答案"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field">提示问题2：</span>
+            <input name="question2" class="user-add-valid common-input" type="text" value="{question2}" placeholder="请输入密码提示问题"/>
+            <span class="common-field">提示问题答案2：</span>
+            <input name="answer2" class="user-add-valid common-input" type="text" value="{answer2}" placeholder="请输入密码提示问题答案"/>
+            <input name="id" value="{id}" class="hide"/>
         </p>
     </form>
-    <div id="role-result">
-        <div class="stick-title-bar mb0">
-            <span class="title">角色信息列表</span>
-        </div>
-        <!--<div class="win-color-bar mt15">
-            <span class="title">角色信息列表</span>
-        </div>-->
-        <div id="role-div-table">
-            <table id="role-table" class="typical-tb" cellpadding="3">
-                <thead>
-                <th width="10%" sort-name="rownum">序号</th>
-                <th width="27%">角色名</th>
-                <th width="55%">角色描述</th>
-                <!--<th width="50px">状态</th>-->
-                <th width="8%">选择</th>
-                </thead>
-                <tbody tpsource="#role-list"></tbody>
-            </table>
-        </div>
-        <!--<div class="paging"></div>-->
-    </div>
     <p class="tcenter mt15 mb10">
         <b id="update-user" class="cm-save-btn mr15"></b>
         <b id="user-edit-cancel" class="cm-cancel-btn"></b>
@@ -171,18 +173,6 @@
         </td>
     </tr>
 </script>
-<script type="text/template" id="role-list">
-    <tr>
-        <td>{rownum}</td>
-        <td>{roleName}</td>
-        <td class="tleft">{description}</td>
-        <!--<td>{openFlag}</td>-->
-        <td>
-            <input id="{id}" name="roleId" type="checkbox" {_checked} value="{id}" class="check-role" rownum="{rownum}"/>
-        </td>
-    </tr>
-</script>
-
 
 </body>
 <script src="../js/base.js?version=0.99"></script>
@@ -192,11 +182,10 @@
 
             var searchAction = top.path+'/api/0/business/user/list';
             var viewAction = top.path+'/api/0/business/user/view';
-            var editAction = top.path+'/api/0/system/user/_edit';
             var roleAction = top.path+'/api/0/system/role/list';
             var deleteAction = top.path+'/api/1/business/user/delete';
             var saveAction = top.path+'/api/1/business/user/add';
-            var updateAction = top.path+'/api/1/system/user/edit';
+            var updateAction = top.path+'/api/1/business/user/edit';
             var companyDict = top.path + '/api/0/business/company/dict';
             var editingUser;
             var pageDate;
@@ -223,6 +212,7 @@
             function initCompanyDict(){
                 $get(companyDict,{},function(res){
                     $('#dict-query-company').dict(res.data);
+                    $('#dict-edit-company').dict(res.data);
                 });
             }
             //查询用户
@@ -233,7 +223,8 @@
                     jsonObj:{
                         userName:$('#userName').val().trim(),
                         trueName:$('#trueName').val().trim(),
-                        companyName:$('#companyName').val()
+                        companyName:$('#companyName').val(),
+                        status:$('#status-user').val()
                     },
                     callback:function(data){
                         pageDate = data;
@@ -269,12 +260,14 @@
             }
             //进入修改页面
             function intoUserEdit(id){
-                $get(editAction,{id:id},function(msg) {
-                    editingUser=msg.data;
-                    // queryForRole();
-                    window.newwin=$open('#user-edit-div',{width:800, title:'用户修改'});
-                    $template('#user-edit-form',editingUser.sysUser[0]);
-                });
+                for(var i=0;i<pageDate.length;i++){
+                    if(pageDate[i].id==id){
+                        window.newwin=$open('#user-edit-div',{width:800, title:'用户修改'});
+                        $template('#user-edit-form',pageDate[i]);
+                        $('#edit-company').dictSelect(pageDate[i].companyId);
+                        $('#dict-edit').dictSelect(pageDate[i].status);
+                    }
+                }
             }
             //查询所有角色
             function queryForRole(){
@@ -330,10 +323,11 @@
             //新增保存用户
             function saveUser(){
                 trimAll();
-                $('.user-add-valid').validatebox();
-                if($('.validatebox-invalid').length > 0){
-                    return false;
-                }
+                console.log($("#user-add-form").serializeObject());
+//                $('.user-add-valid').validatebox();
+//                if($('.validatebox-invalid').length > 0){
+//                    return false;
+//                }
                 $post(saveAction,$("#user-add-form").serializeObject(), function(res){
                     userCloseWin('user-add-div');
                     toast('保存成功！',600,function(){
@@ -348,8 +342,6 @@
                 if($('.validatebox-invalid').length > 0){
                     return false;
                 }
-                $('#sysUserRoleIds').val(top.registry.sys.checkRoleIds.where('item=>item!=null').join());
-
                 $post(updateAction,$("#user-edit-form").serializeObject(),function(res){
                     userCloseWin('user-edit-div');
                     toast('保存成功！').ok();

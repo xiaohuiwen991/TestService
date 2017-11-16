@@ -55,7 +55,6 @@
                 COMPANY_NAME            AS companyName,
                 CONTACT                 AS contact,
                 REPORT_ADRESS           AS reportAdress,
-                TELPHONE                AS telphone,
                 INVOICE_ADRESS          AS invoiceAdress,
                 E_MAIL                  AS email
             FROM BUS_COMPANY t

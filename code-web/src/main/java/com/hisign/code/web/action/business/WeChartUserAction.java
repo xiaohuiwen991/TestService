@@ -116,7 +116,7 @@ public class WeChartUserAction {
         logger.info("修改开发语句信息");
         try {
             WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(weChartUserInfo);
-            if(info != null) {
+            if(info != null && !info.getId().equals(weChartUserInfo.getId())) {
                 return new JsonResult(0, "用户名已存在!");
             }
             weChartUserInfo.setUser(user);

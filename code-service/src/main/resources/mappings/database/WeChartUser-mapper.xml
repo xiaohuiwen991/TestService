@@ -83,6 +83,9 @@
             <if test="companyName != '' and companyName != null">
                 AND t2.COMPANY_NAME LIKE concat('%',#{companyName},'%')
             </if>
+            <if test="status != '' and status != null">
+                AND t1.STATUS LIKE concat('%',#{status},'%')
+            </if>
         ) t
         <if test=" begin !=null and end != 0 and end !=null">
             LIMIT #{begin},#{end}
@@ -100,6 +103,9 @@
         </if>
         <if test="companyName != '' and companyName != null">
             AND t2.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+        </if>
+        <if test="status != '' and status != null">
+            AND t1.STATUS LIKE concat('%',#{status},'%')
         </if>
     </select>
 
@@ -153,7 +159,7 @@
         STATUS = #{status,jdbcType=VARCHAR},
         TELPHONE = #{telphone,jdbcType=VARCHAR},
         MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
-        MODIFY_DATE = sysdate
+        MODIFY_DATE = NOW()
         WHERE ID = #{id}
     </update>
 
