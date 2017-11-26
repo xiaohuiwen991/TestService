@@ -1,0 +1,329 @@
+  <!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>&#20250;&#21592;&#30331;&#24405;</title>
+<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,target-densitydpi=medium"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta content="telephone=no" name="format-detection" />
+<meta content="email=no" name="format-detection" />
+<link type="text/css" rel="stylesheet" href="../css/wap/base.css" />
+<script type="text/javascript">
+	    var user_name = "muying05";
+    var aGlobalBannerHeight = {};
+</script>
+<script type="text/javascript" src="../include/cookies.js"></script>
+<script src="../include/jquery-1.7.1.min.js" language="JavaScript" ></script>
+<script type="text/javascript" src="../js/wap/nav.js@ver1"></script>
+<script type="text/javascript" src="../js/wap/swipe.js@ver1"></script>
+<script type="text/javascript" src="../js/wap/ajax_info.js@ver1"></script>
+<script type="text/javascript" src="../js/wap/public.js@ver1"></script>
+<link type="text/css" rel="stylesheet" href="../css/wap/web_frame.css@@ver1" />
+<link type="text/css" rel="stylesheet" href="../css/wap/change_module.css@ver1" />
+<link id="webSkinCss" type="text/css" rel="stylesheet" href="../templates/wapother14/css/webskin.css@ver1" />
+<link id="webSkinCss" type="text/css" rel="stylesheet" href="../templates/wapother14/skin_14/style.css@ver1" />
+<!--change_top_tpl-->
+<link type="text/css" rel="stylesheet" href="../css/wap/new/index.css@ver1" >
+<!-- <link type="text/css" rel="stylesheet" href="/css/wap/classStyle.css?ver1" > -->
+    <script type="text/javascript" src="../js/wap/new_wap_public.js@ver1"></script>
+        <script type="text/javascript" src="../js/wap/wapShare.js@ver1"></script>
+                                    <script type="text/javascript" src="../js/wap/doc_json.js@ver1"></script>
+                            <link type="text/css" rel="stylesheet" href="../css/wap/icomoon_style.css@ver1" />
+
+   <link rel="stylesheet" href="../css/wap/base.css">
+  <link rel="stylesheet" href="../css/wap/spectrum.css">
+  <!-- 图标文字 -->
+  <link rel="stylesheet" href="../css/tubiao/gwcFont.css">
+  <link rel="stylesheet" href="../css/tubiao/indexFont.css">
+  <link rel="stylesheet" href="../css/tubiao/qqFont.css">
+  <link rel="stylesheet" href="../css/tubiao/helpFont.css">
+  <link rel="stylesheet" href="../css/tubiao/telFont.css">
+  <link rel="stylesheet" href="../css/tubiao/shopsFont.css">
+  <link rel="stylesheet" href="../css/tubiao/classifyFont.css">
+  <link rel="stylesheet" href="../css/tubiao/fxFont.css">
+  <link rel="stylesheet" href="../css/tubiao/hbqFont.css">
+  <link rel="stylesheet" href="../css/tubiao/memberFont.css">
+  <link rel="stylesheet" href="../css/tubiao/hykFont.css">
+  <link rel="stylesheet" href="../css/tubiao/kfFont.css">
+  <link rel="stylesheet" href="../css/tubiao/lyFont.css">
+  <link rel="stylesheet" href="../css/tubiao/forumFont.css">
+  <link rel="stylesheet" href="../css/tubiao/freeFont.css">
+  <link rel="stylesheet" href="../css/tubiao/tryoutFont.css">
+  <link rel="stylesheet" href="../css/tubiao/tgFont.css">
+  <link rel="stylesheet" href="../css/tubiao/positionFont.css">
+  <link rel="stylesheet" href="../css/tubiao/wdFont.css">
+  <link rel="stylesheet" href="../css/tubiao/xsgFont.css">
+  <link rel="stylesheet" href="../css/tubiao/yyFont.css">
+  <!-- end -->
+  <link rel="stylesheet" href="../css/iconSet.css">
+    <link type="text/css" rel="stylesheet" href="../images/wap/web_style/module_style/Module_style.css@ver1" />
+<link type="text/css" rel="stylesheet" href="../images/wap/web_style/hmo_style/HMo_style.css@ver1" />
+    <link type="text/css" rel="stylesheet" href="../wap/include/user_define_css.php@user_id=1029360&channel_id=0&timestamp=1487751534&style=" />
+<script src="../js/tj/model_banner.js@ver1" type="text/javascript"></script>
+<script src="../../admin.dlszywz.com/ueditor/ueditor.parse.js"></script>
+<style type="text/css">
+  .ev_empy{display: block;}
+  .psd_div{float:right;height:38px;line-height:24px;}
+  .psd_div a{color:#ccc;}
+
+  .ev_t_product_pj_t{ padding-top:0; height:50px; width: auto; position: relative; border-style: solid; border-width: 0 0 2px; }
+  .ev_t_product_pj_t .ev_t_product_run{position: absolute; top:15px; background:url('../images/login_run.png') no-repeat; background-size: 20px 20px;}
+  .ev_t_product_pj_tit{background:#fff; height:50px;}
+  .ev_t_product_pj_t .ev_t_product_span{color:#9D9D9D; padding:5px 0 5px; font-size: 18px; height:45px;}
+  .ev_t_product_pj_t .ev_t_product_span .ch{font-size: 16px;}
+  .ev_t_product_pj_t .ev_t_product_span .en{font-size: 14px;}
+  .ev_t_product_ge b{height:40px;}
+</style>
+</head>
+<body style="height:100%; background:#fff;">
+<div class="wrapper" id="wrapper">
+  <div class="main" style="background:#F5F5F5">
+	<div class="trainModule">
+	  <div class="ev_t_product_pjs">
+		<div class="ev_t_product_pj_tit">
+		  <div class="ev_t_product_pj_t this_bo_color">
+			<a href="../wap_muying05.html@showWelcome=1" class="ev_t_product_run" ></a><div class="ev_t_product_span">
+							<p class="ch">会员登陆</p>
+				<p class="en">Login</p>
+						</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="ev_t_product_ge"><b></b></div>
+	  <div class="ev_t_product_xq">
+		<div class="ev_t_phone_login_form">
+		  <form action="/dom/denglu.php?username=muying05"  method="post"  name="myfrom" id="myfrom">
+						<input type="hidden" name="wap" value="1">
+			<input type="hidden" value="" name="trespass" id="trespass" />
+						<input type="hidden" id="loginType" name="login_type" value="0">
+			<div class="login_tab_list">
+								<div class="pc_list">
+					<div class="ev_t_phone_zh">
+					  <div class="ev_t_phone_yh">
+						<div class="ev_list_data_input"><input type="text" class="tInputObj" name="login_name" id="login_name" placeholder="请输入账号" /></div>
+						<div class="ev_empy"><p id="login_name_msg" class="hint"></p></div>
+					  </div>
+					  <div class="ev_t_phone_mm">
+						<div class="ev_list_data_input"> <input type="password" class="pInputObj" name="login_pwd" id="login_pwd" placeholder="请输入密码" /></div>
+						<div class="ev_empy"><p id="login_pwd_msg" class="hint"></p></div>
+					  </div>
+					</div>
+        </div>
+      </div>
+      <div class="ev_t_phone_but">
+        <a href="javascript:;" id="loginBut">登录</a>
+      </div>
+      <div class="phone_but_url">
+			  <a class="fl" href="get_password.php@username=muying05&wap=1">忘记密码？</a>
+			  <a class="fr" href="zhuce.php@username=muying05&wap=1&trespass=">没有账号，请注册</a>
+			</div>
+			<div class="ev_t_phone_qq_but">
+                                            	                            			  
+
+			</div>
+			</li>
+		  </form>
+          
+          
+		</div>
+	  </div>
+	</div>
+  </div>
+</div>
+ <script language="javascript">
+ 		function android_wx_login(url){
+			android.wxLogin(url);	
+		}
+
+					tab_list('pc_tit','pc_list');
+		
+		/*var iLoginErrorCount = 0;
+		$("#loginBut").on('click', function() {
+			var loginType = parseInt($.trim($('#loginType').val()));
+			remove_error_msg();
+			iLoginErrorCount = 0;
+			if (!loginType){
+				$('#login_name').trigger('blur');
+				$('#login_pwd').trigger('blur');
+			} else {
+				$('#mobile').trigger('blur');
+				$('#mobile_code').trigger('blur');
+			}
+
+			if (parseInt(iLoginErrorCount) > 0) {
+				return false;
+			} else {
+				$("#myfrom").submit();
+			}
+		})
+
+
+		$('#login_name').on('blur',function(){
+			remove_error_msg();
+			var username = $.trim($('#login_name').val());
+
+			if (username.length == 0) {
+				$("#login_name_msg").html('<span class="caution">用户名不能为空！</span>');
+				iLoginErrorCount++;
+				return false;
+			}else if(public.yzUsername(username)==false){
+				$("#login_name_msg").html('<span class="error">用户名为6-20个字符(字母/数字/下划线)！</span>');
+				iLoginErrorCount++;
+				return false
+			} else {
+				$("#login_name_msg").html('');
+			}
+		});
+
+		$('#login_pwd').on('blur',function(){
+			remove_error_msg();
+			var password = $.trim($('#login_pwd').val());
+
+			if (password.length == 0) {
+				$("#login_pwd_msg").html('<span class="caution">密码不能为空！</span>');
+				iLoginErrorCount++;
+				return false;
+			}else if(public.yzUsername(password)==false){
+				$("#login_pwd_msg").html('<span class="error">密码为6-20个字符(字母/数字/下划线)！</span>');
+				iLoginErrorCount++;
+				return false
+			} else {
+				$("#login_pwd_msg").html('');
+			}
+		});
+
+		$('#mobile').on('blur',function(){
+			var mobile = $.trim($('#mobile').val());
+			var mobileErro = $('#mobileError');
+			if (!mobile) {
+				mobileErro.html('<span class="error">手机号不能为空！</span>');
+				iLoginErrorCount++;
+				return false;
+			} else if(public.yzMobile(mobile)==false){
+				mobileErro.html('<span class="error">手机号为11位数字！</span>');
+				iLoginErrorCount++;
+				return false
+			} else {
+				mobileErro.html('');
+			}
+		});
+
+		$('#mobile_code').on('blur',function(){
+			var mobile_code = $.trim($('#mobile_code').val());
+			var mobileCodeError = $('#mobileCodeError');
+			if (!mobile_code) {
+				mobileCodeError.html('<span class="error">验证码不能为空！</span>');
+				iLoginErrorCount++;
+				return false;
+			} else {
+				mobileCodeError.html('');
+			}
+		});
+
+		function remove_error_msg() {
+			if($("#error_msg")[0]){
+				$("#error_msg").html("");
+			}
+		}*/
+	</script>
+  <center></center>
+<script type="text/javascript" src="../js/wap/self_edit.js@ver1"></script>
+
+<!--微名片详细页不显示导航-->
+    <div class="fixedNavBut" id="fixed_nav_but" style="display:block;">
+    <div class="navMoreBut_2">
+      <i class="i-1"></i>
+      <i class="i-2"></i>
+      <i class="i-3"></i>
+      <b class="b-1"></b>
+      <b class="b-2"></b>
+      <b class="b-3"></b>
+    </div>
+  </div>
+
+
+    <div id="NMore" class="NMore_1002" state="close">
+      <em class="NMTip"></em>
+      <ul>
+          <li >
+          <a id="foot_index_link"  href="../wap_muying05.html@showWelcome=1"><span>&#39318;&#39029;</span></a></li>
+                                                <li ><a   href="../muying05/wap_doc/14669351_0_0_0.html"><span>公司新闻</span></a></li>
+                          <li ><a   href="../muying05/wap_pro/14669350_0_0_0.html"><span>公司产品</span></a></li>
+                                                         <li ><a   href="../muying05/wap_item/list_14669349_0.html"><span>关于我们</span></a></li>
+                                  </ul>
+    </div>
+         <div class="Nzz" id="Nzz"></div>
+  <script type="text/javascript">
+$(function(){
+  if (!$('.ev_t_top').length && !$('.ev_t_product_pj_tit').length) {
+    $('#wxAndAppShowHtml').removeClass('content_margin');
+  }
+  });
+$(".baiduEditorTxtModule img").each(function(){
+  var w = $(this).width();
+  if(w > 320){
+    $(this).css({'width':'100%','height':'auto'});
+}
+});
+//判断是否为微信
+function is_weixn(){
+  var ua = navigator.userAgent.toLowerCase();
+  if(ua.match(/MicroMessenger/i)=="micromessenger") {
+    $('#wxAndAppShowHtml').show();
+     return false;
+  } else {
+    $('#wxAndAppShowHtml').hide();
+    return true;
+  }
+}
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r   = window.location.search.substr(1).match(reg);
+     if(r!=null){
+       return  unescape(r[2]);
+     }
+    return '';
+}
+var is_weixn = is_weixn();
+if (is_weixn){
+  writeCookie('openid','',168);
+  var shareModule = $('#shareModule li');
+  if (shareModule.length > 0 ){
+    shareModule.find('.weixin').parent().remove();
+  }
+}else {
+  var openid = GetQueryString('openid');
+  if (!readCookie('openid')){
+    writeCookie('openid',openid);
+  }
+}
+
+</script>
+<script language="javascript">
+  var windowW = $(window).width(),windowH = $(window).height();
+  $(window).resize(function(){
+      })
+$(function(){
+  });
+  
+uParse('.ev_t_product_xq_con', {
+  rootPath: '../../admin.ev123.com/ueditor/default.htm'
+});
+uParse('.ev_t_product_xq_new_div', {
+  rootPath: '../../admin.ev123.com/ueditor/default.htm'
+});
+uParse('.articleC', {
+  rootPath: '../../admin.ev123.com/ueditor/default.htm'
+});
+uParse('.baiduEditorTxtModule', {
+  rootPath: '../../admin.ev123.com/ueditor/default.htm'
+});
+</script>
+</div>
+   
+<!--
+-->
+</body>
+</html>
