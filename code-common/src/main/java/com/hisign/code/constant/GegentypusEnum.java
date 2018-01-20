@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * 对比类型枚举
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/6/29 16:12
  */
 public enum GegentypusEnum {

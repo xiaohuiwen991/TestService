@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.business.TableColumnMapper" >
+<mapper namespace="com.hisign.code.persist.mapper.business.WeChatWebPageMapper" >
     <resultMap id="BaseResultMap" type="com.hisign.code.model.business.TableColumn" >
         <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
         <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
@@ -9,6 +9,33 @@
         <result column="NULLABLE" property="nullable" jdbcType="VARCHAR" />
         <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
     </resultMap>
+
+
+    <select id="queryLoginInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo" resultType="com.hisign.code.model.business.WeChartUserInfo">
+        SELECT
+                @rownum := 0,
+                t1.ID                                             AS id,
+                t1.USER_NAME                                      AS userName,
+                t1.TRUE_NAME                                      AS trueName,
+                t1.PASS_WORD                                      AS password,
+                t1.QUESTION1                                      AS question1,
+                t1.ANSWER1                                        AS answer1,
+                t1.QUESTION2                                      AS question2,
+                t1.ANSWER2                                        AS answer2,
+                t2.COMPANY_NAME                                   AS companyName,
+                t1.TELPHONE                                       AS telphone,
+                t1.COMPANY_ID                                     AS companyId,
+                DATE_FORMAT(t1.CREATE_DATE,'%y-%m-%d %T 24')      AS createDateStr,
+                t1.STATUS                                         AS status
+        FROM BUS_USER t1,BUS_COMPANY t2
+        WHERE t1.COMPANY_ID = t2.ID
+        <if test="userName != '' and userName != null">
+            AND t1.USER_NAME = #{userName}
+        </if>
+        <if test="password != '' and password != null">
+            AND t1.PASS_WORD = #{password}
+        </if>
+    </select>
 
 
     <sql id="select_By_Filter_For_Where" >

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 /**
  * sql创建
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/6/6 16:25
  */
 public class CreateSql implements Serializable {

@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * 表连接action
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/27 14:49
  */
 @Controller

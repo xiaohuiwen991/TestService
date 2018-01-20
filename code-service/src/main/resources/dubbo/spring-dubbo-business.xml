@@ -16,7 +16,7 @@
 
     <dubbo:service interface="com.hisign.code.api.business.CompanyManageService" protocol="rmi" ref="companyManageService" />
 
-    <dubbo:service interface="com.hisign.code.api.business.TableColumnService" protocol="rmi" ref="tableColumnService" />
+    <dubbo:service interface="com.hisign.code.api.business.WeChatWebPageService" protocol="rmi" ref="weChatWebPageService" />
 
     <dubbo:service interface="com.hisign.code.api.business.TemplateSqlService" protocol="rmi" ref="templateSqlService" />
 

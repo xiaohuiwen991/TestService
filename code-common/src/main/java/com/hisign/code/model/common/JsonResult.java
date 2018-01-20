@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * action返回结果类
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2016/5/28 11:46
  */
 public class JsonResult implements Serializable {

@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 模版语句mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/25 13:55
  */
 public interface TemplateSqlMapper {

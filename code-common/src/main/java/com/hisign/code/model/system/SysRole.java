@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 系统角色管理model
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2016/5/28 15:42
  */
 public class SysRole extends BaseModel {

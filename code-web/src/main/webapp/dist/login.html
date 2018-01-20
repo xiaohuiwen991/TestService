@@ -1,79 +1,135 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Pragma" content="no-cache"/>
-    <meta http-equiv="Expires" content="-1"/>
-    <meta http-equiv="Cache-Control" content="no-cache"/>
-    <title>业务管理系统</title>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="Pragma" content="no-cache"/>
+	<meta http-equiv="Expires" content="-1"/>
+	<meta http-equiv="Cache-Control" content="no-cache"/>
+	<title>业务管理系统</title>
+
+	<!-- Meta-Tags -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<!-- //Meta-Tags -->
+
 </head>
-<body class="over-yh" style="visibility:hidden;">
-<div class="login-back">
-    <header>
-        业务管理系统
-    </header>
-    <!--<div class="back-img"></div>-->
-    <form id="login-form">
-        <div id="login-div">
-            <input id="username" name="username" type="text" class="login-info" placeholder="请输入用户名" required="required" autocomplete="on" autofocus="autofocus">
-            <input id="password" name="password" type="password" class="login-info" placeholder="请输入密码" required="required">
-            <input type="button" class="login-btn" value="登 录">
-            <div class="other-operation">
-                <p id="download-cr">
-                    <span> | </span>
-                    <a id="download-a" href="">点此下载chrome浏览器</a>
-                </p>
-                <p>
-                    <label class="hide" for="remember-me">自动登录：</label>
-                    <input class="hide" id="remember-me" type="checkbox">
-                </p>
-            </div>
-        </div>
-    </form>
-    <p id="error"><i class="icon-warning-sign"></i> <span></span></p>
-    <p id="browser-tip"></p>
-    <footer>
-        <p>版本号 v1.1</p>
-    </footer>
-</div>
+<body>
+
+	<h1>登录表单</h1>
+
+	<div class="container w3layouts agileits">
+
+		<div class="login w3layouts agileits">
+			<h2>登 录</h2>
+			<form id="login-form">
+				<input id="username" name="username" type="text" class="login-info" placeholder="请输入用户名" required="required" autocomplete="on" autofocus="autofocus" autocomplete="off">
+				<input id="password" name="password" type="text" class="login-info" placeholder="请输入密码" required="required" autocomplete="off">
+				<!--<input type="text" Name="Userame" placeholder="用户名" required="">-->
+				<!--<input type="password" Name="Password" placeholder="密码" required="">-->
+			</form>
+			<ul class="tick w3layouts agileits">
+				<li>
+					<input type="checkbox" id="brand1" value="">
+					<label for="brand1"><span></span>记住我</label>
+					<label class="hide" for="remember-me">自动登录：</label>
+					<input class="hide" id="remember-me" type="checkbox">
+				</li>
+			</ul>
+			<div class="send-button w3layouts agileits">
+				<form>
+					<input type="button" class="login-btn" value="登 录">
+				</form>
+			</div>
+			<a href="#">记住密码?</a>
+			<div class="social-icons w3layouts agileits">
+				<p>- 其他方式登录 -</p>
+				<ul>
+					<li class="qq"><a href="#">
+					<span class="icons w3layouts agileits"></span>
+					<span class="text w3layouts agileits">QQ</span></a></li>
+					<li class="weixin w3ls"><a href="#">
+					<span class="icons w3layouts"></span>
+					<span class="text w3layouts agileits">微信</span></a></li>
+					<li class="weibo aits"><a href="#">
+					<span class="icons agileits"></span>
+					<span class="text w3layouts agileits">微博</span></a></li>
+					<div class="clear"> </div>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div><div class="copyrights">Collect from </div>
+		<div class="register w3layouts agileits">
+			<h2>注 册</h2>
+			<form id="register-form">
+				<input type="text" Name="Name" placeholder="请输入用户名" required="required">
+				<input type="text" Name="Email" placeholder="请输入邮箱" required="required" autocomplete="off">
+				<input id="new-password" type="text" Name="passwordRegister" placeholder="密码" required="required" autocomplete="off">
+				<input type="text" Name="phoneNumber" placeholder="手机号码" required="required">
+			</form>
+			<div class="send-button w3layouts agileits">
+				<form>
+					<input type="button" value="免费注册">
+				</form>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+
+	</div>
+	<p id="error"><i class="icon-warning-sign"></i> <span></span></p>
+	<p id="browser-tip"></p>
+
+	<div class="footer w3layouts agileits">
+		<p><a href="http://www.miitbeian.gov.cn">备案/许可证编号为：浙ICP备18001671号</a></p>
+	</div>
+
 </body>
 <script>
-    function createLink(src){
-        var link=document.createElement("link");
-        link.rel="stylesheet";
-        link.href=src+'?version='+window.version;
-        document.head.appendChild(link);
-    }
-    function createScript(src,cb){
-        var tag=document.createElement("script");
-        var bol=false;
-        tag.type="text/javascript";
-        tag.src=src+'?version='+window.version;
-        tag.onload=tag.onreadystatechange=function(){
-            if(!bol&&(!tag.readyState||tag.readyState=="loaded"||tag.readyState=="complete")){
-                bol=true;
-                tag.onload=tag.onreadystatechange=null;
-                cb&&cb.call(tag);
-            }
-        };
-        document.head.appendChild(tag);
-    }
-    function addTags(prefix){
-        createLink(prefix+'/css/base.css'),createLink(prefix+'/css/login.css');
-        createScript(prefix+'/js/base.js',function(){createScript(prefix+'/js/login.js');});
-    }
-    if(location.protocol=='file:' && typeof require=='function'){
-        //window.config=require('../data/config.json');
-        //window.version=config.version;
-        window.nwConfig=require('../package.json');
-        window.path=nwConfig.serverPath;
-        window.version=nwConfig.version;
-        addTags('./');
-    }else{
-        window.path=location.pathname.replace(/^\/$/,'');//.replace(/^\//,'');path=='/' && (path='');
-        window.version='0.99';//gulp-replace
-        addTags(window.path+'/dist/');
-    }
-</script>
+	function createLink(src){
+		var link=document.createElement("link");
+		link.rel="stylesheet";
+		link.href=src+'?version='+window.version;
+		document.head.appendChild(link);
+	}
+	function createScript(src,cb){
+		var tag=document.createElement("script");
+		var bol=false;
+		tag.type="text/javascript";
+		tag.src=src+'?version='+window.version;
+		tag.onload=tag.onreadystatechange=function(){
+			if(!bol&&(!tag.readyState||tag.readyState=="loaded"||tag.readyState=="complete")){
+				bol=true;
+				tag.onload=tag.onreadystatechange=null;
+				cb&&cb.call(tag);
+			}
+		};
+		document.head.appendChild(tag);
+	}
+	function addTags(prefix){
+		createLink(prefix+'/css/base.css'),createLink(prefix+'/css/style.css');
+		createScript(prefix+'/js/base.js',function(){createScript(prefix+'/js/login.js');});
+	}
+	if(location.protocol=='file:' && typeof require=='function'){
+		//window.config=require('../data/config.json');
+		//window.version=config.version;
+		window.nwConfig=require('../package.json');
+		window.path=nwConfig.serverPath;
+		window.version=nwConfig.version;
+		addTags('./');
+		$('#password,#new-password').attr('type','text').focus(function(){
+			$(this).attr('type','password');
+		});
+	}else{
+		window.path=location.pathname.replace(/^\/$/,'');//.replace(/^\//,'');path=='/' && (path='');
+		window.version='0.99';//gulp-replace
+		addTags(window.path+'/dist/');
+	}
 
+	function changeType(){
+	}
+</script>
 </html>

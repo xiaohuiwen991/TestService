@@ -2,7 +2,7 @@ package com.hisign.code.constant;
 
 /**
  * 标签枚举
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/7/22 14:56
  */
 public enum LableEnum {

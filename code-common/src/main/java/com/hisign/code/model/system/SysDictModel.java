@@ -4,7 +4,7 @@ import com.hisign.code.model.common.BaseModel;
 
 /**
  *
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/6/12 11:26
  */
 public class SysDictModel extends BaseModel {

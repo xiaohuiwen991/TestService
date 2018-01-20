@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 表连接mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/27 14:49
  */
 public interface TableConnectionMapper {

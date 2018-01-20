@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /**
  * 系统角色管理接口实现类
- * @author jiangpeng
+ * @author xiaohuiwen
  * @version 1.0
  * @since 2016/5/28 16:28
  */

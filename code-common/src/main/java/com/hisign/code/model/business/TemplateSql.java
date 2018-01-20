@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * 模版语句model
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/5/25 14:00
  */
 public class TemplateSql extends BaseModel {

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 /**
  * 字典管理接口实现类
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2016/11/29 12:00
  */
 @Service("dictManageService")

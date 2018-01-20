@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * 数据库连接mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/23 18:19
  */
 public interface CompanyManageMapper {

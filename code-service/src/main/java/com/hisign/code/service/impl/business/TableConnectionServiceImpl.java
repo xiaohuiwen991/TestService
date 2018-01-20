@@ -11,7 +11,7 @@ import java.util.UUID;
 
 /**
  * 表连接接口实现类
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/27 14:49
  */
 @Service("tableConnectionService")

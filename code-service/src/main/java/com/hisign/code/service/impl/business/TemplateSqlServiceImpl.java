@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * 模版语句接口实现类
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/25 13:55
  */
 @Service("templateSqlService")

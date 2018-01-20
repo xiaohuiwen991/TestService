@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 表字段信息
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/5/24 16:39
  */
 public class TableColumn extends BaseModel {

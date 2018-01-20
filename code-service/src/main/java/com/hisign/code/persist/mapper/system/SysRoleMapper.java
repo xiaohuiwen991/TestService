@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * 系统角色管理mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @date 2016/5/28 16:40
  */
 public interface SysRoleMapper {

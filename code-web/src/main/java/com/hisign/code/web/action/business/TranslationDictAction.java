@@ -4,7 +4,7 @@ package com.hisign.code.web.action.business;
 
 import com.alibaba.fastjson.JSON;
 import com.hisign.code.api.business.CompanyManageService;
-import com.hisign.code.api.business.TableColumnService;
+import com.hisign.code.api.business.WeChatWebPageService;
 import com.hisign.code.api.business.TranslationDictService;
 import com.hisign.code.model.common.JsonResult;
 import com.hisign.code.model.business.CompanyInfo;
@@ -47,7 +47,7 @@ public class TranslationDictAction {
      * 字段信息接口
      */
     @Resource
-    private TableColumnService tableColumnService;
+    private WeChatWebPageService weChatWebPageService;
     /**
      * 数据库连接接口
      */
@@ -160,7 +160,7 @@ public class TranslationDictAction {
                 user.setConnectionName(connectionInfo2.getName());
                 tableColumn.setUser(user);
                 //获取所有表字段信息并遍历
-                List<TableColumn> tableColumnList = tableColumnService.findTableColumnList(tableColumn);
+                List<TableColumn> tableColumnList = weChatWebPageService.findTableColumnList(tableColumn);
                 for (TableColumn tableColumnInfo:tableColumnList) {
                     TranslationDict translationDict =new TranslationDict();
                     //获取字段信息与字段描述信息并赋给本地词库表对象

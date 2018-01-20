@@ -32,11 +32,6 @@
 
         <dependency>
             <groupId>com.hisign</groupId>
-            <artifactId>trans-util</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hisign</groupId>
             <artifactId>dubbox</artifactId>
         </dependency>
         <dependency>

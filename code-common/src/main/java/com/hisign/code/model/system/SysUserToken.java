@@ -4,7 +4,7 @@ import com.hisign.code.model.common.BaseModel;
 
 /**
  * 用户token的model
- * @author jiangpeng
+ * @author xiaohuiwen
  * @date 2016/7/8 16:31
  */
 public class SysUserToken extends BaseModel {

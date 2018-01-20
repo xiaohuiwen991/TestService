@@ -1,14 +1,24 @@
 package com.hisign.code.api.business;
 
 import com.hisign.code.model.business.TableColumn;
+import com.hisign.code.model.business.WeChartUserInfo;
+
 import java.util.List;
 
 /**
  * 字段信息接口
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/24 17:27
  */
-public interface TableColumnService {
+public interface WeChatWebPageService {
+
+    /**
+     * 获取手机端登录信息
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    public WeChartUserInfo queryLoginInfo(WeChartUserInfo weChartUserInfo) throws Exception;
 
     /**
      * 获取字段信息列表信息

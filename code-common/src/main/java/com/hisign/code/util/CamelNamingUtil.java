@@ -50,7 +50,7 @@ public class CamelNamingUtil {
             // 没必要转换
             return "";
         } else if (!name.contains("_")) {
-            // 不含下划线，返回小写（modify by jiangpeng）
+            // 不含下划线，返回小写（modify by xiaohuiwen）
             return name.toLowerCase();
         }
         // 用下划线将原始字符串分割

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 字典管理接口
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2016/11/29 11:57
  */
 public interface DictManageService {

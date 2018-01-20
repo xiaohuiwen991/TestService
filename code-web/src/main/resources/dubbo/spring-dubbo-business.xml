@@ -16,7 +16,7 @@
 
     <dubbo:reference id="companyManageService" interface="com.hisign.code.api.business.CompanyManageService" timeout="20000" retries="0"/>
 
-    <dubbo:reference id="tableColumnService" interface="com.hisign.code.api.business.TableColumnService" timeout="20000" retries="0"/>
+    <dubbo:reference id="weChatWebPageService" interface="com.hisign.code.api.business.WeChatWebPageService" timeout="20000" retries="0"/>
 
     <dubbo:reference id="templateSqlService" interface="com.hisign.code.api.business.TemplateSqlService" timeout="20000" retries="0"/>
 

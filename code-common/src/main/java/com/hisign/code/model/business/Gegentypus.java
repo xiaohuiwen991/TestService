@@ -2,7 +2,7 @@ package com.hisign.code.model.business;
 
 /**
  * 比对类型
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/7/22 14:22
  */
 public class Gegentypus {

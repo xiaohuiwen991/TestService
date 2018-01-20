@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * 用户action
- * @author jiangpeng
+ * @author xiaohuiwen
  * @date 2016/6/6 9:24
  */
 @Controller

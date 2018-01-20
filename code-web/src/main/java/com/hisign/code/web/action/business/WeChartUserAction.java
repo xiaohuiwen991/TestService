@@ -2,7 +2,7 @@ package com.hisign.code.web.action.business;
 
 import com.alibaba.fastjson.JSON;
 import com.hisign.code.api.business.WeChartUserService;
-import com.hisign.code.api.business.TableColumnService;
+import com.hisign.code.api.business.WeChatWebPageService;
 import com.hisign.code.model.business.WeChartUserInfo;
 import com.hisign.code.model.common.JsonResult;
 import com.hisign.code.model.business.CreateSql;
@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * 开发语句action
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/26 09:41
  */
 @Controller
@@ -47,7 +47,7 @@ public class WeChartUserAction {
      * 字段信息接口
      */
     @Resource
-    private TableColumnService tableColumnService;
+    private WeChatWebPageService weChatWebPageService;
 
     /**
      * 获取开发语句列表信息
@@ -186,7 +186,7 @@ public class WeChartUserAction {
             List<String> excludeColumn = null;
             if(StringUtils.isNotEmpty(excludeTable)) {
                 //获得移除字段信息
-                List<TableColumn> listExcludeTable = tableColumnService.findTableColumnList(ClassUtil.getObjectByArray(TableColumn.class, "tableNames,user", excludeTable, user));
+                List<TableColumn> listExcludeTable = weChatWebPageService.findTableColumnList(ClassUtil.getObjectByArray(TableColumn.class, "tableNames,user", excludeTable, user));
                 excludeColumn = ClassUtil.getListObjectByList(listExcludeTable, "columnName");
             }
             String sql = "";

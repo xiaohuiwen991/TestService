@@ -33,7 +33,7 @@ import java.util.Map;
 
 /**
  * 字典管理控制器
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2016/11/29 11:56
  */
 @Controller

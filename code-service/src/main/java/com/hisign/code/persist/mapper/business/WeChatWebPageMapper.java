@@ -1,14 +1,23 @@
 package com.hisign.code.persist.mapper.business;
 
 import com.hisign.code.model.business.TableColumn;
+import com.hisign.code.model.business.WeChartUserInfo;
+
 import java.util.List;
 
 /**
  * 字段信息mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/24 17:27
  */
-public interface TableColumnMapper {
+public interface WeChatWebPageMapper {
+
+    /**
+     * 查询登录用户信息
+     * @param webUser
+     * @return
+     */
+    WeChartUserInfo queryLoginInfo(WeChartUserInfo webUser);
 
     /**
      * 获取字段信息列表信息

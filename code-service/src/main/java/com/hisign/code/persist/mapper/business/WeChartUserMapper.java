@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 开发语句mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/05/26 09:41
  */
 public interface WeChartUserMapper {

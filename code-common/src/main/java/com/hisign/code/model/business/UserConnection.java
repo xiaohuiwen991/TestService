@@ -2,7 +2,7 @@ package com.hisign.code.model.business;
 
 /**
  * 用户连接
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/5/24 14:56
  */
 public class UserConnection {

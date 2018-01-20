@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * 开发语句model
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/5/26 9:36
  */
 public class DevelopSql extends BaseModel{

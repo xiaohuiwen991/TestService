@@ -4,7 +4,7 @@ import com.hisign.code.model.common.BaseModel;
 
 /**
  * 操作日志model
- * @author jiangpeng
+ * @author xiaohuiwen
  * @date 2016/6/8 20:17
  */
 public class OperationLog extends BaseModel {

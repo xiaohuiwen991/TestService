@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 字典管理mapper
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2016/11/29 12:03
  */
 public interface DictManageMapper {

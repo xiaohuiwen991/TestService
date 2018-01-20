@@ -4,7 +4,7 @@ import com.hisign.code.model.common.BaseModel;
 
 /**
  * 系统权限model
- * @Author jiangpeng
+ * @Author xiaohuiwen
  * @Date 2016/6/8 16:31
  */
 public class SysPermission extends BaseModel {

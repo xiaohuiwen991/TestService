@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author jiangpeng
+ * @author xiaohuiwen
  * @since 2017/5/27 16:16
  */
 public class SMS4 {
