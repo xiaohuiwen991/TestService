@@ -55,6 +55,27 @@ public class WeChatWebPageServiceImpl implements WeChatWebPageService {
         return result;
     }
 
+    /**
+     * web端用户注册
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    public void registerWebPageUser(WeChartUserInfo weChartUserInfo) throws Exception {
+        weChatWebPageMapper.registerWebPageUser(weChartUserInfo);
+    }
+
+    /**
+     * 检查账号是否已经存在
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    public int checkUserName(WeChartUserInfo weChartUserInfo) throws Exception {
+        int num = weChatWebPageMapper.checkUserName(weChartUserInfo);
+        return num;
+    }
+
     public void handleTableList(List<TableColumn> list) throws Exception {
     }
 

@@ -45,33 +45,9 @@ public class WeChatWebPageAction {
     private WeChatWebPageService weChatWebPageService;
 
     /**
-     * 获取字段信息列表信息
-     * @param tableColumn 字段信息查询条件
-     * @return 字段信息列表信息
-     * @throws InterruptedException
-     */
-    @RequestMapping(value="/list", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-    @ResponseBody
-    public JsonResult findTableColumnList(@TranslateObject TableColumn tableColumn, @CurrentUser SysUser user) throws InterruptedException {
-        JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(tableColumn);
-        logger.info("获取字段信息列表信息");
-        try {
-            tableColumn.setUser(user);
-            List<TableColumn> list = weChatWebPageService.findTableColumnList(tableColumn);
-            int count =  weChatWebPageService.findTableColumnListForCount(tableColumn);
-            jsonResult.setSuccessData(list, count);
-        } catch (Exception e) {
-            logger.error("获取字段信息列表信息失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("获取字段信息列表信息失败");
-        }
-        return jsonResult;
-    }
-
-    /**
-     * 获取表信息
-     * @param weChartUserInfo 表信息查询条件
-     * @return 表信息列表信息
+     * 获取web端用户登录信息
+     * @param weChartUserInfo web端用户登录信息
+     * @return  web端用户登录信息
      * @throws InterruptedException
      */
     @RequestMapping(value="/login", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
@@ -82,7 +58,6 @@ public class WeChatWebPageAction {
         logger.info("获取表信息");
         try {
             WeChartUserInfo loginUser = weChatWebPageService.queryLoginInfo(weChartUserInfo);
-//            int count =  weChatWebPageService.findTableListForCount(tableColumn);
             jsonResult.setSuccessData(loginUser, 1);
         } catch (Exception e) {
             logger.error("获取表信息失败,请求参数为[{}]", paraStr, e);
@@ -91,6 +66,52 @@ public class WeChatWebPageAction {
         return jsonResult;
     }
 
+    /**
+     * 获取web端用户登录信息
+     * @param weChartUserInfo web端用户登录信息
+     * @return  web端用户登录信息
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/check", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult checkUserName(@TranslateObject WeChartUserInfo weChartUserInfo) throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        String paraStr = JSON.toJSONString(weChartUserInfo);
+        logger.info("获取表信息");
+        try {
+            int num = weChatWebPageService.checkUserName(weChartUserInfo);
+            jsonResult.setSuccessData(num, 1);
+        } catch (Exception e) {
+            logger.error("获取表信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("获取表信息失败");
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 获取字段信息列表信息
+     * @param weChartUserInfo 字段信息查询条件
+     * @return 字段信息列表信息
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/register", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult registerWebPageUser(@TranslateObject WeChartUserInfo weChartUserInfo) throws InterruptedException {
+        JsonResult jsonResult = new JsonResult();
+        String paraStr = JSON.toJSONString(weChartUserInfo);
+        logger.info("获取字段信息列表信息");
+        try {
+            weChartUserInfo.setPassword(weChartUserInfo.getPassword1());
+            weChatWebPageService.registerWebPageUser(weChartUserInfo);
+            jsonResult.setData(1);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            logger.error("获取字段信息列表信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setData(0);
+            jsonResult.setErrorMsg("获取字段信息列表信息失败");
+        }
+        return jsonResult;
+    }
 
     /**
      * 获取字段信息列表信息

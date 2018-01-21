@@ -37,6 +37,50 @@
         </if>
     </select>
 
+    <insert id="registerWebPageUser" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
+        INSERT INTO BUS_USER (
+            ID,
+            USER_NAME,
+            TRUE_NAME,
+            PASS_WORD,
+            QUESTION1,
+            ANSWER1,
+            QUESTION2,
+            ANSWER2,
+            COMPANY_NAME,
+            COMPANY_CODE,
+            REPORT_ADRESS,
+            E_MAIL,
+            INVOICE_ADRESS,
+            STATUS,
+            TELPHONE,
+            CREATE_PID,
+            CREATE_DATE
+        ) values (
+            REPLACE(UUID(),'-',''),
+            #{userName,jdbcType=VARCHAR},
+            #{trueName,jdbcType=VARCHAR},
+            #{password1,jdbcType=VARCHAR},
+            #{question1,jdbcType=VARCHAR},
+            #{answer1,jdbcType=VARCHAR},
+            #{question2,jdbcType=VARCHAR},
+            #{answer2,jdbcType=VARCHAR},
+            #{companyName,jdbcType=VARCHAR},
+            #{companyCode,jdbcType=VARCHAR},
+            #{reportAdress,jdbcType=VARCHAR},
+            #{email,jdbcType=VARCHAR},
+            #{invoiceAdress,jdbcType=VARCHAR},
+            '0',
+            #{telphone,jdbcType=VARCHAR},
+            'system',
+            NOW()
+        )
+    </insert>
+
+    <select id="checkUserName" parameterType="com.hisign.code.model.business.WeChartUserInfo" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM BUS_USER WHERE USER_NAME = #{userName}
+    </select>
+
 
     <sql id="select_By_Filter_For_Where" >
         <where>

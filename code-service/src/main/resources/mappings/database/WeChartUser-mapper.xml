@@ -67,13 +67,16 @@
                 t1.ANSWER1                                        AS answer1,
                 t1.QUESTION2                                      AS question2,
                 t1.ANSWER2                                        AS answer2,
-                t2.COMPANY_NAME                                   AS companyName,
+                t1.COMPANY_NAME                                   AS companyName,
+                t1.COMPANY_CODE                                   AS companyCode,
+                t1.INVOICE_ADRESS                                 AS invoiceAdress,
+                t1.REPORT_ADRESS                                  AS reportAdress,
+                t1.E_MAIL                                         AS email,
                 t1.TELPHONE                                       AS telphone,
-                t1.COMPANY_ID                                     AS companyId,
-                DATE_FORMAT(t1.CREATE_DATE,'%y-%m-%d %T 24')    AS createDateStr,
+                DATE_FORMAT(t1.CREATE_DATE,'%Y-%m-%d %T ')        AS createDateStr,
                 t1.STATUS                                         AS status
-            FROM BUS_USER t1,BUS_COMPANY t2
-            WHERE t1.COMPANY_ID = t2.ID
+            FROM BUS_USER t1
+            WHERE 1=1
             <if test="userName != '' and userName != null">
                 AND t1.USER_NAME LIKE concat('%',#{userName},'%')
             </if>
@@ -81,7 +84,7 @@
                 AND t1.TRUE_NAME LIKE concat('%',#{trueName},'%')
             </if>
             <if test="companyName != '' and companyName != null">
-                AND t2.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+                AND t1.COMPANY_NAME LIKE concat('%',#{companyName},'%')
             </if>
             <if test="status != '' and status != null">
                 AND t1.STATUS LIKE concat('%',#{status},'%')
@@ -93,8 +96,8 @@
     </select>
 
     <select id="findDevelopSqlListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
-        SELECT COUNT(1) FROM BUS_USER t1,BUS_COMPANY t2
-        WHERE t1.COMPANY_ID = t2.ID
+        SELECT COUNT(1) FROM BUS_USER t1
+        WHERE 1=1
         <if test="userName != '' and userName != null">
             AND t1.USER_NAME LIKE concat('%',#{userName},'%')
         </if>
@@ -102,7 +105,7 @@
             AND t1.TRUE_NAME LIKE concat('%',#{trueName},'%')
         </if>
         <if test="companyName != '' and companyName != null">
-            AND t2.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+            AND t1.COMPANY_NAME LIKE concat('%',#{companyName},'%')
         </if>
         <if test="status != '' and status != null">
             AND t1.STATUS LIKE concat('%',#{status},'%')
@@ -114,7 +117,7 @@
         WHERE t.ID = #{id}
     </delete>
 
-    <insert id="insertDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql" >
+    <insert id="insertDevelopSql" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
         INSERT INTO BUS_USER (
             ID,
             USER_NAME,
@@ -124,7 +127,11 @@
             ANSWER1,
             QUESTION2,
             ANSWER2,
-            COMPANY_ID,
+            COMPANY_NAME,
+            COMPANY_CODE,
+            REPORT_ADRESS,
+            E_MAIL,
+            INVOICE_ADRESS,
             STATUS,
             TELPHONE,
             CREATE_PID,
@@ -138,7 +145,11 @@
             #{answer1,jdbcType=VARCHAR},
             #{question2,jdbcType=VARCHAR},
             #{answer2,jdbcType=VARCHAR},
-            #{companyId,jdbcType=VARCHAR},
+            #{companyName,jdbcType=VARCHAR},
+            #{companyCode,jdbcType=VARCHAR},
+            #{reportAdress,jdbcType=VARCHAR},
+            #{email,jdbcType=VARCHAR},
+            #{invoiceAdress,jdbcType=VARCHAR},
             #{status,jdbcType=VARCHAR},
             #{telphone,jdbcType=VARCHAR},
             #{user.userName,jdbcType=VARCHAR},
@@ -155,7 +166,11 @@
         ANSWER1 = #{answer1,jdbcType=VARCHAR},
         QUESTION2 = #{question2,jdbcType=VARCHAR},
         ANSWER2 = #{answer2,jdbcType=VARCHAR},
-        COMPANY_ID = #{companyId,jdbcType=VARCHAR},
+        COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+        COMPANY_CODE = #{companyCode,jdbcType=VARCHAR},
+        INVOICE_ADRESS = #{invoiceAdress,jdbcType=VARCHAR},
+        REPORT_ADRESS = #{reportAdress,jdbcType=VARCHAR},
+        E_MAIL = #{email,jdbcType=VARCHAR},
         STATUS = #{status,jdbcType=VARCHAR},
         TELPHONE = #{telphone,jdbcType=VARCHAR},
         MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
@@ -174,10 +189,13 @@
             t1.QUESTION2                                      AS question2,
             t1.ANSWER2                                        AS answer2,
             t1.TELPHONE                                       AS telphone,
-            t2.COMPANY_NAME                                   AS companyName,
-            t1.COMPANY_ID                                     AS companyId
-        FROM BUS_USER t1,BUS_COMPANY t2
-        WHERE t1.COMPANY_ID = t2.ID
+            t1.COMPANY_NAME                                   AS companyName,
+            t1.COMPANY_CODE                                   AS companyCode,
+            t1.INVOICE_ADRESS                                 AS invoiceAdress,
+            t1.REPORT_ADRESS                                  AS reportAdress,
+            t1.E_MAIL                                         AS email
+        FROM BUS_USER t1
+        WHERE 1=1
       <if test="userName != null and userName != ''">
           AND t1.USER_NAME = #{userName}
       </if>

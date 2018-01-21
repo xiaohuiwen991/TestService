@@ -20,6 +20,22 @@ public interface WeChatWebPageMapper {
     WeChartUserInfo queryLoginInfo(WeChartUserInfo webUser);
 
     /**
+     * web端用户注册
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    void registerWebPageUser(WeChartUserInfo weChartUserInfo);
+
+    /**
+     * 检查账号是否已经存在
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    int checkUserName(WeChartUserInfo weChartUserInfo);
+
+    /**
      * 获取字段信息列表信息
      * @param tableColumn 字段信息查询条件
      * @return 字段信息列表信息

@@ -21,6 +21,22 @@ public interface WeChatWebPageService {
     public WeChartUserInfo queryLoginInfo(WeChartUserInfo weChartUserInfo) throws Exception;
 
     /**
+     * web端用户注册
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    public void registerWebPageUser(WeChartUserInfo weChartUserInfo) throws Exception;
+
+    /**
+     * 检查账号是否已经存在
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    int checkUserName(WeChartUserInfo weChartUserInfo) throws Exception;
+
+    /**
      * 获取字段信息列表信息
      * @param tableColumn 字段信息查询条件
      * @return 字段信息列表信息

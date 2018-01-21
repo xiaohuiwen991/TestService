@@ -11,6 +11,10 @@ public class WeChartUserInfo extends BaseModel {
 
     private String password;
 
+    private String password1;
+
+    private String password2;
+
     private String trueName;
 
     private String answer1;
@@ -29,7 +33,63 @@ public class WeChartUserInfo extends BaseModel {
 
     private String createDateStr;
 
+    private String email;
+
+    private String companyCode;
+
+    private String reportAdress;
+
+    private String invoiceAdress;
+
     private String telphone;
+
+    public String getInvoiceAdress() {
+        return invoiceAdress;
+    }
+
+    public void setInvoiceAdress(String invoiceAdress) {
+        this.invoiceAdress = invoiceAdress;
+    }
+
+    public String getPassword1() {
+        return password1;
+    }
+
+    public void setPassword1(String password1) {
+        this.password1 = password1;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getReportAdress() {
+        return reportAdress;
+    }
+
+    public void setReportAdress(String reportAdress) {
+        this.reportAdress = reportAdress;
+    }
 
     public String getTelphone() {
         return telphone;
