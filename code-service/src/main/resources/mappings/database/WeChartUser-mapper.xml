@@ -89,6 +89,13 @@
             <if test="status != '' and status != null">
                 AND t1.STATUS LIKE concat('%',#{status},'%')
             </if>
+            <if test="createDateBegin != '' and createDateBegin != null">
+                AND DATE_FORMAT(#{createDateBegin}, '%Y-%m-%d')  <![CDATA[<=]]> t1.CREATE_DATE
+            </if>
+            <if test="createDateEnd != '' and createDateEnd != null">
+                AND DATE_FORMAT(#{createDateEnd}, '%Y-%m-%d')  >= t1.CREATE_DATE
+            </if>
+            ORDER BY CREATE_DATE DESC
         ) t
         <if test=" begin !=null and end != 0 and end !=null">
             LIMIT #{begin},#{end}
@@ -109,6 +116,12 @@
         </if>
         <if test="status != '' and status != null">
             AND t1.STATUS LIKE concat('%',#{status},'%')
+        </if>
+        <if test="createDateBegin != '' and createDateBegin != null">
+            AND DATE_FORMAT(#{createDateBegin}, '%Y-%m-%d')  <![CDATA[<=]]> t1.CREATE_DATE
+        </if>
+        <if test="createDateEnd != '' and createDateEnd != null">
+            AND DATE_FORMAT(#{createDateEnd}, '%Y-%m-%d')  >= t1.CREATE_DATE
         </if>
     </select>
 

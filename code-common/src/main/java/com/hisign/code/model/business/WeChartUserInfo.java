@@ -43,6 +43,26 @@ public class WeChartUserInfo extends BaseModel {
 
     private String telphone;
 
+    private String createDateBegin;
+
+    private String createDateEnd;
+
+    public String getCreateDateBegin() {
+        return createDateBegin;
+    }
+
+    public void setCreateDateBegin(String createDateBegin) {
+        this.createDateBegin = createDateBegin;
+    }
+
+    public String getCreateDateEnd() {
+        return createDateEnd;
+    }
+
+    public void setCreateDateEnd(String createDateEnd) {
+        this.createDateEnd = createDateEnd;
+    }
+
     public String getInvoiceAdress() {
         return invoiceAdress;
     }
