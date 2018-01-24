@@ -22,13 +22,16 @@
                 t1.ANSWER1                                        AS answer1,
                 t1.QUESTION2                                      AS question2,
                 t1.ANSWER2                                        AS answer2,
-                t2.COMPANY_NAME                                   AS companyName,
+                t1.COMPANY_NAME                                   AS companyName,
+                t1.COMPANY_CODE                                   AS companyCode,
+                t1.INVOICE_ADRESS                                 AS invoiceAdress,
+                t1.REPORT_ADRESS                                  AS reportAdress,
+                t1.E_MAIL                                         AS email,
                 t1.TELPHONE                                       AS telphone,
-                t1.COMPANY_ID                                     AS companyId,
                 DATE_FORMAT(t1.CREATE_DATE,'%y-%m-%d %T 24')      AS createDateStr,
                 t1.STATUS                                         AS status
-        FROM BUS_USER t1,BUS_COMPANY t2
-        WHERE t1.COMPANY_ID = t2.ID
+        FROM BUS_USER t1
+        WHERE 1=1
         <if test="userName != '' and userName != null">
             AND t1.USER_NAME = #{userName}
         </if>
