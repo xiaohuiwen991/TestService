@@ -22,7 +22,7 @@
 
     <dubbo:service interface="com.hisign.code.api.business.WeChartUserService" protocol="rmi" ref="weChartUserService" />
 
-    <dubbo:service interface="com.hisign.code.api.business.TableConnectionService" protocol="rmi" ref="tableConnectionService" />
+    <dubbo:service interface="com.hisign.code.api.business.ReportManageService" protocol="rmi" ref="reportManageService" />
 
     <dubbo:service interface="com.hisign.code.api.business.TranslationDictService" protocol="rmi" ref="translationDictService"/>
 
