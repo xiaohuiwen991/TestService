@@ -44,6 +44,12 @@ public interface ReportManageMapper {
     void insertReportInfo(ReportInfo reportinfo);
 
     /**
+     * 查询系统参数
+     * @param str 表连接信息
+     */
+    String querySysParam(String str);
+
+    /**
      * 获得表连接信息
      * @param tableConnection 表连接信息
      * @return 表连接信息

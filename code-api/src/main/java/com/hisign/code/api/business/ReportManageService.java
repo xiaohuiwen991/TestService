@@ -49,6 +49,8 @@ public interface ReportManageService {
      */
     void insertReportInfo(ReportInfo reportinfo) throws Exception;
 
+    String querySysParam(String param) throws Exception;
+
     /**
      * 获得表连接信息
      * @param tableConnection 表连接信息

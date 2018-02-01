@@ -17,6 +17,8 @@ public class ReportInfo extends BaseModel {
 
     private String pdfPath;
 
+    private String fileName;
+
     private String status;
 
     private String companyId;
@@ -38,6 +40,24 @@ public class ReportInfo extends BaseModel {
     private String createDateBegin;
 
     private String createDateEnd;
+
+    private String fileBase64;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileBase64() {
+        return fileBase64;
+    }
+
+    public void setFileBase64(String fileBase64) {
+        this.fileBase64 = fileBase64;
+    }
 
     public String getCreateDateBegin() {
         return createDateBegin;

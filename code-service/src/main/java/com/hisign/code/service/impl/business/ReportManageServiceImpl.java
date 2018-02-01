@@ -73,6 +73,15 @@ public class ReportManageServiceImpl implements ReportManageService {
     }
 
     /**
+     * 查询系统参数
+     * @param str 表连接信息
+     */
+    public String querySysParam(String str) throws Exception {
+        String param = reportManageMapper.querySysParam(str);
+        return param;
+    }
+
+    /**
      * 获得表连接信息
      * @param tableConnection 表连接信息
      * @return 表连接信息

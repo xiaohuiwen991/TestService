@@ -14,7 +14,6 @@
     <!-- 设置使用注解的类所在的文件夹 -->
     <context:component-scan base-package="com.hisign.code.web"/>
     <mvc:resources location="/dist/" mapping="/dist/**" />
-    <mvc:resources location="/view/" mapping="/view/**" />
     <mvc:resources location="/lib/" mapping="/lib/**" />
     <mvc:resources location="/data/" mapping="/data/**" />
 
@@ -38,6 +37,11 @@
             <bean class="com.hisign.code.web.bind.method.TranslateObjectMethodArgumentsResolver"/>
         </mvc:argument-resolvers>
     </mvc:annotation-driven>
+
+    <!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760" />
+    </bean>
 
     <!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"

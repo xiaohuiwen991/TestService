@@ -40,7 +40,7 @@
         <th>寄送报告地址</th>
         <th>寄送发票地址</th>
         <th>联系方式</th>
-        <th>邮箱</th>
+        <th>报告详情</th>
         <th>操作</th>
         </thead>
         <tbody tpsource="#column-column-list"></tbody>
@@ -51,46 +51,88 @@
 <script type="text/template" id="column-column-list">
     <tr >
         <td>{rownum}</td>
-        <td>{reportName}</td>
+        <td><a class="into-report-view" param="{id}">{reportName}</a></td>
         <td>{companyName}</td>
         <td>{reportAdress}</td>
         <td>{invoiceAdress}</td>
         <td>{telphone}</td>
-        <td>{email}</td>
+        <td><a class="view-report" param="{id}">{fileName}</a></td>
         <td>
-            <a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>
+            <!--<a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>-->
             <a class="delete-for-company icon-remove-btn" param="{id}" companyName="{companyName}" title="删除"></a><br>
         </td>
     </tr>
 </script>
 <div id="company-add-div" class="hide">
-    <form id="company-add-form">
+    <form id="company-add-form" enctype="multipart/form-data" method="post" class="p-file-form">
         <p class="mt10">
             <span class="common-field"><span class="orangered">★ </span>报告名称：</span>
             <input name="reportName" class="user-add-valid common-input" type="text" data-options="required:true" placeholder="0~200个字符，包含字母、数字和下划线"/>
-            <span class="common-field">公司名称：</span>
+            <span class="common-field"><span class="orangered">★ </span>公司名称：</span>
             <input name="companyName" class="user-add-valid common-input" type="text" data-options="required:true,validType:'username'" placeholder="0~200个字符，包含字母、数字和下划线"/>
         </p>
         <p class="mt10">
             <span class="common-field"><span class="orangered">★ </span>信用识别码：</span>
             <input name="companyCode" class="user-add-valid common-input" type="text" data-options="required:true" placeholder="0~200个字符，包含字母、数字和下划线"/>
             <span class="common-field">联系方式：</span>
-            <input name="telphone" class="user-edit-valid common-input" type="text" data-options="validType:'mobile'" value="{telphone}" placeholder="请输入联系电话"/>
+            <input name="telphone" class="user-edit-valid common-input" type="text" data-options="validType:'mobile'" placeholder="请输入联系电话"/>
         </p>
         <p class="mt10">
             <span class="common-field"><span class="orangered">★ </span>寄送报告地址：</span>
-            <input name="reportAdress" class="user-add-valid common-input" type="text" data-options="validType:'length[0,255]'" placeholder="报告地址为空的情况下报告寄往[寄送发票地址]"/>
+            <input name="reportAdress" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="报告地址为空的情况下报告寄往[寄送发票地址]"/>
             <span class="common-field"><span class="orangered">★ </span>寄送发票地址：</span>
             <input name="invoiceAdress" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="小于等于200个字"/>
         </p>
         <p class="mt10">
             <span class="common-field"><span class="orangered">★ </span>邮箱：</span>
             <input name="email" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="0~20个字符"/>
+            <input name="fileName" id="fileName" class="common-input hide" type="text" />
+            <input name="filePath" id="filePath" class="common-input hide" type="text" />
         </p>
     </form>
+    <form id="file-form" enctype="multipart/form-data" method="post" class="p-file-form">
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>监测报告：</span>
+            <input name="upLoadFile" accept="application/pdf" type="file" multiple="true" id="multiFile" class=" p-file common-input mr15">
+        </p>
+    </form>
+
     <p class="tcenter mt10">
         <b id="save-user" class="cm-save-btn mr15"></b>
         <b id="user-add-cancel" class="cm-cancel-btn"></b>
+    </p>
+</div>
+
+<div id="report-view-div" class="hide">
+    <p class="mt10">
+        <span class="common-field"><span class="orangered">★ </span>报告名称：</span>
+        <input name="reportName" class="user-add-valid common-input" type="text" readonly="true" value="{reportName}"/>
+        <span class="common-field"><span class="orangered">★ </span>公司名称：</span>
+        <input name="companyName" class="user-add-valid common-input" type="text" readonly="true" value="{companyName}"/>
+    </p>
+    <p class="mt10">
+        <span class="common-field"><span class="orangered">★ </span>信用识别码：</span>
+        <input name="companyCode" class="user-add-valid common-input" type="text" readonly="true" value="{companyCode}"/>
+        <span class="common-field">联系方式：</span>
+        <input name="telphone" class="user-edit-valid common-input" type="text" readonly="true" value="{telphone}"/>
+    </p>
+    <p class="mt10">
+        <span class="common-field"><span class="orangered">★ </span>寄送报告地址：</span>
+        <input name="reportAdress" class="user-add-valid common-input" type="text" readonly="true" value="{reportAdress}"/>
+        <span class="common-field"><span class="orangered">★ </span>寄送发票地址：</span>
+        <input name="invoiceAdress" class="user-add-valid common-input" type="text" readonly="true" value="{invoiceAdress}"/>
+    </p>
+    <p class="mt10">
+        <span class="common-field"><span class="orangered">★ </span>邮箱：</span>
+        <input name="email" class="user-add-valid common-input" type="text" readonly="true" value="{email}"/>
+    </p>
+    <p class="mt10">
+        <span class="common-field"><span class="orangered">★ </span>监测报告：</span>
+        <input name="fileName" class="common-input common-input" type="text" readonly="true" value="{fileName}"/>
+    </p>
+
+    <p class="tcenter mt10">
+        <b id="report-view-cancel" class="cm-cancel-btn"></b>
     </p>
 </div>
 <script src="../../dist/js/base.js"></script>
@@ -100,7 +142,9 @@
         var   columnListAction = top.path+'/api/0/business/report/list',
                 addAction = top.path+'/api/0/business/report/add',
                 updateAction = top.path+'/api/0/business/report/edit',
+                pdfViewAction = top.path+'/api/0/business/report/view',
                 deleteAction = top.path+'/api/0/business/report/delete',
+                uploadAction = top.path+'/wx/business/WeChart/upload',
                 pageData = [],
                 flag = 0,
                 updateId = '';
@@ -146,7 +190,14 @@
         function intoUserAdd(){
             flag = 'add';
             $("#company-add-form")[0].reset();
-            $open('#company-add-div',{width:800,height:260,title:'用户公司信息'});
+            var file = document.getElementById("multiFile");
+            // for IE, Opera, Safari, Chrome
+            if (file.outerHTML) {
+                file.outerHTML = file.outerHTML;
+            } else { // FF(包括3.5)
+                file.value = "";
+            }
+            $open('#company-add-div',{width:800,height:320,title:'环境监测报告信息'});
         }
 
         $('#save-user').on('click',function(){
@@ -154,6 +205,9 @@
         });
         $('#user-add-cancel').on('click',function(){
             closeWin('company-add-div');
+        });
+        $('#report-view-cancel').on('click',function(){
+            closeWin('report-view-div');
         });
 
         //新增保存公司信息
@@ -163,33 +217,16 @@
             if($('.validatebox-invalid').length > 0){
                 return false;
             }
-            if(flag=='add') {
-                var postData = $("#company-add-form").serializeObject();
-                if(postData.reportAdress==null||postData.reportAdress==''){
-                    postData.reportAdress = postData.invoiceAdress;
-                }
-                $post(addAction, postData, function (res) {
-                    closeWin('company-add-div');
-                    toast('保存成功！', 600, function () {
-                        loadColumnList($('.paging').data('currentPage'));
-                    }).ok();
-
-                }, true);
-            }else if(flag=='edit') {
-                var postData = $("#company-add-form").serializeObject()
-                postData.id= updateId;
-                if(postData.reportAdress==null||postData.reportAdress==''){
-                    postData.reportAdress = postData.invoiceAdress;
-                }
-                console.log(postData);
-                $post(updateAction, postData, function (res) {
-                    closeWin('company-add-div');
-                    toast('保存成功！', 600, function () {
-                        loadColumnList($('.paging').data('currentPage'));
-                    }).ok();
-
-                }, true);
+            if ($('#fileName').val()==null||$('#fileName').val()=='') {
+                toast('请上传监测报告！').css('width', '300px').warn();
+                return;
             }
+            $post(addAction,$("#company-add-form").serializeObject(), function(res){
+                closeWin('company-add-div');
+                toast('保存成功！',600,function(){
+                    loadColumnList(false);
+                }).ok();
+            },true);
         }
 
         //关闭窗口
@@ -218,17 +255,91 @@
                     $('#company-add-form').find("input[name='reportAdress']").val(pageData[i].reportAdress);
                     $('#company-add-form').find("input[name='invoiceAdress']").val(pageData[i].invoiceAdress);
                     $('#company-add-form').find("input[name='email']").val(pageData[i].email);
+                    $('#company-add-form').find("input[name='fileName']").val(pageData[i].fileName);
+                    $('#company-add-form').find("input[name='filePath']").val(pageData[i].filePath);
+                    var file = document.getElementById("multiFile");
+                    // for IE, Opera, Safari, Chrome
+                    if (file.outerHTML) {
+                        file.outerHTML = file.outerHTML;
+                    } else { // FF(包括3.5)
+                        file.value = "";
+                    }
+//                    $('#multiFile').val(pageData[i].fileName);
                 }
             }
-            $open('#company-add-div',{width:800,height:260,title:'环境监测报告信息'});
+            $open('#company-add-div',{width:800,height:320,title:'环境监测报告信息'});
         }
 
-        $('#column-column-table').on('click','.into-user-view',function(){
-            intoUserView(this.getAttribute('param'));
-        }).on('click','.into-user-edit',function(){
+        $('#multiFile').on('change',function (){
+            var filePicker = $('#multiFile')
+//            if(filePicker.value && !checkImgType(filePicker.value)) {
+//                toast('照片格式不正确！').css('width','300px').warn();
+//                return;
+//            }
+            if(filePicker.val()!=null&&''!=filePicker.val()) {
+                if (!filePicker.val().indexOf('.pdf')) {
+                    toast('PDF格式不正确！').css('width', '300px').warn();
+                    return;
+                } else {
+                    var array = filePicker.val().split("\\");
+                    if (array.length>0) {
+                        var fileName = array[array.length - 1];
+                        console.log(fileName);
+                        $('#fileName').val(fileName);
+                    }
+                    var data = new FormData(document.querySelector('#file-form'));
+                    $.ajax({
+                        url: uploadAction,
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            if (res.flag == 1) {
+                                toast('文件上传成功！').ok();
+                                $('#filePath').val(res.data);
+                            } else {
+                                toast('图片上传出错！').css('width', '300px').warn();
+                                return;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //进入查看页面
+        function intoReportView(id) {
+            for(var i=0;i<pageData.length;i++){
+                if(pageData[i].id==id){
+                    $('#report-view-div').find("input[name='reportName']").val(pageData[i].reportName);
+                    $('#report-view-div').find("input[name='companyName']").val(pageData[i].companyName);
+                    $('#report-view-div').find("input[name='companyCode']").val(pageData[i].companyCode);
+                    $('#report-view-div').find("input[name='telphone']").val(pageData[i].telphone);
+                    $('#report-view-div').find("input[name='reportAdress']").val(pageData[i].reportAdress);
+                    $('#report-view-div').find("input[name='invoiceAdress']").val(pageData[i].invoiceAdress);
+                    $('#report-view-div').find("input[name='email']").val(pageData[i].email);
+                    $('#report-view-div').find("input[name='fileName']").val(pageData[i].fileName);
+                    $open('#report-view-div',{width:800,height:260,title:'环境监测报告信息'});
+                }
+            }
+        }
+
+        //进入报告查看页面
+        function viewReport(id) {
+            window.open('https://www.baidu.com', '_blank');
+        }
+
+        $('#column-column-table').on('click','.into-user-edit',function(){
             intoCompanyEdit(this.getAttribute('param'));
         }).on('click','.delete-for-company',function(){
             deleteForCompany(this.getAttribute('param'),this.getAttribute('companyName'));
+        }).on('click','.into-report-view',function(){
+            intoReportView(this.getAttribute('param'));
+        }).on('click','.view-report',function() {
+            viewReport(this.getAttribute('param'));
         });
 
         //删除用户

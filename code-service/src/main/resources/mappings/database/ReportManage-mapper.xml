@@ -67,6 +67,7 @@
                 WORD_PATH                                         AS wordPath,
                 PDF_PATH                                          AS pdfPath,
                 FILE_PATH                                         AS filePath,
+                FILE_NAME                                         AS fileName,
                 TELPHONE                                          AS telphone,
                 EMAIL                                             AS email,
                 INVOICE_ADRESS                                    AS invoiceAdress,
@@ -132,6 +133,10 @@
         </if>
     </delete>
 
+    <select id="querySysParam"  parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT VALUE FROM SYS_PARAMETER WHERE ENGLISH_NAME = #{str}
+    </select>
+
     <insert id="insertReportInfo" parameterType="com.hisign.code.model.business.ReportInfo" >
         insert into BUS_REPORT (
             ID,
@@ -141,6 +146,7 @@
             WORD_PATH,
             PDF_PATH,
             FILE_PATH,
+            FILE_NAME,
             TELPHONE,
             EMAIL,
             INVOICE_ADRESS,
@@ -157,6 +163,7 @@
             #{wordPath,jdbcType=VARCHAR},
             #{pdfPath,jdbcType=VARCHAR},
             #{filePath,jdbcType=VARCHAR},
+            #{fileName,jdbcType=VARCHAR},
             #{telphone,jdbcType=VARCHAR},
             #{email,jdbcType=VARCHAR},
             #{invoiceAdress,jdbcType=VARCHAR},
@@ -176,6 +183,7 @@
             WORD_PATH = #{wordPath,jdbcType=VARCHAR},
             PDF_PATH = #{pdfPath,jdbcType=VARCHAR},
             FILE_PATH = #{filePath,jdbcType=VARCHAR},
+            FILE_NAME = #{fileName,jdbcType=VARCHAR},
             TELPHONE = #{telphone,jdbcType=VARCHAR},
             EMAIL = #{email,jdbcType=VARCHAR},
             INVOICE_ADRESS = #{invoiceAdress,jdbcType=VARCHAR},
