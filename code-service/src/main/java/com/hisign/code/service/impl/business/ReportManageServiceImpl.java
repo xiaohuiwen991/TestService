@@ -82,6 +82,17 @@ public class ReportManageServiceImpl implements ReportManageService {
     }
 
     /**
+     * 获得pdf路径
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public String findPdfPath(String id) throws Exception {
+        String param = reportManageMapper.findPdfPath(id);
+        return param;
+    }
+
+    /**
      * 获得表连接信息
      * @param tableConnection 表连接信息
      * @return 表连接信息

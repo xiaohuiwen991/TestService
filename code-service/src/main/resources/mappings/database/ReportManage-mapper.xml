@@ -137,6 +137,10 @@
         SELECT VALUE FROM SYS_PARAMETER WHERE ENGLISH_NAME = #{str}
     </select>
 
+    <select id="findPdfPath"  parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT PDF_PATH FROM BUS_REPORT WHERE ID = #{str} LIMIT 0,1
+    </select>
+
     <insert id="insertReportInfo" parameterType="com.hisign.code.model.business.ReportInfo" >
         insert into BUS_REPORT (
             ID,

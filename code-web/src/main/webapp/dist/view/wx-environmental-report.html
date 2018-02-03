@@ -142,7 +142,7 @@
         var   columnListAction = top.path+'/api/0/business/report/list',
                 addAction = top.path+'/api/0/business/report/add',
                 updateAction = top.path+'/api/0/business/report/edit',
-                pdfViewAction = top.path+'/api/0/business/report/view',
+                pdfViewAction = top.path+'/wx/business/WeChart/view',
                 deleteAction = top.path+'/api/0/business/report/delete',
                 uploadAction = top.path+'/wx/business/WeChart/upload',
                 pageData = [],
@@ -190,13 +190,14 @@
         function intoUserAdd(){
             flag = 'add';
             $("#company-add-form")[0].reset();
-            var file = document.getElementById("multiFile");
-            // for IE, Opera, Safari, Chrome
-            if (file.outerHTML) {
-                file.outerHTML = file.outerHTML;
-            } else { // FF(包括3.5)
-                file.value = "";
-            }
+            clear();
+//            var file = document.getElementById("multiFile");
+//            // for IE, Opera, Safari, Chrome
+//            if (file.outerHTML) {
+//                file.outerHTML = file.outerHTML;
+//            } else { // FF(包括3.5)
+//                file.value = "";
+//            }
             $open('#company-add-div',{width:800,height:320,title:'环境监测报告信息'});
         }
 
@@ -264,18 +265,13 @@
                     } else { // FF(包括3.5)
                         file.value = "";
                     }
-//                    $('#multiFile').val(pageData[i].fileName);
                 }
             }
             $open('#company-add-div',{width:800,height:320,title:'环境监测报告信息'});
         }
 
         $('#multiFile').on('change',function (){
-            var filePicker = $('#multiFile')
-//            if(filePicker.value && !checkImgType(filePicker.value)) {
-//                toast('照片格式不正确！').css('width','300px').warn();
-//                return;
-//            }
+            var filePicker = $('#multiFile');
             if(filePicker.val()!=null&&''!=filePicker.val()) {
                 if (!filePicker.val().indexOf('.pdf')) {
                     toast('PDF格式不正确！').css('width', '300px').warn();
@@ -284,7 +280,6 @@
                     var array = filePicker.val().split("\\");
                     if (array.length>0) {
                         var fileName = array[array.length - 1];
-                        console.log(fileName);
                         $('#fileName').val(fileName);
                     }
                     var data = new FormData(document.querySelector('#file-form'));
@@ -329,7 +324,7 @@
 
         //进入报告查看页面
         function viewReport(id) {
-            window.open('https://www.baidu.com', '_blank');
+            window.open(pdfViewAction+"?id="+id, '_blank');
         }
 
         $('#column-column-table').on('click','.into-user-edit',function(){
@@ -352,6 +347,42 @@
                     },true);
                 }
             });
+        }
+
+        function clear(){
+            var inputs,frm;
+            if (arguments.length == 0)
+            {
+                inputs = document.getElementsByTagName("input");
+            }else{
+                frm = (typeof arguments[0] == "string")?document.getElementById(arguments[0]):arguments[0];
+                if (typeof frm != "object") return null;
+                inputs = frm.getElementsByTagName("input");
+            }
+
+            var fs=[];
+            for ( var i=0; i<inputs.length; i++ )
+            {
+                if (inputs[i].type == "file") fs[fs.length] = inputs[i];
+            }
+
+            var tf = document.createElement("form");
+            for ( var i=0; i<fs.length; i++ )
+            {
+                var tt = document.createElement("span");
+                tt.id = "__tt__" + i;
+                fs[i].parentNode.insertBefore(tt, fs[i]);
+                tf.appendChild(fs[i]);
+            }
+            document.getElementsByTagName("body")[0].appendChild(tf);
+            tf.reset();
+            for ( var i=0; i<fs.length; i++)
+            {
+                var tt = document.getElementById("__tt__" + i);
+                tt.parentNode.insertBefore(fs[i],tt);
+                tt.parentNode.removeChild(tt);
+            }
+            tf.parentNode.removeChild(tf);
         }
 
     });

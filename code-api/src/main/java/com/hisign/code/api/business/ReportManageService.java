@@ -49,7 +49,21 @@ public interface ReportManageService {
      */
     void insertReportInfo(ReportInfo reportinfo) throws Exception;
 
+    /**
+     * 查询系统参数
+     * @param param
+     * @return
+     * @throws Exception
+     */
     String querySysParam(String param) throws Exception;
+
+    /**
+     * 获得pdf路径
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    String findPdfPath(String id) throws Exception;
 
     /**
      * 获得表连接信息

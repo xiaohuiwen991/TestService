@@ -1,5 +1,6 @@
 package com.hisign.code.web.action.business;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.hisign.code.api.business.ReportManageService;
 import com.hisign.code.api.business.WeChatWebPageService;
@@ -12,6 +13,7 @@ import com.hisign.code.web.bind.annotation.TranslateObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,17 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 字段信息action
@@ -130,25 +126,26 @@ public class WeChatWebPageAction {
 
     /**
      * 获取字段信息列表信息
-     * @param tableColumn 字段信息查询条件
+     * @param id 字段信息查询条件
      * @return 字段信息列表信息
      * @throws InterruptedException
      */
-    @RequestMapping(value="/column_list", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value="/view", method= RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult findColumnList(@TranslateObject TableColumn tableColumn, @CurrentUser SysUser user) throws InterruptedException {
+    public void findColumnList(@TranslateObject String id,HttpServletResponse response) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(tableColumn);
+        String paraStr = id;
         logger.info("获取字段信息列表信息");
         try {
-            tableColumn.setUser(user);
-            List<TableColumn> list = weChatWebPageService.findColumnList(tableColumn);
-            jsonResult.setSuccessData(list);
+            String path = reportManageService.findPdfPath(id);
+            if (!StringUtils.isEmpty(path)) {
+                File file = new File(path);
+                InputStream in = new FileInputStream(file);
+                FileCopyUtils.copy(in,response.getOutputStream());
+            }
         } catch (Exception e) {
             logger.error("获取字段信息列表信息失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("获取字段信息列表信息失败");
         }
-        return jsonResult;
     }
 
 
@@ -215,7 +212,7 @@ public class WeChatWebPageAction {
             if(!file.exists()) {
                 file.mkdir();
             }
-
+            deleteDir(dateStr,dateBerforeStr,pathOut);
             String path = pathOut + System.getProperty("file.separator") + dateStr;
             file = new File(path);
             if(!file.exists()) {
@@ -413,5 +410,43 @@ public class WeChatWebPageAction {
         return s;
     }
 
+    /**
+     * 删除通用目录
+     * @param dateStr
+     * @param dateBerforeStr
+     */
+    public void deleteDir(String dateStr, String dateBerforeStr, String pathOut){
+        List<String> fileNames = getFileNames(pathOut); //获得压缩文件目录删除该目录下两天前的目录
+        if (fileNames != null && fileNames.size()>0) {
+            for( String str : fileNames ) {
+                if (!str.equals(dateStr) && !str.equals(dateBerforeStr)) {
+                    deleteDirectory(pathOut + System.getProperty("file.separator") + str,true);//删除目录及子目录
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取所有文件夹名称
+     * @param path
+     * @return
+     */
+    public static List<String> getFileNames (String path) {
+        File f = new File(path);
+        if (!f.exists()) {
+            System.out.println(path + " not exists");
+            return null;
+        }
+
+        File fa[] = f.listFiles();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < fa.length; i++) {
+            File fs = fa[i];
+            if (fs.isDirectory()) {
+                list.add(fs.getName());
+            }
+        }
+        return list;
+    }
 
 }
