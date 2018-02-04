@@ -40,6 +40,27 @@
         </if>
     </select>
 
+    <select id="findReportInfo" parameterType="java.lang.String" resultType="com.hisign.code.model.business.ReportInfo">
+        SELECT
+            t2.ID                                                AS id,
+            t2.REPORT_NAME                                       AS reportName,
+            t2.COMPANY_NAME                                      AS companyName,
+            t2.COMPANY_CODE                                      AS companyCode,
+            t2.WORD_PATH                                         AS wordPath,
+            t2.PDF_PATH                                          AS pdfPath,
+            t2.FILE_PATH                                         AS filePath,
+            t2.FILE_NAME                                         AS fileName,
+            t2.TELPHONE                                          AS telphone,
+            t2.EMAIL                                             AS email,
+            t2.INVOICE_ADRESS                                    AS invoiceAdress,
+            t2.REPORT_ADRESS                                     AS reportAdress,
+            t2.CREATE_PID                                        AS createPid,
+            DATE_FORMAT(t2.CREATE_DATE,'%Y-%m-%d')               AS createDateStr
+        FROM BUS_USER t1,BUS_REPORT t2
+        WHERE t1.COMPANY_CODE = t2.COMPANY_CODE
+          AND t1.ID = #{id}
+    </select>
+
     <insert id="registerWebPageUser" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
         INSERT INTO BUS_USER (
             ID,

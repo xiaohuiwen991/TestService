@@ -28,6 +28,13 @@ public interface WeChatWebPageMapper {
     void registerWebPageUser(WeChartUserInfo weChartUserInfo);
 
     /**
+     * 查询报告信息
+     * @param id
+     * @return
+     */
+    List<String> findReportInfo(String id);
+
+    /**
      * 检查账号是否已经存在
      * @param weChartUserInfo
      * @return

@@ -126,6 +126,29 @@ public class WeChatWebPageAction {
 
     /**
      * 获取字段信息列表信息
+     * @param id 用户id
+     * @return 字段信息列表信息
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/report", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult findReportInfo(@TranslateObject String id) throws InterruptedException {
+        JsonResult jsonResult = new JsonResult();
+        logger.info("获取字段信息列表信息");
+        try {
+            List<String> list = weChatWebPageService.findReportInfo(id);
+            jsonResult.setData(list);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            logger.error("获取字段信息列表信息失败,请求参数为[{}]", e);
+            jsonResult.setData(0);
+            jsonResult.setErrorMsg("获取字段信息列表信息失败");
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 获取字段信息列表信息
      * @param id 字段信息查询条件
      * @return 字段信息列表信息
      * @throws InterruptedException
