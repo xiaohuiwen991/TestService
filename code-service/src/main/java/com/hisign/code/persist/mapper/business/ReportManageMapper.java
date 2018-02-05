@@ -57,6 +57,13 @@ public interface ReportManageMapper {
     String findPdfPath(String str);
 
     /**
+     * 获取pdf路径
+     * @param str
+     * @return
+     */
+    ReportInfo findPicInfo(String str);
+
+    /**
      * 获得表连接信息
      * @param tableConnection 表连接信息
      * @return 表连接信息

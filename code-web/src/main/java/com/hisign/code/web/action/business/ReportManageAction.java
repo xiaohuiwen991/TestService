@@ -21,10 +21,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.Collator;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 表连接action
@@ -110,19 +109,41 @@ public class ReportManageAction {
                 file.mkdir();
             }
 
-            String path = pathOut + System.getProperty("file.separator") + dateStr;
-            file = new File(path);
+            pathOut = pathOut + System.getProperty("file.separator") + dateStr;
+            file = new File(pathOut);
             if(!file.exists()) {
                 file.mkdir();
             }
-            String pdfPath = path + System.getProperty("file.separator") + uuid + System.getProperty("file.separator");
+            String pdfPath = pathOut + System.getProperty("file.separator") + uuid + System.getProperty("file.separator");
             file = new File(pdfPath);
             if(!file.exists()) {
                 file.mkdir();
             }
+
+            String picPath = dir + "file" + System.getProperty("file.separator") + "picFile";
+            file = new File(picPath);
+            if(!file.exists()) {
+                file.mkdir();
+            }
+
+            picPath = picPath + System.getProperty("file.separator") + dateStr;
+            file = new File(picPath);
+            if(!file.exists()) {
+                file.mkdir();
+            }
+            picPath = picPath + System.getProperty("file.separator") + uuid + System.getProperty("file.separator");
+            file = new File(picPath);
+            if(!file.exists()) {
+                file.mkdir();
+            }
+
             String fileName = reportinfo.getFileName();
             copyFile(reportinfo.getFilePath(),pdfPath+fileName);
+
+            copyDir(reportinfo.getPicPath(),picPath);
+
             reportinfo.setPdfPath(pdfPath+fileName);
+            reportinfo.setFilePath(picPath);
             reportManageService.insertReportInfo(reportinfo);
             File tempFile = new File(reportinfo.getFilePath());
             if (tempFile.isFile() && tempFile.exists()) {// 路径为文件且不为空则进行删除
@@ -187,6 +208,30 @@ public class ReportManageAction {
     }
 
     /**
+     * 拷贝目录
+     * @param oldPath
+     * @param newPath
+     */
+    public void copyDir(String oldPath, String newPath) {
+        File file = new File(oldPath);
+        List<String> list = new ArrayList<>();
+        if (file != null) {
+            File[] fileList = file.listFiles();
+            if(fileList!=null && fileList.length>0) {
+                for (File f : fileList) {
+                    if(f.isFile()) {
+                        list.add(f.getName());
+                    }
+                }
+            }
+        }
+        Collections.sort(list, Collator.getInstance(java.util.Locale.CHINA));
+        for (String str : list) {
+            copyFile(oldPath + System.getProperty("file.separator") + str,newPath + System.getProperty("file.separator") + str);
+        }
+    }
+
+    /**
      * 复制文件
      * @param oldPath
      * @param newPath
@@ -207,13 +252,11 @@ public class ReportManageAction {
                 fs.write(buffer, 0, byteread);
             }
             inStream.close();
-        }
-        catch (Exception e) {
+            fs.close();
+        } catch (Exception e) {
             System.out.println("复制单个文件操作出错");
             e.printStackTrace();
-
         }
-
     }
 
     public static boolean isOSLinux() {

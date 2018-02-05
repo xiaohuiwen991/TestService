@@ -4,12 +4,18 @@ import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.hisign.code.api.business.ReportManageService;
 import com.hisign.code.api.business.WeChatWebPageService;
+import com.hisign.code.model.business.ReportInfo;
 import com.hisign.code.model.business.TableColumn;
 import com.hisign.code.model.business.WeChartUserInfo;
 import com.hisign.code.model.common.JsonResult;
 import com.hisign.code.model.system.SysUser;
 import com.hisign.code.web.bind.annotation.CurrentUser;
 import com.hisign.code.web.bind.annotation.TranslateObject;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,11 +29,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.Method;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivilegedAction;
+import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * 字段信息action
@@ -230,31 +245,185 @@ public class WeChatWebPageAction {
                 file.mkdir();
             }
 
-            pathOut = pathOut + System.getProperty("file.separator") + "tempFfile";
+            pathOut = pathOut + System.getProperty("file.separator") + "tempPdf";
             file = new File(pathOut);
             if(!file.exists()) {
                 file.mkdir();
             }
             deleteDir(dateStr,dateBerforeStr,pathOut);
-            String path = pathOut + System.getProperty("file.separator") + dateStr;
-            file = new File(path);
+            pathOut = pathOut + System.getProperty("file.separator") + dateStr;
+            file = new File(pathOut);
             if(!file.exists()) {
                 file.mkdir();
             }
-            String pdfPath = path + System.getProperty("file.separator") + uuid + System.getProperty("file.separator");
+            String pdfPath = pathOut + System.getProperty("file.separator") + uuid + System.getProperty("file.separator");
             file = new File(pdfPath);
             if(!file.exists()) {
                 file.mkdir();
             }
+
+            String picPath = dir + System.getProperty("file.separator") + "file" + System.getProperty("file.separator") + "tempPic";
+            file = new File(picPath);
+            if(!file.exists()) {
+                file.mkdir();
+            }
+
+            picPath = picPath + System.getProperty("file.separator") + dateStr;
+            file = new File(picPath);
+            if(!file.exists()) {
+                file.mkdir();
+            }
+
+            picPath = picPath + System.getProperty("file.separator") + uuid + System.getProperty("file.separator");
+            file = new File(picPath);
+            if(!file.exists()) {
+                file.mkdir();
+            }
+
             String fileName = time+".pdf";
             byte2File(bytes,pdfPath, fileName);
-            jsonResult.setData(pdfPath + fileName);
+            changePdfToImg(pdfPath,picPath,time+"");
+            List<String> list = new ArrayList<>();
+            list.add(pdfPath + fileName);
+            list.add(picPath);
+            jsonResult.setData(list);
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("获取表连接信息失败,请求参数为[{}]", e);
             jsonResult.setErrorMsg("获取表连接信息失败");
         }
         return jsonResult;
+    }
+
+    /**
+     * 获取字段信息列表信息
+     * @param id 字段信息查询条件
+     * @return 字段信息列表信息
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/pic", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult findPicInfo(@TranslateObject String id,HttpServletResponse response) throws InterruptedException {
+        JsonResult jsonResult = new JsonResult();
+        try {
+            ReportInfo reportinfo = reportManageService.findPicInfo(id);
+            Map<String,Object> map = new HashMap<>();
+            map.put("pic",reportinfo);
+            String path = reportinfo.getFilePath();
+            File file = new File(path);
+            List<String> list = new ArrayList<>();
+            List<String> pathList = new ArrayList<>();
+            if (file != null) {
+                File[] fileList = file.listFiles();
+                if(fileList!=null && fileList.length>0) {
+                    for (File f : fileList) {
+                        if(f.isFile()) {
+                            list.add(f.getName());
+                        }
+                    }
+                }
+            }
+            Collections.sort(list, Collator.getInstance(java.util.Locale.CHINA));
+            for (String str : list) {
+                pathList.add(file + System.getProperty("file.separator") + str);
+            }
+            map.put("img",pathList);
+            jsonResult.setData(map);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            logger.error("获取字段信息列表信息失败,请求参数为[{}]", id, e);
+            jsonResult.setErrorMsg("获取字段信息列表信息失败");
+        }
+        return jsonResult;
+    }
+
+    /**
+     * pdf转png
+     * @param instructiopath
+     * @param picturepath
+     * @return
+     */
+    public static int changePdfToImg(String instructiopath,String picturepath,String fileName) {
+        int countpage =0;
+        try {
+            File file = new File(instructiopath + System.getProperty("file.separator") + fileName +".pdf");
+            RandomAccessFile raf = new RandomAccessFile(file, "r");
+            FileChannel channel = raf.getChannel();
+            MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,
+                    0, channel.size());
+            PDFFile pdffile = new PDFFile(buf);
+            //创建图片文件夹
+            File dirfile = new File(picturepath);
+            if(!dirfile.exists()){
+                dirfile.mkdirs();
+            }
+            //获得图片页数
+            countpage = pdffile.getNumPages();
+            for (int i=0;i<countpage;i++) {
+                if (pdffile.getNumPages() > 0) {
+                    PDFPage page = pdffile.getPage(1);
+                    Rectangle rect = new Rectangle(0, 0, ((int) page.getBBox()
+                            .getWidth()), ((int) page.getBBox().getHeight()));
+                    int n = 2;
+                    /** 图片清晰度（n>0且n<7）【pdf放大参数】 */
+                    Image img = page.getImage(rect.width * n, rect.height * n,
+                            rect, /** 放大pdf到n倍，创建图片。 */
+                            null, /** null for the ImageObserver */
+                            true, /** fill background with white */
+                            true /** block until drawing is done */
+                    );
+                    BufferedImage tag = new BufferedImage(rect.width * n,
+                            rect.height * n, BufferedImage.TYPE_INT_RGB);
+                    tag.getGraphics().drawImage(img, 0, 0, rect.width * n,
+                            rect.height * n, null);
+                    /**
+                     * File imgfile = new File("D:\\work\\mybook\\FilesNew\\img\\" +
+                     * i + ".jpg"); if(imgfile.exists()){
+                     * if(imgfile.createNewFile()) { System.out.println("创建图片："+
+                     * "D:\\work\\mybook\\FilesNew\\img\\" + i + ".jpg"); } else {
+                     * System.out.println("创建图片失败！"); } }
+                     */
+                    FileOutputStream out = new FileOutputStream(picturepath + System.getProperty("file.separator") + fileName + "_" + i+ ".png");
+                    /** 输出到文件流 */
+                    JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+                    JPEGEncodeParam param2 = encoder.getDefaultJPEGEncodeParam(tag);
+                    param2.setQuality(1f, true);
+                    /** 1f~0.01f是提高生成的图片质量 */
+                    encoder.setJPEGEncodeParam(param2);
+                    encoder.encode(tag);
+                    /** JPEG编码 */
+                    out.close();
+                }
+            }
+            channel.close();
+            raf.close();
+            unmap(buf);
+            /** 如果要在转图片之后删除pdf，就必须要这个关闭流和清空缓冲的方法 */
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return countpage;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void unmap(final Object buffer) {
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                try {
+                    Method getCleanerMethod = buffer.getClass().getMethod(
+                            "cleaner", new Class[0]);
+                    getCleanerMethod.setAccessible(true);
+                    sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod
+                            .invoke(buffer, new Object[0]);
+                    cleaner.clean();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
     }
 
     /**

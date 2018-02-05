@@ -93,6 +93,17 @@ public class ReportManageServiceImpl implements ReportManageService {
     }
 
     /**
+     * 获得pic信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public ReportInfo findPicInfo(String id) throws Exception {
+        ReportInfo reportinfo = reportManageMapper.findPicInfo(id);
+        return reportinfo;
+    }
+
+    /**
      * 获得表连接信息
      * @param tableConnection 表连接信息
      * @return 表连接信息

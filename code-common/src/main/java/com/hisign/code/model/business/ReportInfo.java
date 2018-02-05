@@ -43,6 +43,16 @@ public class ReportInfo extends BaseModel {
 
     private String fileBase64;
 
+    private String picPath;
+
+    public String getPicPath() {
+        return picPath;
+    }
+
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
+    }
+
     public String getFileName() {
         return fileName;
     }

@@ -141,6 +141,25 @@
         SELECT PDF_PATH FROM BUS_REPORT WHERE ID = #{str} LIMIT 0,1
     </select>
 
+    <select id="findPicInfo"  parameterType="java.lang.String" resultType="com.hisign.code.model.business.ReportInfo">
+        SELECT
+            ID                                                AS id,
+            REPORT_NAME                                       AS reportName,
+            COMPANY_NAME                                      AS companyName,
+            COMPANY_CODE                                      AS companyCode,
+            WORD_PATH                                         AS wordPath,
+            PDF_PATH                                          AS pdfPath,
+            FILE_PATH                                         AS filePath,
+            FILE_NAME                                         AS fileName,
+            TELPHONE                                          AS telphone,
+            EMAIL                                             AS email,
+            INVOICE_ADRESS                                    AS invoiceAdress,
+            REPORT_ADRESS                                     AS reportAdress,
+            CREATE_PID                                        AS createPid,
+            DATE_FORMAT(CREATE_DATE,'%Y-%m-%d %T ')          AS createDateStr
+        FROM BUS_REPORT WHERE ID = #{str} LIMIT 0,1
+    </select>
+
     <insert id="insertReportInfo" parameterType="com.hisign.code.model.business.ReportInfo" >
         insert into BUS_REPORT (
             ID,

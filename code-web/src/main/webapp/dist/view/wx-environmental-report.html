@@ -88,6 +88,7 @@
             <input name="email" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="0~20个字符"/>
             <input name="fileName" id="fileName" class="common-input hide" type="text" />
             <input name="filePath" id="filePath" class="common-input hide" type="text" />
+            <input name="picPath" id="picPath" class="common-input hide" type="text" />
         </p>
     </form>
     <form id="file-form" enctype="multipart/form-data" method="post" class="p-file-form">
@@ -258,6 +259,7 @@
                     $('#company-add-form').find("input[name='email']").val(pageData[i].email);
                     $('#company-add-form').find("input[name='fileName']").val(pageData[i].fileName);
                     $('#company-add-form').find("input[name='filePath']").val(pageData[i].filePath);
+                    $('#company-add-form').find("input[name='picPath']").val(pageData[i].picPath);
                     var file = document.getElementById("multiFile");
                     // for IE, Opera, Safari, Chrome
                     if (file.outerHTML) {
@@ -294,7 +296,8 @@
                         success: function (res) {
                             if (res.flag == 1) {
                                 toast('文件上传成功！').ok();
-                                $('#filePath').val(res.data);
+                                $('#filePath').val(res.data[0]);
+                                $('#picPath').val(res.data[1]);
                             } else {
                                 toast('图片上传出错！').css('width', '300px').warn();
                                 return;

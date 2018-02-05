@@ -58,6 +58,14 @@ public interface ReportManageService {
     String querySysParam(String param) throws Exception;
 
     /**
+     * 获得pic信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    ReportInfo findPicInfo(String id) throws Exception;
+
+    /**
      * 获得pdf路径
      * @param id
      * @return
