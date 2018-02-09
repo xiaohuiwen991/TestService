@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>环境监测报告管理</title>
+    <title>环境检测报告管理</title>
     <link rel="stylesheet" href="../../dist/css/base.css"/>
     <link rel="stylesheet" href="../../dist/css/database.css"/>
 </head>
@@ -93,7 +93,7 @@
     </form>
     <form id="file-form" enctype="multipart/form-data" method="post" class="p-file-form">
         <p class="mt10">
-            <span class="common-field"><span class="orangered">★ </span>监测报告：</span>
+            <span class="common-field"><span class="orangered">★ </span>检测报告：</span>
             <input name="upLoadFile" accept="application/pdf" type="file" multiple="true" id="multiFile" class=" p-file common-input mr15">
         </p>
     </form>
@@ -128,7 +128,7 @@
         <input name="email" class="user-add-valid common-input" type="text" readonly="true" value="{email}"/>
     </p>
     <p class="mt10">
-        <span class="common-field"><span class="orangered">★ </span>监测报告：</span>
+        <span class="common-field"><span class="orangered">★ </span>检测报告：</span>
         <input name="fileName" class="common-input common-input" type="text" readonly="true" value="{fileName}"/>
     </p>
 
@@ -199,7 +199,7 @@
 //            } else { // FF(包括3.5)
 //                file.value = "";
 //            }
-            $open('#company-add-div',{width:800,height:320,title:'环境监测报告信息'});
+            $open('#company-add-div',{width:800,height:320,title:'环境检测报告信息'});
         }
 
         $('#save-user').on('click',function(){
@@ -220,7 +220,7 @@
                 return false;
             }
             if ($('#fileName').val()==null||$('#fileName').val()=='') {
-                toast('请上传监测报告！').css('width', '300px').warn();
+                toast('请上传检测报告！').css('width', '300px').warn();
                 return;
             }
             $post(addAction,$("#company-add-form").serializeObject(), function(res){
@@ -269,7 +269,7 @@
                     }
                 }
             }
-            $open('#company-add-div',{width:800,height:320,title:'环境监测报告信息'});
+            $open('#company-add-div',{width:800,height:320,title:'环境检测报告信息'});
         }
 
         $('#multiFile').on('change',function (){
@@ -320,7 +320,7 @@
                     $('#report-view-div').find("input[name='invoiceAdress']").val(pageData[i].invoiceAdress);
                     $('#report-view-div').find("input[name='email']").val(pageData[i].email);
                     $('#report-view-div').find("input[name='fileName']").val(pageData[i].fileName);
-                    $open('#report-view-div',{width:800,height:260,title:'环境监测报告信息'});
+                    $open('#report-view-div',{width:800,height:260,title:'环境检测报告信息'});
                 }
             }
         }

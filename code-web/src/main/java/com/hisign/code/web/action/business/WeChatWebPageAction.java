@@ -84,7 +84,12 @@ public class WeChatWebPageAction {
         logger.info("获取表信息");
         try {
             WeChartUserInfo loginUser = weChatWebPageService.queryLoginInfo(weChartUserInfo);
-            jsonResult.setSuccessData(loginUser, 1);
+            if (loginUser==null) {
+                jsonResult.setFlag(0);
+                return jsonResult;
+            } else {
+                jsonResult.setSuccessData(loginUser, 1);
+            }
         } catch (Exception e) {
             logger.error("获取表信息失败,请求参数为[{}]", paraStr, e);
             jsonResult.setErrorMsg("获取表信息失败");
