@@ -1,6 +1,6 @@
 package com.hisign.code.service.impl.business;
 
-import com.hisign.code.api.business.TranslationDictService;
+import com.hisign.code.api.business.ApplicationService;
 import com.hisign.code.api.business.WeChatWebPageService;
 import com.hisign.code.model.business.TableColumn;
 import com.hisign.code.model.business.WeChartUserInfo;
@@ -37,7 +37,7 @@ public class WeChatWebPageServiceImpl implements WeChatWebPageService {
     public ILoadBean loadBean;
 
     @Resource
-    public TranslationDictService translationDictService;
+    public ApplicationService applicationService;
 
     /**
      * 配置日志信息

@@ -1,9 +1,10 @@
 package com.hisign.code.service.impl.business;
 
-import com.hisign.code.api.business.TranslationDictService;
+import com.hisign.code.api.business.ApplicationService;
 import com.hisign.code.constant.Constants;
+import com.hisign.code.model.business.ApplicationInfo;
 import com.hisign.code.model.business.TranslationDict;
-import com.hisign.code.persist.mapper.business.TranslationDictMapper;
+import com.hisign.code.persist.mapper.business.ApplicationMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,31 +14,31 @@ import java.util.List;
  * 本地词库服务接口实现类
  * Created by likangbo on 2017/5/31.
  */
-@Service("translationDictService")
-public class TranslationDictServiceImpl implements TranslationDictService{
+@Service("applicationService")
+public class ApplicationServiceImpl implements ApplicationService {
     /**
      * 本地词库mapper
      */
     @Resource
-    public TranslationDictMapper translationDictMapper;
+    public ApplicationMapper applicationMapper;
 
     /**
      * 本地词库接口实现类
-     * @param translationDict
+     * @param applicationInfo
      * @return 本地词库字段信息列表
      */
-    public List<TranslationDict> findTranslationDict(TranslationDict translationDict) {
-        return translationDictMapper.findTranslationDict(translationDict);
+    public List<ApplicationInfo> findApplicationInfo(ApplicationInfo applicationInfo) throws Exception {
+        return applicationMapper.findApplicationInfo(applicationInfo);
     }
 
     /**
      * 查询所有本地词库信息数量
-     * @param translationDict
+     * @param applicationInfo
      * @return
      * @throws Exception
      */
-    public int findTranslationDictForCount(TranslationDict translationDict) throws Exception {
-        return translationDictMapper.findTranslationDictForCount(translationDict);
+    public int findApplicationInfoForCount(ApplicationInfo applicationInfo) throws Exception {
+        return applicationMapper.findApplicationInfoForCount(applicationInfo);
     }
 
     /**
@@ -46,7 +47,7 @@ public class TranslationDictServiceImpl implements TranslationDictService{
      * @throws Exception
      */
     public void insertTranslationDict(TranslationDict translationDict) throws Exception {
-        translationDictMapper.insertTranslationDict(translationDict);
+        applicationMapper.insertTranslationDict(translationDict);
         Constants.TRANSLATION_MAP.put(translationDict.getOriginalText(), translationDict.getTranslation());
     }
 
@@ -56,8 +57,8 @@ public class TranslationDictServiceImpl implements TranslationDictService{
      * @return
      * @throws Exception
      */
-    public TranslationDict findTranslationDictInfo(TranslationDict translationDict) throws Exception {
-        return translationDictMapper.findTranslationDictInfo(translationDict);
+    public TranslationDict findApplicationInfoInfo(TranslationDict translationDict) throws Exception {
+        return applicationMapper.findApplicationInfoInfo(translationDict);
     }
 
     /**
@@ -66,7 +67,7 @@ public class TranslationDictServiceImpl implements TranslationDictService{
      * @throws Exception
      */
     public void deleteTranslationDict(TranslationDict translationDict) throws Exception {
-        translationDictMapper.deleteTranslationDict(translationDict);
+        applicationMapper.deleteTranslationDict(translationDict);
         Constants.TRANSLATION_MAP.remove(translationDict.getOriginalText());
     }
 
@@ -76,7 +77,7 @@ public class TranslationDictServiceImpl implements TranslationDictService{
      * @throws Exception
      */
     public void updateTranslationDict(TranslationDict translationDict) throws Exception {
-        translationDictMapper.updateTranslationDict(translationDict);
+        applicationMapper.updateTranslationDict(translationDict);
         Constants.TRANSLATION_MAP.put(translationDict.getOriginalText(), translationDict.getTranslation());
     }
 
@@ -85,7 +86,7 @@ public class TranslationDictServiceImpl implements TranslationDictService{
      * @throws Exception
      */
     public void initTranslationMap()  {
-//        List<TranslationDict> translationDict = translationDictMapper.findTranslationDict(new TranslationDict());
+//        List<TranslationDict> translationDict = applicationMapper.findApplicationInfo(new TranslationDict());
 //        for (TranslationDict dict : translationDict) {
 //            Constants.TRANSLATION_MAP.put(dict.getOriginalText(), dict.getTranslation());
 //        }

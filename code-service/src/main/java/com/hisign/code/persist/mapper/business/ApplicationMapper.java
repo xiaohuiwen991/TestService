@@ -1,6 +1,7 @@
 package com.hisign.code.persist.mapper.business;
 
 
+import com.hisign.code.model.business.ApplicationInfo;
 import com.hisign.code.model.business.TranslationDict;
 
 import java.util.List;
@@ -10,20 +11,20 @@ import java.util.List;
  * @author likangbo
  * @since 2017/5/31
  */
-public interface TranslationDictMapper {
+public interface ApplicationMapper {
     /**
      * 查询本地词库信息列表
-     * @param translationDict
+     * @param applicationinfo
      * @return
      */
-    List<TranslationDict> findTranslationDict(TranslationDict translationDict);
+    List<ApplicationInfo> findApplicationInfo(ApplicationInfo applicationinfo);
 
     /**
      * 查询本地词库字段信息数量
-     * @param translationDict
+     * @param applicationInfo
      * @return
      */
-    int findTranslationDictForCount(TranslationDict translationDict);
+    int findApplicationInfoForCount(ApplicationInfo applicationInfo);
 
     /**
      * 插入本地词库字段信息
@@ -36,7 +37,7 @@ public interface TranslationDictMapper {
      * @param translationDict
      * @return
      */
-    TranslationDict findTranslationDictInfo(TranslationDict translationDict);
+    TranslationDict findApplicationInfoInfo(TranslationDict translationDict);
 
     /**
      * 删除字段信息

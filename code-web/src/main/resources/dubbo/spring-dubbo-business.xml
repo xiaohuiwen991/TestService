@@ -24,6 +24,6 @@
 
     <dubbo:reference id="reportManageService" interface="com.hisign.code.api.business.ReportManageService" timeout="20000" retries="0"/>
 
-    <dubbo:reference id="translationDictService" interface="com.hisign.code.api.business.TranslationDictService" timeout="20000" retries="0"/>
+    <dubbo:reference id="applicationService" interface="com.hisign.code.api.business.ApplicationService" timeout="20000" retries="0"/>
 
 </beans>

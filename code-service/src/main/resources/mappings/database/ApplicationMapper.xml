@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hisign.code.persist.mapper.business.TranslationDictMapper" >
+<mapper namespace="com.hisign.code.persist.mapper.business.ApplicationMapper" >
   <resultMap id="BaseResultMap" type="com.hisign.code.model.business.TranslationDict" >
     <id column="ORIGINAL_TEXT" property="originalText" jdbcType="VARCHAR" />
     <result column="TRANSLATION" property="translation" jdbcType="VARCHAR" />
@@ -52,36 +52,68 @@
     </where>
   </sql>
 
-  <select id="findTranslationDict" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">
-    select p.* from(
-    select
-    rownum,rownum as rn,a.* from (
-    select
-    <include refid="Base_Column_List" />
-    from DB_TRANSLATION_DICT t
-    <include refid="select_By_Filter_For_Where" />
-    <if test="orderByString != null and orderByString != ''">
-      order by ${orderByString}
-    </if>
-    <if test="orderByString == null or orderByString == ''">
-      order by CREATE_DATE desc nulls last
-    </if>
-    ) a
-    <if test="end != 0 and end !=null">
-      where rownum <![CDATA[<=]]> #{end,jdbcType=INTEGER}
-    </if>
-    ) p
-    <if test="begin != 0 and begin !=null">
-      where rn >= #{begin, jdbcType=INTEGER}
+  <select id="findApplicationInfo" resultType="com.hisign.code.model.business.ApplicationInfo" parameterType="com.hisign.code.model.business.ApplicationInfo">
+    SELECT t.*,@rownum := @rownum + 1 AS rownum FROM (
+      SELECT
+        @rownum := 0,
+        t1.ID                                                AS id,
+        t1.COMPANY_NAME                                      AS companyName,
+        t1.COMPANY_CODE                                      AS companyCode,
+        t1.CONTACT                                           AS telphone,
+        t1.E_MAIL                                            AS email,
+        t1.INVOICE_ADRESS                                    AS invoiceAdress,
+        t1.REPORT_ADRESS                                     AS reportAdress,
+        t1.CREATE_PID                                        AS createPid,
+        t2.USER_NAME                                         AS userName,
+        t1.STATUS                                            AS status,
+        t1.REMARKS                                           AS remarks,
+        DATE_FORMAT(t1.CREATE_DATE,'%Y-%m-%d %T ')           AS createDateStr
+      FROM BUS_APPLICATION t1 LEFT JOIN BUS_USER t2
+      ON (t1.CREATE_PID=t2.ID)
+      WHERE 1 = 1
+      <if test="companyName != '' and companyName != null">
+        AND t1.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+      </if>
+      <if test="companyCode != '' and companyCode != null">
+        AND t1.COMPANY_CODE LIKE concat('%',#{companyCode},'%')
+      </if>
+      <if test="reportAdress != '' and reportAdress != null">
+        AND t1.REPORT_ADRESS LIKE concat('%',#{reportAdress},'%')
+      </if>
+      <if test="createDateBegin != '' and createDateBegin != null">
+        AND DATE_FORMAT(#{createDateBegin}, '%Y-%m-%d')  <![CDATA[<=]]> t1.CREATE_DATE
+      </if>
+      <if test="createDateEnd != '' and createDateEnd != null">
+        AND DATE_FORMAT(#{createDateEnd}, '%Y-%m-%d')  >= t1.CREATE_DATE
+      </if>
+      ORDER BY t1.CREATE_DATE DESC
+    ) t
+    <if test=" begin !=null and end != 0 and end !=null">
+      LIMIT #{begin},#{end}
     </if>
   </select>
 
-  <select id="findTranslationDictForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.TranslationDict">
-    select count(1) from DB_TRANSLATION_DICT
-    <include refid="select_By_Filter_For_Where" />
+  <select id="findApplicationInfoForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.ApplicationInfo">
+    SELECT COUNT(1) FROM BUS_APPLICATION t1
+    WHERE 1 = 1
+    <if test="companyName != '' and companyName != null">
+      AND t1.COMPANY_NAME LIKE concat('%',#{companyName},'%')
+    </if>
+    <if test="companyCode != '' and companyCode != null">
+      AND t1.COMPANY_CODE LIKE concat('%',#{companyCode},'%')
+    </if>
+    <if test="reportAdress != '' and reportAdress != null">
+      AND t1.REPORT_ADRESS LIKE concat('%',#{reportAdress},'%')
+    </if>
+    <if test="createDateBegin != '' and createDateBegin != null">
+      AND DATE_FORMAT(#{createDateBegin}, '%Y-%m-%d')  <![CDATA[<=]]> t1.CREATE_DATE
+    </if>
+    <if test="createDateEnd != '' and createDateEnd != null">
+      AND DATE_FORMAT(#{createDateEnd}, '%Y-%m-%d')  >= t1.CREATE_DATE
+    </if>
   </select>
 
-  <select id="findTranslationDictInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">
+  <select id="findApplicationInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">
     select
     <include refid="Base_Column_List" />
     from DB_TRANSLATION_DICT

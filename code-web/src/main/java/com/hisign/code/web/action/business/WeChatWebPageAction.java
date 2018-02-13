@@ -366,7 +366,7 @@ public class WeChatWebPageAction {
             countpage = pdffile.getNumPages();
             for (int i=0;i<countpage;i++) {
                 if (pdffile.getNumPages() > 0) {
-                    PDFPage page = pdffile.getPage(1);
+                    PDFPage page = pdffile.getPage(i);
                     Rectangle rect = new Rectangle(0, 0, ((int) page.getBBox()
                             .getWidth()), ((int) page.getBBox().getHeight()));
                     int n = 2;
