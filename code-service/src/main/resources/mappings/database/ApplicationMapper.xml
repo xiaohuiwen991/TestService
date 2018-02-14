@@ -113,6 +113,10 @@
     </if>
   </select>
 
+  <update id="updateApplicationInfo" parameterType="com.hisign.code.model.business.ApplicationInfo">
+    UPDATE BUS_APPLICATION SET STATUS = #{status} WHERE ID = #{id}
+  </update>
+
   <select id="findApplicationInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">
     select
     <include refid="Base_Column_List" />

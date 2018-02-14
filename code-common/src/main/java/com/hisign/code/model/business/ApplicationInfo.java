@@ -60,6 +60,8 @@ public class ApplicationInfo extends BaseModel {
             return "报告已上传";
         } else if ("3".equals(this.getStatus())) {
             return "报告已寄送";
+        } else if ("4".equals(this.getStatus())) {
+            return "不予受理";
         } else {
             return "未受理";
         }

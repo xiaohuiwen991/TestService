@@ -15,7 +15,7 @@
             <span class="common-field w65">报告名称：</span>
             <input name="reportName" class="common-input mr15"></select>
             <span class="common-field w65">寄送地址：</span>
-            <input name="adress" class="common-input mr15"></select>
+            <input name="reportAdress" class="common-input mr15"></select>
             <span class="common-field w65">申请日期：</span>
             <input type="text" id="createDateBegin" name="createDateBegin" class="query-date ml5"/>~<input type="text" id="createDateEnd" name="createDateEnd" class="query-date mr15"/>
             <p class="query-reset">
@@ -60,8 +60,10 @@
         <td><a class="into-report-view" param="{id}">查看申请内容</a></td>
         <td>{statusStr}</td>
         <td>
-            <a class="into-user-edit icon-edit-btn" param="{id}" title="受理"></a>
-            <a class="delete-for-company icon-remove-btn" param="{id}" companyName="{companyName}" title="删除"></a><br>
+            <a class="into-application-sl hide{slClass}" param="{id}"> 受理 </a>&nbsp;&nbsp;&nbsp;
+            <a class="into-application-wsl hide{wslClass}" param="{id}" companyName="{companyName}"> 不予受理 </a>
+            <a class="into-application-wsc hide{wscClass}" param="{id}"> 上传检测报告 </a>
+            <a class="into-application-wjc hide{wjcClass}" param="{id}"> 寄出检测报告 </a>
         </td>
     </tr>
 </script>
@@ -100,19 +102,60 @@
         <b id="report-view-cancel" class="cm-cancel-btn"  onclick="closeWin2()"></b>
     </p>
 </div>
+<div id="company-add-div" class="hide">
+    <form id="company-add-form" enctype="multipart/form-data" method="post" class="p-file-form">
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>报告名称：</span>
+            <input name="reportName" class="user-add-valid common-input" type="text" data-options="required:true" placeholder="0~200个字符，包含字母、数字和下划线"/>
+            <span class="common-field"><span class="orangered">★ </span>公司名称：</span>
+            <input name="companyName" class="user-add-valid common-input" type="text" data-options="required:true,validType:'username'" placeholder="0~200个字符，包含字母、数字和下划线"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>信用识别码：</span>
+            <input name="companyCode" class="user-add-valid common-input" type="text" data-options="required:true" placeholder="0~200个字符，包含字母、数字和下划线"/>
+            <span class="common-field">联系方式：</span>
+            <input name="telphone" class="user-edit-valid common-input" type="text" data-options="validType:'mobile'" placeholder="请输入联系电话"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>寄送报告地址：</span>
+            <input name="reportAdress" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="报告地址为空的情况下报告寄往[寄送发票地址]"/>
+            <span class="common-field"><span class="orangered">★ </span>寄送发票地址：</span>
+            <input name="invoiceAdress" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="小于等于200个字"/>
+        </p>
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>邮箱：</span>
+            <input name="email" class="user-add-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" placeholder="0~20个字符"/>
+            <input name="fileName" id="fileName" class="common-input hide" type="text" />
+            <input name="filePath" id="filePath" class="common-input hide" type="text" />
+            <input name="picPath" id="picPath" class="common-input hide" type="text" />
+        </p>
+    </form>
+    <form id="file-form" enctype="multipart/form-data" method="post" class="p-file-form">
+        <p class="mt10">
+            <span class="common-field"><span class="orangered">★ </span>检测报告：</span>
+            <input name="upLoadFile" accept="application/pdf" type="file" multiple="true" id="multiFile" class=" p-file common-input mr15">
+        </p>
+    </form>
+
+    <p class="tcenter mt10">
+        <b id="save-user" class="cm-save-btn mr15"></b>
+        <b id="user-add-cancel" class="cm-cancel-btn"></b>
+    </p>
+</div>
 <script src="../../dist/js/base.js"></script>
 <script>
     function closeWin2(){
         $('#report-view-div').$close()
     }
 
-
     // 在doc准备好后,写js逻辑
     importing('datepicker',function () {
         var queryListAction = top.path+'/api/business/application/list',
-            addAction = top.path+'/api/business/report/add',
+            handleAction = top.path+'/api/business/application/update',
             pdfViewAction = top.path+'/wx/business/WeChart/view',
             deleteAction = top.path+'/api/0/business/report/delete',
+            addAction = top.path+'/api/0/business/report/add',
+            uploadAction = top.path+'/wx/business/WeChart/upload',
             pageData = [];
 
         $('.query-date').datepicker();
@@ -129,6 +172,15 @@
         function pageBack(data) {
             pageData = data;
             $('#column-column-table').find('tbody').template(data, function(item,i){
+                if (item.status=='0') {
+                    item.slClass='1';
+                    item.wslClass='1';
+                    item.delClass = '1';
+                } else if (item.status=='1') {
+                    item.wscClass='1';
+                } else if (item.status=='2') {
+                    item.wjcClass='1';
+                }
             });
         }
 
@@ -148,6 +200,32 @@
             $('#column-form')[0].reset();
             $('#match-page').html('');
         });
+        //操作时间
+        $('#column-column-table').on('click','.into-application-sl',function(){//受理操作
+            updateApplication(this.getAttribute('param'), 1, '确定受理申请信息吗？');
+        }).on('click','.into-application-wsl',function() {//不予受理
+            updateApplication(this.getAttribute('param'),4, '确定不予受理申请信息吗？');
+        }).on('click','.into-application-wsc',function() {//上传报告
+            intoUserAdd(this.getAttribute('param'));
+//            updateApplication(this.getAttribute('param'),2, '确定上传报告信息吗？');
+        }).on('click','.into-application-wjc',function() {//寄送报告
+            updateApplication(this.getAttribute('param'),3, '确定更新报告信息吗？');
+        }).on('click','.view-report',function() {
+            viewReport(this.getAttribute('param'));
+        });
+
+        function updateApplication(id,type,msg){
+            $confirm(msg,function(bol) {
+                if (bol) {
+                    $post(handleAction, {id: id, status: type}, function (res) {
+                        if (res.flag == '1') {
+                            toast('报告状态已更新！').ok();
+                            loadColumnList($('.paging').data('currentPage'));
+                        }
+                    })
+                }
+            });
+        }
 
         //关闭窗口
         function closeWin(id){
@@ -185,6 +263,136 @@
             viewReport(this.getAttribute('param'));
         });
 
+        $('#save-user').on('click',function(){
+            saveCompany();
+        });
+        $('#user-add-cancel').on('click',function(){
+            closeWin('company-add-div');
+        });
+
+        var updateId = 'null';
+        //进入新增页面
+        function intoUserAdd(id){
+            updateId = id;
+            flag = 'add';
+            $("#company-add-form")[0].reset();
+            clear();
+            for(var i=0;i<pageData.length;i++) {
+                if (pageData[i].id == id) {
+                    $('#company-add-form').find("input[name='reportName']").val(pageData[i].reportName);
+                    $('#company-add-form').find("input[name='companyName']").val(pageData[i].companyName);
+                    $('#company-add-form').find("input[name='companyCode']").val(pageData[i].companyCode);
+                    $('#company-add-form').find("input[name='telphone']").val(pageData[i].telphone);
+                    $('#company-add-form').find("input[name='reportAdress']").val(pageData[i].reportAdress);
+                    $('#company-add-form').find("input[name='invoiceAdress']").val(pageData[i].invoiceAdress);
+                    $('#company-add-form').find("input[name='email']").val(pageData[i].email);
+                    $('#company-add-form').find("input[name='fileName']").val(pageData[i].fileName);
+                    $('#company-add-form').find("input[name='filePath']").val(pageData[i].filePath);
+                    $('#company-add-form').find("input[name='picPath']").val(pageData[i].picPath);
+                }
+            }
+            $open('#company-add-div',{width:800,height:320,title:'环境检测报告信息'});
+        }
+
+        //新增报告信息
+        function saveCompany(){
+            trimAll();
+            $('.user-add-valid').validatebox();
+            if($('.validatebox-invalid').length > 0){
+                return false;
+            }
+            if ($('#fileName').val()==null||$('#fileName').val()=='') {
+                toast('请上传检测报告！').css('width', '300px').warn();
+                return;
+            }
+            $post(addAction,$("#company-add-form").serializeObject(), function(res){
+                if (res.flag=='1') {
+                    closeWin('company-add-div');
+                    $post(handleAction, {id: updateId, status: 2}, function (res) {
+                        if (res.flag == '1') {
+                            toast('报告状态已更新！').ok();
+                            loadColumnList($('.paging').data('currentPage'));
+                        }
+                    })
+                } else {
+                    toast('报告上传出错！').css('width', '300px').warn();
+                }
+            },true);
+        }
+
+
+        $('#multiFile').on('change',function (){
+            var filePicker = $('#multiFile');
+            if(filePicker.val()!=null&&''!=filePicker.val()) {
+                if (!filePicker.val().indexOf('.pdf')) {
+                    toast('PDF格式不正确！').css('width', '300px').warn();
+                    return;
+                } else {
+                    var array = filePicker.val().split("\\");
+                    if (array.length>0) {
+                        var fileName = array[array.length - 1];
+                        $('#fileName').val(fileName);
+                    }
+                    var data = new FormData(document.querySelector('#file-form'));
+                    $.ajax({
+                        url: uploadAction,
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            if (res.flag == 1) {
+                                toast('文件上传成功！').ok();
+                                $('#filePath').val(res.data[0]);
+                                $('#picPath').val(res.data[1]);
+                            } else {
+                                toast('图片上传出错！').css('width', '300px').warn();
+                                return;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        function clear(){
+            var inputs,frm;
+            if (arguments.length == 0)
+            {
+                inputs = document.getElementsByTagName("input");
+            }else{
+                frm = (typeof arguments[0] == "string")?document.getElementById(arguments[0]):arguments[0];
+                if (typeof frm != "object") return null;
+                inputs = frm.getElementsByTagName("input");
+            }
+
+            var fs=[];
+            for ( var i=0; i<inputs.length; i++ )
+            {
+                if (inputs[i].type == "file") fs[fs.length] = inputs[i];
+            }
+
+            var tf = document.createElement("form");
+            for ( var i=0; i<fs.length; i++ )
+            {
+                var tt = document.createElement("span");
+                tt.id = "__tt__" + i;
+                fs[i].parentNode.insertBefore(tt, fs[i]);
+                tf.appendChild(fs[i]);
+            }
+            document.getElementsByTagName("body")[0].appendChild(tf);
+            tf.reset();
+            for ( var i=0; i<fs.length; i++)
+            {
+                var tt = document.getElementById("__tt__" + i);
+                tt.parentNode.insertBefore(fs[i],tt);
+                tt.parentNode.removeChild(tt);
+            }
+            tf.parentNode.removeChild(tf);
+        }
+
         //删除用户
         function deleteForCompany(id,companyName){
             $confirm('确定删除【'+companyName+'】公司信息吗？',function(bol){
@@ -196,8 +404,6 @@
                 }
             });
         }
-
-
     });
 
 </script>

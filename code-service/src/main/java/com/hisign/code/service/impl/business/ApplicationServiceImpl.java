@@ -53,12 +53,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * 查找具体字段信息
-     * @param translationDict
+     * @param applicationInfo
      * @return
      * @throws Exception
      */
-    public TranslationDict findApplicationInfoInfo(TranslationDict translationDict) throws Exception {
-        return applicationMapper.findApplicationInfoInfo(translationDict);
+    public void updateApplicationInfo(ApplicationInfo applicationInfo)throws Exception {
+        applicationMapper.updateApplicationInfo(applicationInfo);
     }
 
     /**

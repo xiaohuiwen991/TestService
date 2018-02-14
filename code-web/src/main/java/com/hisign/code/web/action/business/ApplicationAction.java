@@ -58,23 +58,18 @@ public class ApplicationAction {
         return jsonResult;
     }
 
-    @RequestMapping(value = "/add",method = RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/update",method = RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public JsonResult insertTranslationDict(@TranslateObject TranslationDict translationDict, @CurrentUser SysUser user) throws InterruptedException {
+    public JsonResult updateApplicationInfo(@TranslateObject ApplicationInfo applicationInfo, @CurrentUser SysUser user) throws InterruptedException {
         JsonResult jsonResult = new JsonResult();
-        String paraStr = JSON.toJSONString(translationDict);
-        logger.info("新增本地词库信息");
+        String paraStr = JSON.toJSONString(applicationInfo);
+        logger.info("更新申请信息");
         try {
-            TranslationDict translationDictInfo = applicationService.findApplicationInfoInfo(translationDict);
-            if (translationDictInfo != null) {
-                return new JsonResult(0, "该字段名已经存在");
-            }
-            translationDict.setUser(user);
-            applicationService.insertTranslationDict(translationDict);
+            applicationService.updateApplicationInfo(applicationInfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {
-            logger.error("新增本地词库字段失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("新增本地词库字段失败");
+            logger.error("更新申请信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("更新申请信息失败");
         }
         return jsonResult;
     }
@@ -118,8 +113,8 @@ public class ApplicationAction {
         String paraStr = JSON.toJSONString(translationDict);
         logger.info("获取本地词库字段信息");
         try {
-            TranslationDict translationDictInfo = applicationService.findApplicationInfoInfo(translationDict);
-            jsonResult.setSuccessData(translationDictInfo);
+//            TranslationDict translationDictInfo = applicationService.findApplicationInfoInfo(translationDict);
+            jsonResult.setSuccessData(translationDict);
         } catch (Exception e) {
             logger.error("获取本地词库字段信息失败,请求参数为[{}]", paraStr, e);
             jsonResult.setErrorMsg("获取本地词库字段信息失败");

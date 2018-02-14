@@ -32,10 +32,10 @@ public interface ApplicationService {
 
     /**
      * 根据字段信息查询具体对象
-     * @param translationDict
+     * @param applicationInfo
      * @return
      */
-    TranslationDict findApplicationInfoInfo(TranslationDict translationDict) throws Exception;
+    void updateApplicationInfo(ApplicationInfo applicationInfo) throws Exception;
 
     /**
      * 删除字段信息

@@ -34,10 +34,10 @@ public interface ApplicationMapper {
 
     /**
      * 根据单词信息查询具体对象
-     * @param translationDict
+     * @param applicationInfo
      * @return
      */
-    TranslationDict findApplicationInfoInfo(TranslationDict translationDict);
+    void updateApplicationInfo(ApplicationInfo applicationInfo);
 
     /**
      * 删除字段信息

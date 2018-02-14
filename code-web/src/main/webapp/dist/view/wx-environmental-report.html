@@ -15,7 +15,7 @@
             <span class="common-field w65">报告名称：</span>
             <input name="reportName" class="common-input mr15"></select>
             <span class="common-field w65">寄送地址：</span>
-            <input name="adress" class="common-input mr15"></select>
+            <input name="reportAdress" class="common-input mr15"></select>
             <span class="common-field w65">上传日期：</span>
             <input type="text" id="createDateBegin" name="createDateBegin" class="query-date ml5"/>~<input type="text" id="createDateEnd" name="createDateEnd" class="query-date mr15"/>
             <p class="query-reset">
@@ -59,7 +59,7 @@
         <td><a class="view-report" param="{id}">{fileName}</a></td>
         <td>
             <!--<a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>-->
-            <a class="delete-for-company icon-remove-btn" param="{id}" companyName="{companyName}" title="删除"></a><br>
+            <a class="delete-for-company icon-remove-btn" param="{id}" companyName="{reportName}" title="删除"></a><br>
         </td>
     </tr>
 </script>
@@ -341,8 +341,8 @@
         });
 
         //删除用户
-        function deleteForCompany(id,companyName){
-            $confirm('确定删除【'+companyName+'】公司信息吗？',function(bol){
+        function deleteForCompany(id,reportName){
+            $confirm('确定删除【'+reportName+'】报告信息吗？',function(bol){
                 if(bol){
                     $post(deleteAction,{id:id},function(res){
                         toast('删除成功！').ok();
@@ -387,7 +387,6 @@
             }
             tf.parentNode.removeChild(tf);
         }
-
     });
 
 </script>
