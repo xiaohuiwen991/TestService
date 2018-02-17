@@ -2,8 +2,10 @@ package com.hisign.code.web.action.business;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
+import com.hisign.code.api.business.ApplicationService;
 import com.hisign.code.api.business.ReportManageService;
 import com.hisign.code.api.business.WeChatWebPageService;
+import com.hisign.code.model.business.ApplicationInfo;
 import com.hisign.code.model.business.ReportInfo;
 import com.hisign.code.model.business.TableColumn;
 import com.hisign.code.model.business.WeChartUserInfo;
@@ -69,6 +71,9 @@ public class WeChatWebPageAction {
      */
     @Resource
     private ReportManageService reportManageService;
+
+    @Resource
+    private ApplicationService applicationService;
 
     /**
      * 获取web端用户登录信息
@@ -191,6 +196,52 @@ public class WeChatWebPageAction {
         }
     }
 
+    /**
+     * 查询检测申请
+     * @param applicationInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/application/query", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult queryApplication(@TranslateObject ApplicationInfo applicationInfo)  throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        String paraStr = JSON.toJSONString(applicationInfo);;
+        logger.info("获取字段信息列表信息");
+        try {
+            applicationInfo.setBegin(0);
+            applicationInfo.setEnd(9999);
+            List<ApplicationInfo> list = applicationService.findApplicationInfo(applicationInfo);
+            jsonResult.setData(list);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            jsonResult.setFlag(0);
+            logger.error("查询检测申请出错,请求参数为[{}]", paraStr, e);
+        }
+        return jsonResult;
+    }
+
+    /**
+     * 新增检测申请
+     * @param applicationInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/application/add", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult insertApplication(@TranslateObject ApplicationInfo applicationInfo)  throws Exception {
+        JsonResult jsonResult = new JsonResult();
+        String paraStr = JSON.toJSONString(applicationInfo);;
+        logger.info("获取字段信息列表信息");
+        try {
+            applicationService.insertApplication(applicationInfo);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            jsonResult.setFlag(0);
+            logger.error("新增检测申请出错,请求参数为[{}]", paraStr, e);
+        }
+        return jsonResult;
+    }
 
     /**
      * 获取字段信息列表信息

@@ -38,6 +38,13 @@ public interface ApplicationService {
     void updateApplicationInfo(ApplicationInfo applicationInfo) throws Exception;
 
     /**
+     * 新增请求信息
+     * @param applicationInfo
+     * @throws Exception
+     */
+    void insertApplication(ApplicationInfo applicationInfo) throws Exception;
+
+    /**
      * 删除字段信息
      * @param translationDict
      */

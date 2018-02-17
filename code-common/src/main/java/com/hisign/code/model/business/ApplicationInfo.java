@@ -49,7 +49,11 @@ public class ApplicationInfo extends BaseModel {
 
     private String remarks;
 
+    private String token;
+
     private String statusStr;
+
+    private String pid;
 
     public String getStatusStr() {
         if(StringUtils.isEmpty(this.getStatus())) {
@@ -65,6 +69,22 @@ public class ApplicationInfo extends BaseModel {
         } else {
             return "未受理";
         }
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setStatusStr(String statusStr) {

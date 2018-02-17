@@ -62,6 +62,15 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     /**
+     * 新增请求信息
+     * @param applicationInfo
+     * @throws Exception
+     */
+    public void insertApplication(ApplicationInfo applicationInfo) throws Exception {
+        applicationMapper.insertApplication(applicationInfo);
+    }
+
+    /**
      * 删除具体字段信息
      * @param translationDict
      * @throws Exception

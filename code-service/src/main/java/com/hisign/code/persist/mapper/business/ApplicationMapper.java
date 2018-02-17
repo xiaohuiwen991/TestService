@@ -40,6 +40,12 @@ public interface ApplicationMapper {
     void updateApplicationInfo(ApplicationInfo applicationInfo);
 
     /**
+     * 新增请求信息
+     * @param applicationInfo
+     */
+    void insertApplication(ApplicationInfo applicationInfo);
+
+    /**
      * 删除字段信息
      * @param translationDict
      */

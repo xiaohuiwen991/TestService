@@ -86,6 +86,9 @@
       <if test="createDateEnd != '' and createDateEnd != null">
         AND DATE_FORMAT(#{createDateEnd}, '%Y-%m-%d')  >= t1.CREATE_DATE
       </if>
+      <if test="pid != '' and pid != null">
+        AND t1.CREATE_PID = #{pid}
+      </if>
       ORDER BY t1.CREATE_DATE DESC
     ) t
     <if test=" begin !=null and end != 0 and end !=null">
@@ -123,6 +126,38 @@
     from DB_TRANSLATION_DICT
     <include refid="select_By_Filter_For_Where2" />
   </select>
+
+  <insert id="insertApplication" parameterType="com.hisign.code.model.business.ApplicationInfo">
+    INSERT INTO BUS_APPLICATION (
+      ID,
+      COMPANY_NAME,
+      COMPANY_CODE,
+      CONTACT,
+      REPORT_ADRESS,
+      INVOICE_ADRESS,
+      E_MAIL,
+      STATUS,
+    <if test="remarks!='' and remarks!=null">
+      REMARKS,
+    </if>
+      CREATE_PID,
+      CREATE_DATE
+    ) SELECT
+      REPLACE(UUID(),'-',''),
+      COMPANY_NAME,
+      COMPANY_CODE,
+      TELPHONE,
+      REPORT_ADRESS,
+      INVOICE_ADRESS,
+      E_MAIL,
+      '0',
+    <if test="remarks!='' and remarks!=null">
+      #{remarks},
+    </if>
+      ID,
+      NOW()
+    FROM BUS_USER WHERE ID = #{pid}
+  </insert>
 
   <insert id="insertTranslationDict" parameterType="com.hisign.code.model.business.TranslationDict">
   insert into db_translation_dict
