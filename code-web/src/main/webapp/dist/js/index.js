@@ -337,7 +337,7 @@ importing('socket', 'dict', function(){
     });
 
     //默认登录用户管理
-    mainFrame.src=getViewPath('sys-xtmkgl.html');
+    mainFrame.src=getViewPath('wx-environmental-report.html');
 
     //客户端测试
     $('#more-tool').click(function(){

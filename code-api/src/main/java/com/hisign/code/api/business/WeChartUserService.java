@@ -58,4 +58,11 @@ public interface WeChartUserService {
      */
     WeChartUserInfo findDevelopSqlInfo(WeChartUserInfo weChartUserInfo) throws Exception;
 
+    /**
+     * 启用用户信息
+     * @param weChartUserInfo
+     * @throws Exception
+     */
+    void enableUserStatus(WeChartUserInfo weChartUserInfo) throws Exception;
+
 }

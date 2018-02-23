@@ -46,8 +46,9 @@ public class SysMessageAction {
             if(filter.getSortName()!=null) {
                 filter.setOrderByString(filter.getSortName() + "  " + filter.getSortOrder());
             }else{
-                filter.setOrderByString("t.create_date desc" );
+                filter.setOrderByString("t.CREATE_DATE DESC" );
             }
+            filter.setBegin(filter.getBegin()-1);
             List<SysMessage> list = sysMessageService.findSysMessageByFilter(filter);
             int count = sysMessageService.findSysMessageByFilterForCount(filter);
             jsonResult.setData(list);

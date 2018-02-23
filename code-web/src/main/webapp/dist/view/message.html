@@ -289,7 +289,10 @@
                 t_rownum = this.getAttribute('rownum');
                 t_id = this.getAttribute('id');
                 top.registry.global.checkMsgs[t_rownum] = this.checked?'checked':null;
+                console.log(top.registry.global.checkMsgs[t_rownum]);
                 top.registry.global.checkMsgIds[t_rownum] = this.checked?t_id:null;
+                console.log(top.registry.global.checkMsgIds[t_rownum]);
+                console.log(top.registry.global.checkMsgIds);
             });
         });
         //删除

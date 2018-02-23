@@ -47,6 +47,16 @@ public class WeChartUserInfo extends BaseModel {
 
     private String createDateEnd;
 
+    private String msgId;
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
+
     public String getCreateDateBegin() {
         return createDateBegin;
     }

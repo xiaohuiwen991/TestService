@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 字段信息接口实现类
@@ -63,6 +64,18 @@ public class WeChatWebPageServiceImpl implements WeChatWebPageService {
      */
     public void registerWebPageUser(WeChartUserInfo weChartUserInfo) throws Exception {
         weChatWebPageMapper.registerWebPageUser(weChartUserInfo);
+        String id = UUID.randomUUID().toString().replaceAll("-","");
+        weChartUserInfo.setId(id);
+        weChatWebPageMapper.setMessageInfo(weChartUserInfo);
+        List<WeChartUserInfo> list = weChatWebPageMapper.queryUserList();
+        if (list!=null) {
+            for (WeChartUserInfo w : list) {
+                weChartUserInfo.setUserName(w.getUserName());
+                weChartUserInfo.setId(w.getId());
+                weChartUserInfo.setMsgId(id);
+                weChatWebPageMapper.setMessageReceiveBoxInfo(weChartUserInfo);
+            }
+        }
     }
 
     /**

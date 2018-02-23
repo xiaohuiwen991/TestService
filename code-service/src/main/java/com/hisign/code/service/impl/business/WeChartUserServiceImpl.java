@@ -84,4 +84,13 @@ public class WeChartUserServiceImpl implements WeChartUserService {
         return weChartUserMapper.findDevelopSqlInfo(weChartUserInfo);
     }
 
+    /**
+     * 启用用户信息
+     * @param weChartUserInfo
+     * @throws Exception
+     */
+    public void enableUserStatus(WeChartUserInfo weChartUserInfo) throws Exception {
+        weChartUserMapper.enableUserStatus(weChartUserInfo);
+    }
+
 }

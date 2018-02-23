@@ -51,4 +51,11 @@ public interface WeChartUserMapper {
      */
     WeChartUserInfo findDevelopSqlInfo(WeChartUserInfo weChartUserInfo);
 
+    /**
+     * 启用用户信息
+     * @param weChartUserInfo
+     * @throws Exception
+     */
+    void enableUserStatus(WeChartUserInfo weChartUserInfo);
+
 }

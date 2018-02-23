@@ -202,8 +202,8 @@
         <td>{createDateStr}</td>
         <td>
             <a class="into-user-edit icon-edit-btn" param="{id}" title="修改"></a>
-            <a class="delete-for-user icon-remove-btn" param="{id}" paramName="{userName}" title="删除"></a>
-            <a class="user-status {iconClass}" param="{id}" paramName="{userName}" title="删除"></a><br>
+            <a class="user-status icon-key-btn" param="{id}" paramName="{userName}" title="启用"></a>
+            <a class="delete-for-user icon-remove-btn" param="{id}" paramName="{userName}" title="删除"></a><br>
         </td>
     </tr>
 </script>
@@ -216,7 +216,7 @@
 
             var searchAction = top.path+'/api/0/business/user/list';
             var viewAction = top.path+'/api/0/business/user/view';
-            var roleAction = top.path+'/api/0/system/role/list';
+            var enableAction = top.path+'/api/1/business/user/enable';
             var deleteAction = top.path+'/api/1/business/user/delete';
             var saveAction = top.path+'/api/1/business/user/add';
             var updateAction = top.path+'/api/1/business/user/edit';
@@ -352,6 +352,17 @@
                 var sortName;
                 var order;
             }
+            //启用用户
+            function enableUser(id,userName){
+                $confirm('确定启用【'+userName+'】用户吗？',function(bol){
+                    if(bol){
+                        $post(enableAction,{id:id,status:'1'},function(res){
+                            toast('用户已启用！').ok();
+                            queryForUser(false,$('.paging').data('currentPage'));
+                        },true);
+                    }
+                });
+            }
 
             regOrder();
 
@@ -388,6 +399,8 @@
                 intoUserEdit(this.getAttribute('param'));
             }).on('click','.delete-for-user',function(){
                 deleteForUser(this.getAttribute('param'),this.getAttribute('paramName'));
+            }).on('click','.user-status',function(){
+                enableUser(this.getAttribute('param'),this.getAttribute('paramName'));
             });
             $('#role-table').on('click','.check-role',function(i,ele){
                 var rownum=+(this.getAttribute('rownum'));

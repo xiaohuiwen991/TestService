@@ -102,6 +102,13 @@
         </if>
     </select>
 
+    <select id="queryUserList" resultType="com.hisign.code.model.business.WeChartUserInfo">
+        SELECT
+          USERNAME  AS userName,
+          ID        AS id
+        FROM SYS_ROLE t1,SYS_ROLE_USER t2,SYS_USER t3 WHERE t1.ROLE_ID = t2.ROLE_ID AND t2.USER_ID = t3.ID
+    </select>
+
     <select id="findDevelopSqlListForCount" resultType="java.lang.Integer" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
         SELECT COUNT(1) FROM BUS_USER t1
         WHERE 1=1
@@ -217,5 +224,7 @@
       </if>
     </select>
 
-
+    <update id="enableUserStatus" parameterType="com.hisign.code.model.business.WeChartUserInfo">
+        UPDATE BUS_USER SET  STATUS = #{status,jdbcType=VARCHAR} WHERE ID = #{id}
+    </update>
 </mapper>

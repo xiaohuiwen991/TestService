@@ -130,6 +130,31 @@ public class WeChartUserAction {
     }
 
     /**
+     * 修改用户状态信息
+     * @param id 开发语句信息
+     * @return 修改标志
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/enable", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult enableUserStatus(@TranslateObject String id) throws InterruptedException {
+        JsonResult jsonResult = new JsonResult();
+        String paraStr = JSON.toJSONString(id);
+        logger.info("修改开发语句信息");
+        try {
+            WeChartUserInfo weChartUserInfo = new WeChartUserInfo();
+            weChartUserInfo.setId(id);
+            weChartUserInfo.setStatus("1");
+            weChartUserService.enableUserStatus(weChartUserInfo);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            logger.error("修改开发语句信息失败,请求参数为[{}]", paraStr, e);
+            jsonResult.setErrorMsg("修改开发语句信息失败");
+        }
+        return jsonResult;
+    }
+
+    /**
      * 删除开发语句
      * @param weChartUserInfo 开发语句信息
      * @return 删除标志

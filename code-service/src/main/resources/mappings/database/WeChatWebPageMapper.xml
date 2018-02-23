@@ -10,6 +10,63 @@
         <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
     </resultMap>
 
+    <insert id="setMessageInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo">
+        INSERT INTO SYS_MESSAGE (
+            ID,
+            SUBJECT,
+            CONTENT,
+            TYPE,
+            MSG_LEVEL,
+            DEL,
+            SECRECY,
+            CREATE_DATE,
+            CREATE_PID,
+            MODIFY_DATE,
+            MODIFY_PID
+        ) VALUES (
+            #{id},
+            '新用户注册提醒',
+             CONCAT('用户',#{userName,jdbcType=VARCHAR},'申请会员注册,请前往[注册用户管理]模块进项审核。')
+            '1',
+            '1',
+            '0',
+            '1',
+            'system',
+            NOW(),
+            'system',
+            NOW()
+        )
+    </insert>
+
+    <insert id="setMessageReceiveBoxInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo">
+        INSERT INTO SYS_RECEIVE_BOX (
+            ID,
+            MSG_ID,
+            SENDER_NAME,
+            SENDER_ID,
+            RECEIVER_ID,
+            RECEIVER_NAME,
+            RECEIVER_TYPE,
+            MSG_STATE,
+            DEL,
+            SECRECY,
+            CREATE_DATE,
+            CREATE_PID
+        ) VALUES (
+            REPLACE(UUID(),'-',''),
+            #{msgId},
+            '系统邮件',
+            'system',
+            #{id},
+            #{userName},
+            '1',
+            '1',
+            '0',
+            '1',
+            NOW(),
+            'system'
+        )
+    </insert>
 
     <select id="queryLoginInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo" resultType="com.hisign.code.model.business.WeChartUserInfo">
         SELECT

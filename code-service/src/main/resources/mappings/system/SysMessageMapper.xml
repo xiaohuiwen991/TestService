@@ -2,73 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hisign.code.persist.mapper.system.SysMessageMapper" >
 
-    <select id="findSysMessageByFilter"
-            parameterType="com.hisign.code.model.system.SysMessage"
-            resultType="com.hisign.code.model.system.SysMessage">
-        select a.* from (
-                select  r.id as receiveId,
-                        r.sender_name as senderName,
-                        r.sender_id as senderId,
-                        GET_DICTVALUE_BY_DICTKEY('GXSDM',r.sender_unit) as senderUnit,
-                        r.msg_state as msgState,
-                        r.msg_id as msgId,
-                        t.id as id,
-                        t.subject as subject,
-                        t.content as content,
-                        GET_DICTVALUE_BY_DICTKEY('XXLXDM',t.type) as msgType,
-                        GET_DICTVALUE_BY_DICTKEY('XXDJDM',t.msg_level) as msgLevel,
-                        date_format(t.create_date,'%Y-%m-%d %H%i%S')  as msgDateStr,
-                        t.create_date as createDate,
-                        t.tslb as tslb,
-                        t.att_id as attId
-                from SYS_MESSAGE t ,SYS_RECEIVE_BOX r
-        where 1=1
-            and t.id = r.msg_id
-            and r.receiver_id = #{user.userName,jdbcType=VARCHAR}
-            and r.del = '0'
-        <if test="msgState != null and msgState != ''">
-            and r.msg_state =  #{msgState,jdbcType=VARCHAR}
-        </if>
-        <if test="msgLevel != null and msgLevel != ''">
-            and t.msg_level =  #{msgLevel,jdbcType=VARCHAR}
-        </if>
-        <if test="msgVest != null and msgVest != ''">
-            and t.msg_vest =  #{msgVest,jdbcType=VARCHAR}
-        </if>
-        <if test="msgType != null and msgType != ''">
-            and t.type =  #{msgType,jdbcType=VARCHAR}
-        </if>
-        <if test="senderName != null and senderName != ''">
-            and r.sender_name like '%' || #{senderName,jdbcType=VARCHAR} || '%'
-        </if>
-        <if test="content != null and content != ''">
-            and t.content like '%' || #{content,jdbcType=VARCHAR} || '%'
-        </if>
-        <if test="noTslbSql != null and noTslbSql != ''">
-            and t.tslb not in ${noTslbSql}
-        </if>
-        <if test="msgDateBegin!=null and msgDateBegin!=''">
-            and t.create_date >= to_date(#{msgDateBegin},'yyyy-mm-dd')
-        </if>
-        <if test="msgDateEnd!=null and msgDateEnd!=''">
-            and t.create_date <![CDATA[<]]> to_date(#{msgDateEnd},'yyyy-mm-dd')+1
-        </if>
-        <if test="orderByString != null and orderByString != ''">
-              order by ${orderByString}
-        </if>
-        ) a
-        <if test="end != 0 and end !=null and begin != 0 and begin !=null">
-        limit #{begin,jdbcType=INTEGER}, #{and,jdbcType=INTEGER}
-        </if>
-    </select>
-
-    <select id="findSysMessageByFilterForCount"
-            parameterType="com.hisign.code.model.system.SysMessage"
-            resultType="java.lang.Integer">
-        select
-          count(1)
-        from SYS_MESSAGE t ,SYS_RECEIVE_BOX r
-        where 1=1
+    <select id="findSysMessageByFilter" parameterType="com.hisign.code.model.system.SysMessage" resultType="com.hisign.code.model.system.SysMessage">
+        select a.*,@rownum := @rownum + 1 AS rownum from (
+                select
+                        @rownum := 0,
+                        r.ID AS receiveId,
+                        r.SENDER_NAME AS senderName,
+                        r.SENDER_ID AS senderId,
+                        r.MSG_STATE AS msgState,
+                        r.MSG_ID AS msgId,
+                        t.ID AS id,
+                        t.SUBJECT AS subject,
+                        t.CONTENT AS content,
+                        GET_DICTVALUE_BY_DICTKEY('XXLXDM',t.type) AS msgType,
+                        GET_DICTVALUE_BY_DICTKEY('XXDJDM',t.msg_level) AS msgLevel,
+                        date_format(t.create_date,'%Y-%m-%d %H%i%S')  AS msgDateStr,
+                        t.CREATE_DATE AS createDate,
+                        t.TSLB AS tslb,
+                        t.ATT_ID AS attId
+                FROM SYS_MESSAGE t ,SYS_RECEIVE_BOX r
+        WHERE 1=1
             and t.ID = r.MSG_ID
             and r.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
             and r.DEL = '0'
@@ -85,19 +38,65 @@
             and t.TYPE =  #{msgType,jdbcType=VARCHAR}
         </if>
         <if test="senderName != null and senderName != ''">
-            and r.SENDER_NAME like '%' || #{senderName,jdbcType=VARCHAR} || '%'
+            and r.SENDER_NAME LIKE concat('%',#{senderName},'%')
         </if>
         <if test="content != null and content != ''">
-            and t.CONTENT like '%' || #{content,jdbcType=VARCHAR} || '%'
+            and t.CONTENT LIKE concat('%',#{content},'%')
         </if>
         <if test="noTslbSql != null and noTslbSql != ''">
             and t.TSLB not in ${noTslbSql}
         </if>
         <if test="msgDateBegin!=null and msgDateBegin!=''">
-            and t.CREATE_DATE >= to_date(#{msgDateBegin},'yyyy-mm-dd')
+            AND DATE_FORMAT(#{msgDateBegin}, '%Y-%m-%d')  <![CDATA[<=]]> t.CREATE_DATE
         </if>
         <if test="msgDateEnd!=null and msgDateEnd!=''">
-            and t.CREATE_DATE <![CDATA[<]]> to_date(#{msgDateEnd},'yyyy-mm-dd')+1
+            AND DATE_FORMAT(#{msgDateEnd}, '%Y-%m-%d')  >= t.CREATE_DATE
+        </if>
+        <if test="orderByString != null and orderByString != ''">
+              order by ${orderByString}
+        </if>
+        ) a
+        <if test="end != 0 and end !=null and begin != 0 and begin !=null">
+        LIMIT #{begin,jdbcType=INTEGER}, #{end,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="findSysMessageByFilterForCount"
+            parameterType="com.hisign.code.model.system.SysMessage"
+            resultType="java.lang.Integer">
+        SELECT
+          COUNT(1)
+        FROM SYS_MESSAGE t ,SYS_RECEIVE_BOX r
+        WHERE 1=1
+            AND t.ID = r.MSG_ID
+            AND r.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
+            AND r.DEL = '0'
+        <if test="msgState != null and msgState != ''">
+            AND r.MSG_STATE =  #{msgState,jdbcType=VARCHAR}
+        </if>
+        <if test="msgLevel != null and msgLevel != ''">
+            AND t.MSG_LEVEL =  #{msgLevel,jdbcType=VARCHAR}
+        </if>
+        <if test="msgVest != null and msgVest != ''">
+            AND t.MSG_VEST =  #{msgVest,jdbcType=VARCHAR}
+        </if>
+        <if test="msgType != null and msgType != ''">
+            AND t.TYPE =  #{msgType,jdbcType=VARCHAR}
+        </if>
+        <if test="senderName != null and senderName != ''">
+            AND r.SENDER_NAME LIKE concat('%',#{senderName},'%')
+        </if>
+        <if test="content != null and content != ''">
+            AND t.CONTENT LIKE concat('%',#{content},'%')
+        </if>
+        <if test="noTslbSql != null and noTslbSql != ''">
+            AND t.TSLB not in ${noTslbSql}
+        </if>
+        <if test="msgDateBegin!=null and msgDateBegin!=''">
+            AND DATE_FORMAT(#{msgDateBegin}, '%Y-%m-%d')  <![CDATA[<=]]> t.CREATE_DATE
+        </if>
+        <if test="msgDateEnd!=null and msgDateEnd!=''">
+            AND DATE_FORMAT(#{msgDateEnd}, '%Y-%m-%d')  >= t.CREATE_DATE
         </if>
 
     </select>
