@@ -26,17 +26,24 @@
         ) VALUES (
             #{id},
             '新用户注册提醒',
-             CONCAT('用户',#{userName,jdbcType=VARCHAR},'申请会员注册,请前往[注册用户管理]模块进项审核。')
+             CONCAT('用户',#{userName,jdbcType=VARCHAR},'申请会员注册,请前往[注册用户管理]模块进项审核。'),
             '1',
             '1',
             '0',
             '1',
-            'system',
             NOW(),
             'system',
-            NOW()
+            NOW(),
+            'system'
         )
     </insert>
+
+    <select id="queryUserList" resultType="com.hisign.code.model.business.WeChartUserInfo">
+        SELECT DISTINCT
+          t3.USERNAME  AS userName,
+          t3.ID        AS id
+        FROM SYS_ROLE t1,SYS_USER_ROLE t2,SYS_USER t3 WHERE t1.ID = t2.ROLE_ID AND t2.USER_ID = t3.ID
+    </select>
 
     <insert id="setMessageReceiveBoxInfo" parameterType="com.hisign.code.model.business.WeChartUserInfo">
         INSERT INTO SYS_RECEIVE_BOX (
@@ -51,7 +58,9 @@
             DEL,
             SECRECY,
             CREATE_DATE,
-            CREATE_PID
+            CREATE_PID,
+            MODIFY_DATE,
+            MODIFY_PID
         ) VALUES (
             REPLACE(UUID(),'-',''),
             #{msgId},
@@ -63,6 +72,8 @@
             '1',
             '0',
             '1',
+            NOW(),
+            'system',
             NOW(),
             'system'
         )

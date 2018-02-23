@@ -23,7 +23,7 @@
                 FROM SYS_MESSAGE t ,SYS_RECEIVE_BOX r
         WHERE 1=1
             and t.ID = r.MSG_ID
-            and r.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
+            and r.RECEIVER_ID = #{user.id,jdbcType=VARCHAR}
             and r.DEL = '0'
         <if test="msgState != null and msgState != ''">
             and r.MSG_STATE =  #{msgState,jdbcType=VARCHAR}
@@ -69,7 +69,7 @@
         FROM SYS_MESSAGE t ,SYS_RECEIVE_BOX r
         WHERE 1=1
             AND t.ID = r.MSG_ID
-            AND r.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
+            AND r.RECEIVER_ID = #{user.id,jdbcType=VARCHAR}
             AND r.DEL = '0'
         <if test="msgState != null and msgState != ''">
             AND r.MSG_STATE =  #{msgState,jdbcType=VARCHAR}
@@ -148,7 +148,7 @@
             t.MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
             t.MODIFY_DATE = now()
         where t.MSG_ID = #{id,jdbcType=VARCHAR}
-          and t.RECEIVER_ID = #{user.userName,jdbcType=VARCHAR}
+          and t.RECEIVER_ID = #{user.id,jdbcType=VARCHAR}
     </update>
 
 </mapper>
