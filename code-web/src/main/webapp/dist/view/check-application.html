@@ -35,12 +35,13 @@
     <table id="column-column-table" class="typical-tb">
         <thead>
         <th style="width: 5%">序号</th>
-        <th style="width: 20%">公司名称</th>
+        <th style="width: 15%">公司名称</th>
         <th style="width: 15%">寄送报告地址</th>
-        <th style="width: 15%">寄送发票地址</th>
-        <th style="width: 10%">联系方式</th>
+        <th style="width: 12%">联系方式</th>
         <th style="width: 10%">申请日期</th>
-        <th style="width: 10%">申请内容</th>
+        <th style="width: 8%">申请内容</th>
+        <th style="width: 12%">备注</th>
+        <th style="width: 8%">业务员</th>
         <th style="width: 7%">申请状态</th>
         <th style="width: 8%">操作</th>
         </thead>
@@ -54,10 +55,11 @@
         <td>{rownum}</td>
         <td>{companyName}</td>
         <td>{reportAdress}</td>
-        <td>{invoiceAdress}</td>
         <td>{telphone}</td>
         <td>{createDateStr}</td>
         <td><a class="into-report-view" param="{id}">查看申请内容</a></td>
+        <td>{text}</td>
+        <td>{userName}</td>
         <td>{statusStr}</td>
         <td>
             <a class="into-application-sl hide{slClass}" param="{id}"> 受理 </a>&nbsp;&nbsp;&nbsp;
@@ -142,10 +144,31 @@
         <b id="user-add-cancel" class="cm-cancel-btn"></b>
     </p>
 </div>
+
+<div id="report-update-div" class="hide">
+    <p class="mt10 hide">
+        <input id="data-id">
+        <input id="data-type">
+    </p>
+    <p class="mt10">
+        <span class="common-field fl">备注：</span>
+        <textarea class="common-textarea" id="text-remarks" placeholder="备注内容请不要超过500字" rows="5"></textarea>
+    </p>
+
+    <p class="tcenter mt10">
+        <b id="report-update-save" class="cm-save-btn mr15"></b>
+        <b id="report-update-cancel" class="cm-cancel-btn"  onclick="closeWin3()"></b>
+    </p>
+</div>
+
 <script src="../../dist/js/base.js"></script>
 <script>
     function closeWin2(){
-        $('#report-view-div').$close()
+        $('#report-view-div').$close();
+    }
+
+    function closeWin3(){
+        $('#report-update-div').$close();
     }
 
     // 在doc准备好后,写js逻辑
@@ -202,9 +225,17 @@
         });
         //操作时间
         $('#column-column-table').on('click','.into-application-sl',function(){//受理操作
-            updateApplication(this.getAttribute('param'), 1, '确定受理申请信息吗？');
+            document.getElementById('text-remarks').value = '';
+            insertRemarks()
+            $('#data-id').val(this.getAttribute('param'));
+            $('#data-type').val('1');
+//            updateApplication(this.getAttribute('param'), 1, '确定受理申请信息吗？');
         }).on('click','.into-application-wsl',function() {//不予受理
-            updateApplication(this.getAttribute('param'),4, '确定不予受理申请信息吗？');
+            document.getElementById('text-remarks').value = '';
+            insertRemarks()
+            $('#data-id').val(this.getAttribute('param'));
+            $('#data-type').val('4');
+//            updateApplication(this.getAttribute('param'),4, '确定不予受理申请信息吗？');
         }).on('click','.into-application-wsc',function() {//上传报告
             intoUserAdd(this.getAttribute('param'));
 //            updateApplication(this.getAttribute('param'),2, '确定上传报告信息吗？');
@@ -213,6 +244,10 @@
         }).on('click','.view-report',function() {
             viewReport(this.getAttribute('param'));
         });
+
+        function insertRemarks(){
+            $open('#report-update-div',{width:800,height:230,title:'添加备注信息'});
+        }
 
         function updateApplication(id,type,msg){
             $confirm(msg,function(bol) {
@@ -225,6 +260,25 @@
                     })
                 }
             });
+        }
+
+        function updateApplicationRemarks(){
+            var remarks = document.getElementById('text-remarks').value;
+            var type = document.getElementById('data-type').value;
+            var id = document.getElementById('data-id').value;
+            if(remarks!=null && remarks!=''){
+                if (remarks.length>999) {
+                    toast('备注内容超出最大长度！').css('width', '300px').warn();
+                    return;
+                }
+            }
+            $post(handleAction, {id: id, status: type ,text:remarks}, function (res) {
+                if (res.flag == '1') {
+                    toast('报告状态已更新！').ok();
+                    loadColumnList($('.paging').data('currentPage'));
+                    $('#report-update-div').$close();
+                }
+            })
         }
 
         //关闭窗口
@@ -263,6 +317,9 @@
             viewReport(this.getAttribute('param'));
         });
 
+        $('#report-update-save').on('click',function(){
+            updateApplicationRemarks();
+        });
         $('#save-user').on('click',function(){
             saveCompany();
         });

@@ -65,6 +65,7 @@ public class ApplicationAction {
         String paraStr = JSON.toJSONString(applicationInfo);
         logger.info("更新申请信息");
         try {
+            applicationInfo.setUser(user);
             applicationService.updateApplicationInfo(applicationInfo);
             jsonResult.setFlag(1);
         } catch (Exception e) {

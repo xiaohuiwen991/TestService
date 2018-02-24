@@ -55,6 +55,16 @@ public class ApplicationInfo extends BaseModel {
 
     private String pid;
 
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public String getStatusStr() {
         if(StringUtils.isEmpty(this.getStatus())) {
             return "未受理";

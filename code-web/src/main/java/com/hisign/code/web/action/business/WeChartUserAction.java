@@ -87,9 +87,17 @@ public class WeChartUserAction {
         String paraStr = JSON.toJSONString(weChartUserInfo);
         logger.info("新增微信用户");
         try {
-            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(weChartUserInfo);
+            WeChartUserInfo queryMode = new WeChartUserInfo();
+            queryMode.setUserName(weChartUserInfo.getUserName());
+            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(queryMode);
             if(info != null) {
                 return new JsonResult(0, "用户名已存在!");
+            }
+            queryMode = new WeChartUserInfo();
+            queryMode.setCompanyCode(weChartUserInfo.getCompanyCode());
+            info = weChartUserService.findDevelopSqlInfo(queryMode);
+            if(info != null) {
+                return new JsonResult(0, "信用识别代码已经被注册!");
             }
             weChartUserInfo.setUser(user);
             String id = weChartUserService.insertDevelopSql(weChartUserInfo);
@@ -115,9 +123,17 @@ public class WeChartUserAction {
         String paraStr = JSON.toJSONString(weChartUserInfo);
         logger.info("修改开发语句信息");
         try {
-            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(weChartUserInfo);
+            WeChartUserInfo queryMode = new WeChartUserInfo();
+            queryMode.setUserName(weChartUserInfo.getUserName());
+            WeChartUserInfo info = weChartUserService.findDevelopSqlInfo(queryMode);
             if(info != null && !info.getId().equals(weChartUserInfo.getId())) {
                 return new JsonResult(0, "用户名已存在!");
+            }
+            queryMode = new WeChartUserInfo();
+            queryMode.setCompanyCode(weChartUserInfo.getCompanyCode());
+            info = weChartUserService.findDevelopSqlInfo(queryMode);
+            if(info != null && !info.getId().equals(weChartUserInfo.getId())) {
+                return new JsonResult(0, "信用识别代码已经被注册!");
             }
             weChartUserInfo.setUser(user);
             weChartUserService.updateDevelopSql(weChartUserInfo);

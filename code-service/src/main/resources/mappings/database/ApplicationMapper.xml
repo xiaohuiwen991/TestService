@@ -64,12 +64,13 @@
         t1.INVOICE_ADRESS                                    AS invoiceAdress,
         t1.REPORT_ADRESS                                     AS reportAdress,
         t1.CREATE_PID                                        AS createPid,
-        t2.USER_NAME                                         AS userName,
+        t2.TRUE_NAME                                         AS userName,
+        t1.TEXT                                              AS text,
         t1.STATUS                                            AS status,
         t1.REMARKS                                           AS remarks,
         DATE_FORMAT(t1.CREATE_DATE,'%Y-%m-%d %T ')           AS createDateStr
-      FROM BUS_APPLICATION t1 LEFT JOIN BUS_USER t2
-      ON (t1.CREATE_PID=t2.ID)
+      FROM BUS_APPLICATION t1 LEFT JOIN SYS_USER t2
+      ON (t1.MODIFY_PID=t2.ID)
       WHERE 1 = 1
       <if test="companyName != '' and companyName != null">
         AND t1.COMPANY_NAME LIKE concat('%',#{companyName},'%')
@@ -117,7 +118,14 @@
   </select>
 
   <update id="updateApplicationInfo" parameterType="com.hisign.code.model.business.ApplicationInfo">
-    UPDATE BUS_APPLICATION SET STATUS = #{status} WHERE ID = #{id}
+    UPDATE BUS_APPLICATION SET
+      STATUS = #{status},
+      MODIFY_PID = #{user.id,jdbcType=VARCHAR},
+    <if test="text!=null and text!=''">
+      TEXT = #{text},
+    </if>
+      MODIFY_DATE = NOW()
+    WHERE ID = #{id}
   </update>
 
   <select id="findApplicationInfoInfo" resultMap="BaseResultMap" parameterType="com.hisign.code.model.business.TranslationDict">

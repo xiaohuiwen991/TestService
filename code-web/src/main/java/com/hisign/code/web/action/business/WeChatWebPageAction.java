@@ -18,8 +18,13 @@ import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +40,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.AccessController;
@@ -391,6 +397,38 @@ public class WeChatWebPageAction {
             jsonResult.setErrorMsg("获取字段信息列表信息失败");
         }
         return jsonResult;
+    }
+
+    /**
+     * 获取字段信息列表信息
+     * @return 字段信息列表信息
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/download/pdf", method= RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public ResponseEntity<byte[]> download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        boolean flag = isOSLinux();
+        String dir = "";
+        if(flag) {
+            dir = reportManageService.querySysParam("filePath");
+        }
+        String fileName = request.getParameter("fileName");
+        if(fileName!=null) {
+            fileName = URLDecoder.decode(fileName,"UTF-8");
+        }
+        String pdfPath = request.getParameter("pdfPath");
+        if(fileName!=null) {
+            pdfPath = URLDecoder.decode(pdfPath,"UTF-8");
+        }
+        if(fileName==null || fileName=="" ){
+            return null;
+        }
+        HttpHeaders headers = new HttpHeaders();
+        File file= new File(dir+System.getProperty("file.separator")+pdfPath);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO8859-1"));
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                headers, HttpStatus.CREATED);
     }
 
     /**

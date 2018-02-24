@@ -212,9 +212,13 @@
       <if test="userName != null and userName != ''">
           AND t1.USER_NAME = #{userName}
       </if>
+      <if test="companyCode != null and companyCode != ''">
+          AND t1.COMPANY_CODE = #{companyCode}
+      </if>
       <if test="id != null and id != ''">
           AND t1.ID = #{id}
       </if>
+        LIMIT 0,1
     </select>
 
     <update id="enableUserStatus" parameterType="com.hisign.code.model.business.WeChartUserInfo">
