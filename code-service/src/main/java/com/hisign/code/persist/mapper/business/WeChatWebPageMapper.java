@@ -20,6 +20,14 @@ public interface WeChatWebPageMapper {
     WeChartUserInfo queryLoginInfo(WeChartUserInfo webUser);
 
     /**
+     * 获取手机端登录信息
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    WeChartUserInfo queryLoginByIdWebPage(WeChartUserInfo weChartUserInfo);
+
+    /**
      * web端用户注册
      * @param weChartUserInfo
      * @return

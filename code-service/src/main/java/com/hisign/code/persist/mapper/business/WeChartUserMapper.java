@@ -58,4 +58,11 @@ public interface WeChartUserMapper {
      */
     void enableUserStatus(WeChartUserInfo weChartUserInfo);
 
+    /**
+     * 手机端更新用户信息
+     * @param weChartUserInfo
+     * @throws Exception
+     */
+    void registerUpdateWebPageUser(WeChartUserInfo weChartUserInfo);
+
 }

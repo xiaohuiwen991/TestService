@@ -144,11 +144,11 @@
             <span class="common-field"><span class="orangered">★ </span>用户账号：</span>
             <input name="userName" class="user-edit-valid common-input" type="text" data-options="required:true,validType:'length[0,255]'" value="{userName}" placeholder="0~50个字符，包含字母、数字和下划线"/>
             <span class="common-field"><span class="orangered">★ </span>用户姓名：</span>
-            <input name="trueName" class="user-edit-valid common-input" type="text" data-options="required:true,validType:'length[0,50]'" value="{trueName}" placeholder="小于等于50个字"/>
+            <input name="trueName" id="trueName-input-edit" class="user-edit-valid common-input" type="text" readonly="true" data-options="required:true,validType:'length[0,50]'" value="{trueName}" placeholder="小于等于50个字"/>
         </p>
         <p class="mt10">
             <span class="common-field">密码：</span>
-            <input name="password" class="user-edit-valid common-input" type="password" autocomplete="on" data-options="validType:'length[3,20]'" placeholder="不输入新密码,原始密码保持不变"/>
+            <input name="password" id="password-input-edit" class="user-edit-valid common-input" type="password" readonly="true" autocomplete="on" data-options="validType:'length[3,20]'" placeholder="不输入新密码,原始密码保持不变"/>
             <span class="common-field"><span class="orangered">★ </span>邮箱：</span>
             <input name="email" class="user-edit-valid common-input" type="text" value="{email}" data-options="required:true,validType:'length[0,255]'" placeholder="0~20个字符"/>
         </p>
@@ -392,6 +392,11 @@
             });
             $('#user-view-cancel').on('click',function(){
                 userCloseWin('user-view-div');
+            });
+            $('#user-edit-form').on('click','#trueName-input-edit',function(){
+                $('#trueName-input-edit').removeAttr("readonly");
+            }).on('click','#password-input-edit',function(){
+                $('#password-input-edit').removeAttr("readonly");
             });
             $('#user-table').on('click','.into-user-view',function(){
                 intoUserView(this.getAttribute('param'));

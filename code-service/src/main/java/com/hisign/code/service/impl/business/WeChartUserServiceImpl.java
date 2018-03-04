@@ -93,4 +93,13 @@ public class WeChartUserServiceImpl implements WeChartUserService {
         weChartUserMapper.enableUserStatus(weChartUserInfo);
     }
 
+    /**
+     * 手机端更新用户信息
+     * @param weChartUserInfo
+     * @throws Exception
+     */
+    public void registerUpdateWebPageUser(WeChartUserInfo weChartUserInfo) throws Exception {
+        weChartUserMapper.registerUpdateWebPageUser(weChartUserInfo);
+    }
+
 }

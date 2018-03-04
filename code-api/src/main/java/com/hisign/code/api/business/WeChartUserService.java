@@ -65,4 +65,11 @@ public interface WeChartUserService {
      */
     void enableUserStatus(WeChartUserInfo weChartUserInfo) throws Exception;
 
+    /**
+     * 手机端更新用户信息
+     * @param weChartUserInfo
+     * @throws Exception
+     */
+    void registerUpdateWebPageUser(WeChartUserInfo weChartUserInfo) throws Exception;
+
 }

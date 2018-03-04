@@ -108,6 +108,32 @@
         </if>
     </select>
 
+    <select id="queryLoginByIdWebPage" parameterType="com.hisign.code.model.business.WeChartUserInfo" resultType="com.hisign.code.model.business.WeChartUserInfo">
+        SELECT
+            @rownum := 0,
+            t1.ID                                             AS id,
+            t1.USER_NAME                                      AS userName,
+            t1.TRUE_NAME                                      AS trueName,
+            t1.PASS_WORD                                      AS password,
+            t1.QUESTION1                                      AS question1,
+            t1.ANSWER1                                        AS answer1,
+            t1.QUESTION2                                      AS question2,
+            t1.ANSWER2                                        AS answer2,
+            t1.COMPANY_NAME                                   AS companyName,
+            t1.COMPANY_CODE                                   AS companyCode,
+            t1.INVOICE_ADRESS                                 AS invoiceAdress,
+            t1.REPORT_ADRESS                                  AS reportAdress,
+            t1.E_MAIL                                         AS email,
+            t1.TELPHONE                                       AS telphone,
+            DATE_FORMAT(t1.CREATE_DATE,'%y-%m-%d %T 24')      AS createDateStr,
+            t1.STATUS                                         AS status
+        FROM BUS_USER t1
+        WHERE STATUS = '1'
+        <if test="id != '' and id != null">
+            AND t1.ID = #{id}
+        </if>
+    </select>
+
     <select id="findReportInfo" parameterType="java.lang.String" resultType="com.hisign.code.model.business.ReportInfo">
         SELECT
             t2.ID                                                AS id,

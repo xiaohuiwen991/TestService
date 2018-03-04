@@ -272,6 +272,7 @@
         }
 
         $('#multiFile').on('change',function (){
+            showLoading();
             var filePicker = $('#multiFile');
             if(filePicker.val()!=null&&''!=filePicker.val()) {
                 if (!filePicker.val().indexOf('.pdf')) {
@@ -293,6 +294,7 @@
                         processData: false,
                         contentType: false,
                         success: function (res) {
+                            hideLoading()
                             if (res.flag == 1) {
                                 toast('文件上传成功！').ok();
                                 $('#filePath').val(res.data[0]);

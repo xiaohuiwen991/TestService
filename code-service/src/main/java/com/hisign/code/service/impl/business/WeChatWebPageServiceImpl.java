@@ -57,6 +57,17 @@ public class WeChatWebPageServiceImpl implements WeChatWebPageService {
     }
 
     /**
+     * 获取手机端登录信息
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    public WeChartUserInfo queryLoginByIdWebPage(WeChartUserInfo weChartUserInfo) throws Exception {
+        WeChartUserInfo result = weChatWebPageMapper.queryLoginByIdWebPage(weChartUserInfo);
+        return result;
+    }
+
+    /**
      * web端用户注册
      * @param weChartUserInfo
      * @return

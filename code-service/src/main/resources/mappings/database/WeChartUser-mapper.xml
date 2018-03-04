@@ -170,7 +170,7 @@
         )
     </insert>
 
-    <update id="updateDevelopSql" parameterType="com.hisign.code.model.business.DevelopSql" >
+    <update id="updateDevelopSql" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
         update BUS_USER set
         USER_NAME = #{userName,jdbcType=VARCHAR},
         TRUE_NAME = #{trueName,jdbcType=VARCHAR},
@@ -187,6 +187,20 @@
         STATUS = #{status,jdbcType=VARCHAR},
         TELPHONE = #{telphone,jdbcType=VARCHAR},
         MODIFY_PID = #{user.userName,jdbcType=VARCHAR},
+        MODIFY_DATE = NOW()
+        WHERE ID = #{id}
+    </update>
+
+    <update id="registerUpdateWebPageUser" parameterType="com.hisign.code.model.business.WeChartUserInfo" >
+        update BUS_USER set
+        TRUE_NAME = #{trueName,jdbcType=VARCHAR},
+        COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+        COMPANY_CODE = #{companyCode,jdbcType=VARCHAR},
+        INVOICE_ADRESS = #{invoiceAdress,jdbcType=VARCHAR},
+        REPORT_ADRESS = #{reportAdress,jdbcType=VARCHAR},
+        E_MAIL = #{email,jdbcType=VARCHAR},
+        TELPHONE = #{telphone,jdbcType=VARCHAR},
+        MODIFY_PID = USER_NAME,
         MODIFY_DATE = NOW()
         WHERE ID = #{id}
     </update>

@@ -21,6 +21,14 @@ public interface WeChatWebPageService {
     public WeChartUserInfo queryLoginInfo(WeChartUserInfo weChartUserInfo) throws Exception;
 
     /**
+     * 获取手机端登录信息
+     * @param weChartUserInfo
+     * @return
+     * @throws Exception
+     */
+    public WeChartUserInfo queryLoginByIdWebPage(WeChartUserInfo weChartUserInfo) throws Exception;
+
+    /**
      * web端用户注册
      * @param weChartUserInfo
      * @return
