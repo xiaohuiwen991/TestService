@@ -153,6 +153,7 @@
         FROM BUS_USER t1,BUS_REPORT t2
         WHERE t1.COMPANY_CODE = t2.COMPANY_CODE
           AND t1.ID = #{id}
+        ORDER BY t2.CREATE_DATE DESC
     </select>
 
     <insert id="registerWebPageUser" parameterType="com.hisign.code.model.business.WeChartUserInfo" >

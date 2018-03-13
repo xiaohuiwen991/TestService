@@ -386,7 +386,7 @@ public class WeChatWebPageAction {
             if(!file.exists()) {
                 file.mkdir();
             }
-
+            deleteDir(dateStr,dateBerforeStr,picPath);
             picPath = picPath + System.getProperty("file.separator") + dateStr;
             file = new File(picPath);
             if(!file.exists()) {
@@ -401,7 +401,7 @@ public class WeChatWebPageAction {
 
             String fileName = time+".pdf";
             byte2File(bytes,pdfPath, fileName);
-            changePdfToImg(pdfPath,picPath,time+"");
+            changePdfToImgByGhost(pdfPath,picPath,time+"");
             List<String> list = new ArrayList<>();
             list.add(pdfPath + fileName);
             list.add(picPath);
@@ -447,6 +447,30 @@ public class WeChatWebPageAction {
                 pathList.add(file + System.getProperty("file.separator") + str);
             }
             map.put("img",pathList);
+            jsonResult.setData(map);
+            jsonResult.setFlag(1);
+        } catch (Exception e) {
+            logger.error("获取字段信息列表信息失败,请求参数为[{}]", id, e);
+            jsonResult.setErrorMsg("获取字段信息列表信息失败");
+        }
+        return jsonResult;
+    }
+
+
+    /**
+     * 获取字段信息列表信息
+     * @param id 字段信息查询条件
+     * @return 字段信息列表信息
+     * @throws InterruptedException
+     */
+    @RequestMapping(value="/report/pdf", method= RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public JsonResult findPdfInfo(@TranslateObject String id,HttpServletResponse response) throws InterruptedException {
+        JsonResult jsonResult = new JsonResult();
+        try {
+            ReportInfo reportinfo = reportManageService.findPicInfo(id);
+            Map<String,Object> map = new HashMap<>();
+            map.put("pdfPath",reportinfo.getPdfPath());
             jsonResult.setData(map);
             jsonResult.setFlag(1);
         } catch (Exception e) {
@@ -534,7 +558,15 @@ public class WeChatWebPageAction {
                      * "D:\\work\\mybook\\FilesNew\\img\\" + i + ".jpg"); } else {
                      * System.out.println("创建图片失败！"); } }
                      */
-                    FileOutputStream out = new FileOutputStream(picturepath + System.getProperty("file.separator") + fileName + "_" + i+ ".png");
+                    String num = i+"";
+                    if (num.length()==1) {
+                        num = "000"+num;
+                    } else if (num.length()==2) {
+                        num = "00"+num;
+                    } else if (num.length()==3) {
+                        num = "0"+num;
+                    }
+                    FileOutputStream out = new FileOutputStream(picturepath + System.getProperty("file.separator") + fileName + "_" + num+ ".png");
                     /** 输出到文件流 */
                     JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
                     JPEGEncodeParam param2 = encoder.getDefaultJPEGEncodeParam(tag);
@@ -549,6 +581,36 @@ public class WeChatWebPageAction {
             channel.close();
             raf.close();
             unmap(buf);
+            /** 如果要在转图片之后删除pdf，就必须要这个关闭流和清空缓冲的方法 */
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return countpage;
+    }
+
+
+    /**
+     * pdf转png
+     * @param instructiopath
+     * @param picturepath
+     * @return
+     */
+    public static int changePdfToImgByGhost(String instructiopath,String picturepath,String fileName) throws Exception{
+        int countpage =0;
+        try {
+            String pdfPath = instructiopath + System.getProperty("file.separator") + fileName +".pdf";
+            //创建图片文件夹
+            File dirfile = new File(picturepath);
+            if(!dirfile.exists()){
+                dirfile.mkdirs();
+            }
+
+            String picPath = picturepath + System.getProperty("file.separator") + "pic_%03d.png";
+
+            String cmd = "/usr/bin/gs/gs-922-linux-x86_64 -dQUIET -dNOSAFER -r300 -dBATCH -sDEVICE=pngalpha -dNOPAUSE -dNOPROMPT -sOutputFile="+ picPath +" "+pdfPath;
+            Runtime.getRuntime().exec(cmd).waitFor();
             /** 如果要在转图片之后删除pdf，就必须要这个关闭流和清空缓冲的方法 */
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -28,6 +28,13 @@ public interface ReportManageService {
     int queryReportListForCount(ReportInfo reportInfo) throws Exception;
 
     /**
+     * 查询检测报告信息
+     * @param reportinfo
+     * @throws Exception
+     */
+    ReportInfo queryReportInfoById(ReportInfo reportinfo) throws Exception;
+
+    /**
      * 删除表连接
      * @param reportinfo 表连接信息
      * @throws Exception

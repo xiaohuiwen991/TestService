@@ -26,6 +26,13 @@ public interface ReportManageMapper {
     int queryReportListForCount(ReportInfo reportInfo);
 
     /**
+     * 查询检测报告信息
+     * @param reportinfo
+     * @throws Exception
+     */
+    ReportInfo queryReportInfoById(ReportInfo reportinfo);
+
+    /**
      * 删除表连接
      * @param reportinfo 表连接信息
      */

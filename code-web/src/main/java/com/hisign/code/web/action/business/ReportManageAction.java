@@ -97,7 +97,7 @@ public class ReportManageAction {
                 dir = "D:" + System.getProperty("file.separator");
             }
 
-            String pathOut = dir + "file";
+            String pathOut = dir + System.getProperty("file.separator") + "file";
             File file = new File(pathOut);
             if(!file.exists()) {
                 file.mkdir();
@@ -120,7 +120,7 @@ public class ReportManageAction {
                 file.mkdir();
             }
 
-            String picPath = dir + "file" + System.getProperty("file.separator") + "picFile";
+            String picPath = dir + System.getProperty("file.separator") + "file" + System.getProperty("file.separator") + "picFile";
             file = new File(picPath);
             if(!file.exists()) {
                 file.mkdir();
@@ -197,12 +197,23 @@ public class ReportManageAction {
         logger.info("删除表连接");
         try {
             if(!StringUtils.isEmpty(reportinfo.getId())) {
+                ReportInfo info = reportManageService.queryReportInfoById(reportinfo);
+                if (info!=null) {
+                    if (!com.alibaba.druid.util.StringUtils.isEmpty(info.getPdfPath())) {
+                        if(info.getPdfPath().lastIndexOf(File.separator)!=-1) {
+                            deleteDirectory(info.getPdfPath().substring(0,info.getPdfPath().lastIndexOf(File.separator)), true);
+                        }
+                    }
+                    if (!com.alibaba.druid.util.StringUtils.isEmpty(info.getFilePath())) {
+                        deleteDirectory(info.getFilePath(), true);
+                    }
+                }
                 reportManageService.deleteReportInfo(reportinfo);
             }
             jsonResult.setFlag(1);
         } catch (Exception e) {
             logger.error("删除表连接失败,请求参数为[{}]", paraStr, e);
-            jsonResult.setErrorMsg("删除表连接失败");
+            jsonResult.setErrorMsg("删除表连接失败"+e);
         }
         return jsonResult;
     }
@@ -269,5 +280,57 @@ public class ReportManageAction {
         }
     }
 
+    /**
+     * 删除文件目录及目录下文件
+     * @param dirPath
+     * @param isDel
+     * @return
+     */
+    public boolean deleteDirectory(String dirPath,boolean isDel) {// 删除目录（文件夹）以及目录下的文件
+        // 如果sPath不以文件分隔符结尾，自动添加文件分隔符
+        if (!dirPath.endsWith(File.separator)) {
+            dirPath = dirPath + File.separator;
+        }
+        File dirFile = new File(dirPath);
+        // 如果dir对应的文件不存在，或者不是一个目录，则退出
+        if (!dirFile.exists() || !dirFile.isDirectory()) {
+            return false;
+        }
+        boolean flag = true;
+        File[] files = dirFile.listFiles();// 获得传入路径下的所有文件
+        for (int i = 0; i < files.length; i++) {// 循环遍历删除文件夹下的所有文件(包括子目录)
+            if (files[i].isFile()) {// 删除子文件
+                flag = deleteFile(files[i].getAbsolutePath());
+                System.out.println(files[i].getAbsolutePath() + " 删除成功");
+                if (!flag)
+                    break;// 如果删除失败，则跳出
+            } else {// 运用递归，删除子目录
+                flag = deleteDirectory(files[i].getAbsolutePath(),true);
+                if (!flag)
+                    break;// 如果删除失败，则跳出
+            }
+        }
+        if (!flag)
+            return false;
+        if(isDel) {
+            if (dirFile.delete()) {// 删除当前目录
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public boolean deleteFile(String filePath) {// 删除单个文件
+        boolean flag = false;
+        File file = new File(filePath);
+        if (file.isFile() && file.exists()) {// 路径为文件且不为空则进行删除
+            file.delete();// 文件删除
+            flag = true;
+        }
+        return flag;
+    }
 
 }

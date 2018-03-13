@@ -195,7 +195,6 @@
         function upMsgCount(num) {
             num = parseInt(num);
             if (num > 0) {
-                $style(top.path+'/dist/css/feedback.css');
                 $('#msg-count').show().html(num);
             } else {
                 $('#msg-count').hide();

@@ -45,6 +45,16 @@ public class ReportManageServiceImpl implements ReportManageService {
     }
 
     /**
+     * 查询检测报告信息
+     * @param reportinfo
+     * @throws Exception
+     */
+    public ReportInfo queryReportInfoById(ReportInfo reportinfo) throws Exception {
+        ReportInfo info = reportManageMapper.queryReportInfoById(reportinfo);
+        return info;
+    }
+
+    /**
      * 删除表连接
      * @param reportinfo 表连接信息
      * @throws Exception

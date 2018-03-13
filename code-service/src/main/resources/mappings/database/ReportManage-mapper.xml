@@ -126,6 +126,26 @@
         </if>
     </select>
 
+    <select id="queryReportInfoById" resultType="com.hisign.code.model.business.ReportInfo" parameterType="com.hisign.code.model.business.ReportInfo" >
+        SELECT
+            ID                                                AS id,
+            REPORT_NAME                                       AS reportName,
+            COMPANY_NAME                                      AS companyName,
+            COMPANY_CODE                                      AS companyCode,
+            WORD_PATH                                         AS wordPath,
+            PDF_PATH                                          AS pdfPath,
+            FILE_PATH                                         AS filePath,
+            FILE_NAME                                         AS fileName,
+            TELPHONE                                          AS telphone,
+            EMAIL                                             AS email,
+            INVOICE_ADRESS                                    AS invoiceAdress,
+            REPORT_ADRESS                                     AS reportAdress,
+            CREATE_PID                                        AS createPid,
+            DATE_FORMAT(t1.CREATE_DATE,'%Y-%m-%d %T ')        AS createDateStr
+        FROM BUS_REPORT t1
+        WHERE ID = #{id} LIMIT 0,1
+    </select>
+
     <delete id="deleteReportInfo" parameterType="com.hisign.code.model.business.ReportInfo">
         DELETE FROM BUS_REPORT
         <if test="id != '' and id != null">
